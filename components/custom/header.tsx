@@ -8,7 +8,7 @@ export default function Header(): JSX.Element {
   return (
     <div
       className={cn(
-        `w-full rounded-xl flex items-center justify-center bg-accent/40 border max-w-xl mx-auto h-16 backdrop-blur-xs px-4`
+        `w-full rounded-xl flex items-center justify-center bg-accent border max-w-xl mx-auto h-16 backdrop-blur-xs px-4`
       )}
     >
       <div className="flex items-center justify-between w-full">
