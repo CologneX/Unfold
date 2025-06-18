@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 Unfold - Portfolio & CV Management Platform
 
-## Getting Started
+> A modern platform for creating, managing, and showcasing your professional portfolio and curriculum vitae.
 
-First, run the development server:
+## 🏠 Self-Hosted Solution
+
+Unfold is designed as a **self-hosted application**, giving you complete control over your professional data. Here's why self-hosting matters:
+
+- **🔒 Data Privacy** - Your personal and professional information stays on your servers
+- **🎨 Full Customization** - Modify and extend the platform to match your exact needs
+- **💰 Cost Control** - No monthly subscriptions or usage limits
+- **🚀 Performance** - Direct control over hosting environment and optimization
+- **📊 Complete Ownership** - Your portfolio and CV data belongs entirely to you
+
+![Next.js](https://img.shields.io/badge/Next.js-15.1.3-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+
+## ✨ Features
+
+- **📁 Portfolio Management** - Create and showcase project portfolios with rich media
+- **📄 CV Builder** - Comprehensive curriculum vitae creation and editing
+- **📱 Responsive Design** - Beautiful UI that works on all devices
+- **🎨 Rich Text Editing** - Advanced content editing with TipTap
+- **📋 PDF Export** - Generate professional PDF documents
+- **💾 Data Persistence** - Reliable JSON-based storage
+
+### 📁 Portfolio
+
+- Project details with technology stacks and roles
+- Image galleries with captions
+- Live demo and repository links
+- Grid layout with filtering
+
+### 📄 CV Builder
+
+- Personal information and profile photo
+- Professional experience with timeline
+- Education, skills, and qualifications
+- Publications, awards, and achievements
+- ATS-friendly PDF export
+
+## 🎯 Perfect For
+
+- **Professionals** seeking job opportunities and personal branding
+- **Freelancers** showcasing work for client presentations
+- **Students** documenting academic achievements and projects
+
+## 🚧 Future Development Plan
+
+### 🎨 Full Landing Page Visual Builder
+
+- Drag-and-drop interface for creating custom landing pages
+- Pre-built components and templates
+- Real-time preview and responsive design tools
+- Integration with portfolio and CV data
+
+### 🌐 Remote/Production Editing Ability
+
+- Cloud-based data synchronization
+- Multi-device editing capabilities
+- Real-time collaboration features
+- Secure data backup and version control
+
+### 🎭 Theme Builder
+
+- Custom color scheme creation
+- Typography and layout customization
+- Component styling editor
+- Export/import theme packages
+
+---
+
+## 🚀 Getting Started
 
 ```bash
+# Clone the repository
+git clone https://github.com/CologneX/unfold.git
+
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<div align="center">
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Built with ❤️ By CologneX**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</div>
