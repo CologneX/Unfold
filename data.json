@@ -1,0 +1,143 @@
+{
+  "profile": null,
+  "projects": [
+    {
+      "slug": "visionale",
+      "name": "Visionale",
+      "description": "<p>GG Gemink</p>",
+      "shortDescription": "A Video Platform",
+      "bannerUrl": "/uploads/1750834138816-tjhlb9x0zks.jpeg",
+      "imageUrl": [],
+      "technologies": [
+        {
+          "name": "NextJS"
+        }
+      ],
+      "role": [
+        {
+          "name": "Full-Stack Developer"
+        }
+      ],
+      "isFeatured": true,
+      "createdAt": "2025-06-25T06:49:15.373Z",
+      "updatedAt": "2025-06-25T06:49:15.373Z"
+    }
+  ],
+  "cv": {
+    "profile": {
+      "name": "Your name",
+      "description": "Your Description",
+      "profilePictureUrl": "/uploads/1750834138816-tjhlb9x0zks.jpeg",
+      "location": "City, Country",
+      "socials": []
+    },
+    "socials": [],
+    "technologies": [
+      {
+        "name": "React"
+      },
+      {
+        "name": "Svelte"
+      },
+      {
+        "name": "Angular"
+      },
+      {
+        "name": "NextJS"
+      }
+    ],
+    "roles": [
+      {
+        "name": "Full-Stack Developer"
+      }
+    ],
+    "workExperiences": [
+      {
+        "id": "ba4ca8ce-3ec8-4f05-8df3-9c8befe72ccf",
+        "name": "Full-stack Engineer",
+        "description": "Team leader of....",
+        "startDate": "2025-06-05T17:00:00.000Z",
+        "endDate": "2025-06-18T17:00:00.000Z"
+      }
+    ],
+    "educations": [
+      {
+        "id": "c1469eba-9faf-454a-aae2-3d444ade3855",
+        "name": "Computer Science",
+        "institution": "MIT",
+        "degree": "Bachelor of Computer Science",
+        "startDate": "2025-06-25T17:00:00.000Z",
+        "endDate": "2025-06-23T17:00:00.000Z"
+      }
+    ],
+    "certifications": [
+      {
+        "id": "58931dfc-9603-4fe4-939e-c4d65bb5a8c2",
+        "name": "Tech Certification",
+        "issuer": "Good Certification",
+        "startDate": "2025-06-27T20:27:14.415Z",
+        "credentialId": "",
+        "url": ""
+      }
+    ],
+    "awardOrHonors": [
+      {
+        "id": "7b5e4fbe-ee0a-49ab-85d0-513e2e277bdc",
+        "name": "My Award",
+        "institution": "MIT",
+        "description": "",
+        "date": "2025-06-27T20:30:20.308Z",
+        "url": ""
+      }
+    ],
+    "publications": [
+      {
+        "id": "666509cc-412e-4a9d-8a79-ac6b64f19c45",
+        "title": "Title",
+        "authors": [
+          "John Doe,John Due"
+        ],
+        "date": "2025-06-26T17:00:00.000Z",
+        "url": ""
+      }
+    ],
+    "languages": [
+      {
+        "id": "012989a2-8a17-4f38-8614-b0fe04feed65",
+        "name": "English",
+        "proficiency": "Native",
+        "level": "A2",
+        "url": ""
+      }
+    ]
+  },
+  "socials": [],
+  "technologies": [
+    {
+      "name": "NextJS"
+    },
+    {
+      "name": "fvvfvfv"
+    },
+    {
+      "name": "fdbdb"
+    },
+    {
+      "name": "fdbdgbgb"
+    },
+    {
+      "name": "dfbdgb"
+    }
+  ],
+  "roles": [
+    {
+      "name": "Full-Stack Developer"
+    }
+  ],
+  "workExperiences": [],
+  "educations": [],
+  "certifications": [],
+  "awardOrHonors": [],
+  "publications": [],
+  "languages": []
+}

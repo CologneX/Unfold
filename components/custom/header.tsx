@@ -1,19 +1,20 @@
-import { cn } from "@/lib/utils/style";
+import { cn } from "@/lib/utils";
 import { JSX, Suspense } from "react";
 import { Button } from "../ui/button";
 import { Download } from "lucide-react";
 import HeaderButtons from "./header-buttons";
+import Loading from "@/app/loading";
 
 export default function Header(): JSX.Element {
   return (
     <div
       className={cn(
-        `w-full rounded-xl flex items-center justify-center bg-accent border max-w-xl mx-auto h-16 backdrop-blur-xs px-4`
+        `w-full rounded-xl flex items-center justify-center bg-accent/40 border max-w-xl mx-auto h-16 backdrop-blur-xs px-4`
       )}
     >
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center justify-center">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading size={2} />}>
             <HeaderButtons />
           </Suspense>
         </div>
