@@ -316,7 +316,7 @@ export async function updateCV(cv: CV) {
         }
 
         const data = await readData()
-        await writeData({ ...data, cv: cv })
+        await writeData({ ...data, cv: validatedFields.data })
 
         revalidatePath('/curriculum-vitae')
         return { success: true, message: 'CV updated successfully' }
