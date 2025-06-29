@@ -1,143 +1,497 @@
 {
-  "profile": null,
+  "profile": {
+    "name": "John Doe",
+    "description": "Passionate software developer with expertise in modern web technologies and a commitment to creating innovative solutions.",
+    "profilePictureUrl": "/uploads/profile-placeholder.jpg",
+    "location": "San Francisco, CA",
+    "socials": []
+  },
   "projects": [
     {
-      "slug": "visionale",
-      "name": "Visionale",
-      "description": "<p>GG Gemink</p>",
-      "shortDescription": "A Video Platform",
-      "bannerUrl": "/uploads/1750834138816-tjhlb9x0zks.jpeg",
-      "imageUrl": [],
+      "slug": "task-master-pro",
+      "name": "Task Master Pro",
+      "description": "<p>A comprehensive project management application built with modern web technologies. Features include real-time collaboration, advanced filtering, deadline tracking, and team analytics. The application supports multiple project types and integrates with popular development tools.</p>",
+      "shortDescription": "Advanced project management platform with real-time collaboration",
+      "bannerUrl": "/uploads/project-banner-1.jpg",
+      "imageUrl": [
+        "/uploads/project-1-screenshot-1.jpg",
+        "/uploads/project-1-screenshot-2.jpg"
+      ],
       "technologies": [
         {
-          "name": "NextJS"
+          "name": "React"
+        },
+        {
+          "name": "Node.js"
+        },
+        {
+          "name": "PostgreSQL"
+        },
+        {
+          "name": "TypeScript"
         }
       ],
       "role": [
         {
           "name": "Full-Stack Developer"
+        },
+        {
+          "name": "UI/UX Designer"
         }
       ],
+      "repositoryUrl": "https://github.com/example/task-master-pro",
+      "liveUrl": "https://taskmaster-demo.example.com",
       "isFeatured": true,
-      "createdAt": "2025-06-25T06:49:15.373Z",
-      "updatedAt": "2025-06-25T06:49:15.373Z"
+      "createdAt": "2024-01-15T10:30:00.000Z",
+      "updatedAt": "2024-06-20T14:45:00.000Z"
+    },
+    {
+      "slug": "data-viz-dashboard",
+      "name": "Data Visualization Dashboard",
+      "description": "<p>Interactive analytics dashboard for business intelligence. Built with modern charting libraries and real-time data processing capabilities. Supports multiple data sources and provides customizable visualization options for different business metrics.</p>",
+      "shortDescription": "Interactive business intelligence dashboard",
+      "bannerUrl": "/uploads/project-banner-2.jpg",
+      "imageUrl": [
+        "/uploads/project-2-screenshot-1.jpg"
+      ],
+      "technologies": [
+        {
+          "name": "Vue.js"
+        },
+        {
+          "name": "D3.js"
+        },
+        {
+          "name": "Python"
+        },
+        {
+          "name": "MongoDB"
+        }
+      ],
+      "role": [
+        {
+          "name": "Frontend Developer"
+        },
+        {
+          "name": "Data Analyst"
+        }
+      ],
+      "repositoryUrl": "https://github.com/example/data-viz-dashboard",
+      "liveUrl": "https://dataviz-demo.example.com",
+      "isFeatured": true,
+      "createdAt": "2023-11-08T09:15:00.000Z",
+      "updatedAt": "2024-03-12T16:20:00.000Z"
+    },
+    {
+      "slug": "mobile-fitness-app",
+      "name": "Mobile Fitness Tracker",
+      "description": "<p>Cross-platform mobile application for fitness tracking and workout planning. Features include exercise libraries, progress tracking, social challenges, and integration with wearable devices. Built with React Native for iOS and Android platforms.</p>",
+      "shortDescription": "Cross-platform fitness tracking mobile app",
+      "bannerUrl": "/uploads/project-banner-3.jpg",
+      "imageUrl": [
+        "/uploads/project-3-screenshot-1.jpg",
+        "/uploads/project-3-screenshot-2.jpg",
+        "/uploads/project-3-screenshot-3.jpg"
+      ],
+      "technologies": [
+        {
+          "name": "React Native"
+        },
+        {
+          "name": "Firebase"
+        },
+        {
+          "name": "Redux"
+        },
+        {
+          "name": "SQLite"
+        }
+      ],
+      "role": [
+        {
+          "name": "Mobile Developer"
+        },
+        {
+          "name": "Backend Developer"
+        }
+      ],
+      "repositoryUrl": "https://github.com/example/fitness-tracker",
+      "liveUrl": "",
+      "isFeatured": false,
+      "createdAt": "2023-08-22T11:00:00.000Z",
+      "updatedAt": "2024-01-18T13:30:00.000Z"
     }
   ],
   "cv": {
-    "profile": {
-      "name": "Your name",
-      "description": "Your Description",
-      "profilePictureUrl": "/uploads/1750834138816-tjhlb9x0zks.jpeg",
-      "location": "City, Country",
-      "socials": []
-    },
-    "socials": [],
     "technologies": [
+      {
+        "name": "JavaScript"
+      },
+      {
+        "name": "TypeScript"
+      },
       {
         "name": "React"
       },
       {
-        "name": "Svelte"
+        "name": "Vue.js"
       },
       {
-        "name": "Angular"
+        "name": "Node.js"
       },
       {
-        "name": "NextJS"
+        "name": "Python"
+      },
+      {
+        "name": "PostgreSQL"
+      },
+      {
+        "name": "MongoDB"
+      },
+      {
+        "name": "Docker"
+      },
+      {
+        "name": "AWS"
+      },
+      {
+        "name": "GraphQL"
+      },
+      {
+        "name": "React Native"
       }
     ],
     "roles": [
       {
         "name": "Full-Stack Developer"
+      },
+      {
+        "name": "Frontend Developer"
+      },
+      {
+        "name": "Backend Developer"
+      },
+      {
+        "name": "Mobile Developer"
+      },
+      {
+        "name": "UI/UX Designer"
+      },
+      {
+        "name": "Data Analyst"
+      },
+      {
+        "name": "DevOps Engineer"
       }
     ],
     "workExperiences": [
       {
-        "id": "ba4ca8ce-3ec8-4f05-8df3-9c8befe72ccf",
-        "name": "Full-stack Engineer",
-        "description": "Team leader of....",
-        "startDate": "2025-06-05T17:00:00.000Z",
-        "endDate": "2025-06-18T17:00:00.000Z"
+        "id": "work-1",
+        "name": "Senior Software Engineer",
+        "description": "Led development of microservices architecture for e-commerce platform serving 1M+ users. Implemented CI/CD pipelines, reduced deployment time by 60%, and mentored junior developers. Collaborated with product managers to define technical requirements and delivered features ahead of schedule.",
+        "startDate": "2022-03-01T00:00:00.000Z",
+        "endDate": "2024-12-31T23:59:59.000Z"
+      },
+      {
+        "id": "work-2",
+        "name": "Full-Stack Developer",
+        "description": "Developed and maintained web applications using React, Node.js, and PostgreSQL. Built responsive user interfaces and RESTful APIs. Participated in code reviews, wrote comprehensive unit tests, and collaborated with cross-functional teams to deliver high-quality software solutions.",
+        "startDate": "2020-06-15T00:00:00.000Z",
+        "endDate": "2022-02-28T23:59:59.000Z"
+      },
+      {
+        "id": "work-3",
+        "name": "Frontend Developer",
+        "description": "Created interactive user interfaces for SaaS applications using modern JavaScript frameworks. Optimized application performance and implemented responsive designs. Worked closely with UX designers to translate mockups into functional components and ensured cross-browser compatibility.",
+        "startDate": "2019-01-10T00:00:00.000Z",
+        "endDate": "2020-06-10T23:59:59.000Z"
+      },
+      {
+        "id": "work-4",
+        "name": "Junior Web Developer",
+        "description": "Assisted in developing company websites and web applications. Gained experience with HTML, CSS, JavaScript, and basic backend technologies. Participated in agile development processes and contributed to team projects while learning best practices in software development.",
+        "startDate": "2018-08-01T00:00:00.000Z",
+        "endDate": "2018-12-31T23:59:59.000Z"
       }
     ],
     "educations": [
       {
-        "id": "c1469eba-9faf-454a-aae2-3d444ade3855",
+        "id": "edu-1",
         "name": "Computer Science",
-        "institution": "MIT",
-        "degree": "Bachelor of Computer Science",
-        "startDate": "2025-06-25T17:00:00.000Z",
-        "endDate": "2025-06-23T17:00:00.000Z"
+        "institution": "State University of Technology",
+        "degree": "Bachelor of Science",
+        "startDate": "2014-09-01T00:00:00.000Z",
+        "endDate": "2018-05-31T23:59:59.000Z"
+      },
+      {
+        "id": "edu-2",
+        "name": "Web Development Bootcamp",
+        "institution": "Tech Academy",
+        "degree": "Certificate",
+        "startDate": "2018-01-15T00:00:00.000Z",
+        "endDate": "2018-06-30T23:59:59.000Z"
+      },
+      {
+        "id": "edu-3",
+        "name": "Data Structures and Algorithms",
+        "institution": "Online Learning Platform",
+        "degree": "Specialization Certificate",
+        "startDate": "2019-03-01T00:00:00.000Z",
+        "endDate": "2019-08-31T23:59:59.000Z"
       }
     ],
     "certifications": [
       {
-        "id": "58931dfc-9603-4fe4-939e-c4d65bb5a8c2",
-        "name": "Tech Certification",
-        "issuer": "Good Certification",
-        "startDate": "2025-06-27T20:27:14.415Z",
-        "credentialId": "",
-        "url": ""
+        "id": "cert-1",
+        "name": "AWS Certified Solutions Architect",
+        "issuer": "Amazon Web Services",
+        "startDate": "2023-04-15T00:00:00.000Z",
+        "endDate": "2026-04-15T00:00:00.000Z",
+        "credentialId": "AWS-SAA-2023-001234",
+        "url": "https://aws.amazon.com/verification/cert-1234"
+      },
+      {
+        "id": "cert-2",
+        "name": "Google Cloud Professional Developer",
+        "issuer": "Google Cloud",
+        "startDate": "2022-11-20T00:00:00.000Z",
+        "endDate": "2024-11-20T00:00:00.000Z",
+        "credentialId": "GCP-PCD-2022-005678",
+        "url": "https://cloud.google.com/certification/verify/cert-5678"
+      },
+      {
+        "id": "cert-3",
+        "name": "MongoDB Certified Developer",
+        "issuer": "MongoDB Inc.",
+        "startDate": "2022-07-10T00:00:00.000Z",
+        "credentialId": "MDB-DEV-2022-009876",
+        "url": "https://university.mongodb.com/verify/cert-9876"
+      },
+      {
+        "id": "cert-4",
+        "name": "React Developer Certification",
+        "issuer": "Meta",
+        "startDate": "2021-09-05T00:00:00.000Z",
+        "credentialId": "META-REACT-2021-004321",
+        "url": "https://developers.facebook.com/verify/cert-4321"
       }
     ],
     "awardOrHonors": [
       {
-        "id": "7b5e4fbe-ee0a-49ab-85d0-513e2e277bdc",
-        "name": "My Award",
-        "institution": "MIT",
-        "description": "",
-        "date": "2025-06-27T20:30:20.308Z",
-        "url": ""
+        "id": "award-1",
+        "name": "Innovation Excellence Award",
+        "institution": "Tech Solutions Corp",
+        "description": "Recognized for developing an innovative machine learning solution that improved customer satisfaction by 35% and reduced processing time by 50%.",
+        "date": "2024-03-15T00:00:00.000Z",
+        "url": "https://techsolutions.com/awards/2024/innovation-excellence"
+      },
+      {
+        "id": "award-2",
+        "name": "Outstanding Team Collaboration",
+        "institution": "Digital Innovations Ltd",
+        "description": "Awarded for exceptional leadership in cross-functional team projects and mentoring junior developers.",
+        "date": "2023-08-22T00:00:00.000Z",
+        "url": "https://digitalinnovations.com/recognition/team-excellence"
+      },
+      {
+        "id": "award-3",
+        "name": "Hackathon First Place",
+        "institution": "Global Developer Conference",
+        "description": "Won first place in 48-hour hackathon by developing a social impact application for environmental monitoring.",
+        "date": "2023-06-10T00:00:00.000Z",
+        "url": "https://globaldevcon.com/hackathon/2023/winners"
+      },
+      {
+        "id": "award-4",
+        "name": "Dean's List",
+        "institution": "State University of Technology",
+        "description": "Achieved Dean's List recognition for academic excellence with GPA above 3.8 for three consecutive semesters.",
+        "date": "2017-12-15T00:00:00.000Z"
       }
     ],
     "publications": [
       {
-        "id": "666509cc-412e-4a9d-8a79-ac6b64f19c45",
-        "title": "Title",
+        "id": "pub-1",
+        "title": "Modern React Patterns: A Comprehensive Guide to Scalable Frontend Architecture",
         "authors": [
-          "John Doe,John Due"
+          "John Doe",
+          "Sarah Smith"
         ],
-        "date": "2025-06-26T17:00:00.000Z",
-        "url": ""
+        "date": "2024-02-14T00:00:00.000Z",
+        "url": "https://techjournal.com/articles/modern-react-patterns"
+      },
+      {
+        "id": "pub-2",
+        "title": "Microservices Performance Optimization: Lessons from Production",
+        "authors": [
+          "John Doe",
+          "Michael Brown",
+          "Lisa Davis"
+        ],
+        "date": "2023-09-08T00:00:00.000Z",
+        "url": "https://engineeringblog.com/microservices-optimization"
+      },
+      {
+        "id": "pub-3",
+        "title": "Building Accessible Web Applications: A Developer's Guide",
+        "authors": [
+          "John Doe"
+        ],
+        "date": "2023-05-20T00:00:00.000Z",
+        "url": "https://webdev.com/articles/accessibility-guide"
+      },
+      {
+        "id": "pub-4",
+        "title": "The Future of Full-Stack Development: Emerging Technologies and Trends",
+        "authors": [
+          "John Doe",
+          "Jennifer Wilson"
+        ],
+        "date": "2022-11-12T00:00:00.000Z",
+        "url": "https://futuretech.com/fullstack-development-trends"
       }
     ],
     "languages": [
       {
-        "id": "012989a2-8a17-4f38-8614-b0fe04feed65",
+        "id": "lang-1",
         "name": "English",
         "proficiency": "Native",
-        "level": "A2",
-        "url": ""
+        "level": "C2"
+      },
+      {
+        "id": "lang-2",
+        "name": "Spanish",
+        "proficiency": "Advanced",
+        "level": "B2",
+        "url": "https://certifiedlanguages.com/verify/spanish-b2-001234"
+      },
+      {
+        "id": "lang-3",
+        "name": "French",
+        "proficiency": "Intermediate",
+        "level": "B1",
+        "url": "https://languagecenter.com/verify/french-b1-005678"
+      },
+      {
+        "id": "lang-4",
+        "name": "German",
+        "proficiency": "Beginner",
+        "level": "A2"
+      },
+      {
+        "id": "lang-5",
+        "name": "Japanese",
+        "proficiency": "Beginner",
+        "level": "A1"
       }
     ]
   },
-  "socials": [],
+  "socials": [
+    {
+      "id": "global-social-1",
+      "name": "LinkedIn",
+      "url": "https://linkedin.com/in/johndoe-dev"
+    },
+    {
+      "id": "global-social-2",
+      "name": "GitHub",
+      "url": "https://github.com/johndoe-dev"
+    },
+    {
+      "id": "global-social-3",
+      "name": "Twitter",
+      "url": "https://twitter.com/johndoe_dev"
+    }
+  ],
   "technologies": [
     {
-      "name": "NextJS"
+      "name": "JavaScript"
     },
     {
-      "name": "fvvfvfv"
+      "name": "TypeScript"
     },
     {
-      "name": "fdbdb"
+      "name": "React"
     },
     {
-      "name": "fdbdgbgb"
+      "name": "Vue.js"
     },
     {
-      "name": "dfbdgb"
+      "name": "Angular"
+    },
+    {
+      "name": "Node.js"
+    },
+    {
+      "name": "Python"
+    },
+    {
+      "name": "Java"
+    },
+    {
+      "name": "PostgreSQL"
+    },
+    {
+      "name": "MongoDB"
+    },
+    {
+      "name": "Redis"
+    },
+    {
+      "name": "Docker"
+    },
+    {
+      "name": "Kubernetes"
+    },
+    {
+      "name": "AWS"
+    },
+    {
+      "name": "Azure"
+    },
+    {
+      "name": "GraphQL"
+    },
+    {
+      "name": "REST API"
+    },
+    {
+      "name": "React Native"
+    },
+    {
+      "name": "Flutter"
     }
   ],
   "roles": [
     {
       "name": "Full-Stack Developer"
+    },
+    {
+      "name": "Frontend Developer"
+    },
+    {
+      "name": "Backend Developer"
+    },
+    {
+      "name": "Mobile Developer"
+    },
+    {
+      "name": "UI/UX Designer"
+    },
+    {
+      "name": "Data Analyst"
+    },
+    {
+      "name": "DevOps Engineer"
+    },
+    {
+      "name": "Software Architect"
+    },
+    {
+      "name": "Technical Lead"
+    },
+    {
+      "name": "Product Manager"
     }
-  ],
-  "workExperiences": [],
-  "educations": [],
-  "certifications": [],
-  "awardOrHonors": [],
-  "publications": [],
-  "languages": []
+  ]
 }
