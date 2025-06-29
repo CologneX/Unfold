@@ -94,8 +94,6 @@ export type Language = {
 }
 
 export type CV = {
-    profile: Profile;
-    socials: Social[];
     technologies: Technology[];
     roles: Role[];
     workExperiences: WorkExperience[];
@@ -226,8 +224,6 @@ export const profileSchema = z.object({
 
 // CV (for forms that handle the whole CV)
 export const cvSchema = z.object({
-    profile: profileSchema,
-    socials: z.array(socialSchema),
     technologies: z.array(technologySchema),
     roles: z.array(roleSchema),
     workExperiences: z.array(workExperienceSchema),

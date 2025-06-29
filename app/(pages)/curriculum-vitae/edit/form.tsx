@@ -40,23 +40,28 @@ import {
   type ComboboxItem,
   type Technology,
   type Role,
+  Social,
+  Profile,
 } from "@/types/types";
-import { updateCV, createTechnology, createRole } from "@/app/actions";
+import {
+  updateCV,
+  createTechnology,
+  createRole,
+  updateProfile,
+  createSocial,
+  deleteSocial,
+} from "@/app/actions";
 import { cn } from "@/lib/utils";
 
 interface CurriculumVitaeEditFormProps {
   CV: CV | null;
   availableTechnologies: Technology[];
   availableRoles: Role[];
+  socials: Social[];
+  profile: Profile | null;
 }
 
 const formSteps = [
-  {
-    id: "profile",
-    title: "Profile",
-    description: "Basic information and bio",
-    icon: User,
-  },
   {
     id: "experience",
     title: "Experience",
@@ -93,6 +98,8 @@ export default function CurriculumVitaeEditForm({
   CV,
   availableTechnologies,
   availableRoles,
+  socials,
+  profile,
 }: CurriculumVitaeEditFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPending, startTransition] = useTransition();
@@ -100,14 +107,6 @@ export default function CurriculumVitaeEditForm({
   const form = useForm<CV>({
     resolver: zodResolver(cvSchema),
     defaultValues: CV || {
-      profile: {
-        name: "",
-        description: "",
-        profilePictureUrl: "",
-        location: "",
-        socials: [],
-      },
-      socials: [],
       technologies: [],
       roles: [],
       workExperiences: [],
@@ -172,15 +171,6 @@ export default function CurriculumVitaeEditForm({
   } = useFieldArray({
     control: form.control,
     name: "languages",
-  });
-
-  const {
-    fields: socialFields,
-    append: addSocial,
-    remove: removeSocial,
-  } = useFieldArray({
-    control: form.control,
-    name: "socials",
   });
 
   // Convert arrays to combobox format
@@ -316,6 +306,13 @@ export default function CurriculumVitaeEditForm({
         </div>
       </div>
 
+      {/* Profile and Socials Management */}
+      <div className="bg-background/50 border rounded-md mb-6">
+        <div className="container mx-auto p-6">
+          <ProfileSocialsForms profile={profile} socials={socials} />
+        </div>
+      </div>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -330,128 +327,8 @@ export default function CurriculumVitaeEditForm({
               transition={{ duration: 0.3 }}
               className="space-y-8"
             >
-              {/* Profile Step */}
-              {currentStep === 0 && (
-                <CVSection delay={0}>
-                  <CusFormSection
-                    title="Profile Information"
-                    description="Tell us about yourself and background"
-                    icon={<User className="h-5 w-5" />}
-                  >
-                    <ModernFieldGrid cols={2}>
-                      <FormField
-                        control={form.control}
-                        name="profile.name"
-                        render={({ field }) => (
-                          <CusFormField label="Full Name">
-                            <Input {...field} placeholder="John Doe" />
-                          </CusFormField>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="profile.location"
-                        render={({ field }) => (
-                          <CusFormField label="Location">
-                            <Input
-                              {...field}
-                              placeholder="San Francisco, USA"
-                            />
-                          </CusFormField>
-                        )}
-                      />
-                    </ModernFieldGrid>
-
-                    <FormField
-                      control={form.control}
-                      name="profile.description"
-                      render={({ field }) => (
-                        <CusFormField label="Professional Description">
-                          <Textarea
-                            {...field}
-                            placeholder="Experienced software engineer with 5+ years of experience..."
-                            className="min-h-[100px] resize-none"
-                          />
-                        </CusFormField>
-                      )}
-                    />
-
-                    <CusFormField label="Profile Picture">
-                      <div className="max-w-xs">
-                        <ImageUpload
-                          value={form.watch("profile.profilePictureUrl")}
-                          onChange={(url) =>
-                            form.setValue("profile.profilePictureUrl", url)
-                          }
-                        />
-                      </div>
-                    </CusFormField>
-
-                    {/* Social Links */}
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-medium">Social Links</h4>
-                          <p className="text-sm text-muted-foreground">
-                            Add links to your professional profiles
-                          </p>
-                        </div>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            addSocial({
-                              id: crypto.randomUUID(),
-                              name: "",
-                              url: "",
-                            })
-                          }
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Add Link
-                        </Button>
-                      </div>
-
-                      {socialFields.map((field, index) => (
-                        <ModernFormItem
-                          key={field.id}
-                          onDelete={() => removeSocial(index)}
-                          title={`Social Link ${index + 1}`}
-                        >
-                          <ModernFieldGrid cols={2}>
-                            <FormField
-                              control={form.control}
-                              name={`socials.${index}.name`}
-                              render={({ field }) => (
-                                <CusFormField label="Platform">
-                                  <Input {...field} placeholder="LinkedIn" />
-                                </CusFormField>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name={`socials.${index}.url`}
-                              render={({ field }) => (
-                                <CusFormField label="URL">
-                                  <Input
-                                    {...field}
-                                    placeholder="https://linkedin.com/in/johndoe"
-                                  />
-                                </CusFormField>
-                              )}
-                            />
-                          </ModernFieldGrid>
-                        </ModernFormItem>
-                      ))}
-                    </div>
-                  </CusFormSection>
-                </CVSection>
-              )}
-
               {/* Experience Step */}
-              {currentStep === 1 && (
+              {currentStep === 0 && (
                 <CVSection delay={0}>
                   <CusFormSection
                     title="Work Experience"
@@ -542,7 +419,7 @@ export default function CurriculumVitaeEditForm({
               )}
 
               {/* Education Step */}
-              {currentStep === 2 && (
+              {currentStep === 1 && (
                 <CVSection delay={0}>
                   <CusFormSection
                     title="Education"
@@ -640,7 +517,7 @@ export default function CurriculumVitaeEditForm({
               )}
 
               {/* Skills Step */}
-              {currentStep === 3 && (
+              {currentStep === 2 && (
                 <CVSection delay={0}>
                   <div className="space-y-8">
                     <CusFormSection
@@ -699,7 +576,7 @@ export default function CurriculumVitaeEditForm({
               )}
 
               {/* Achievements Step */}
-              {currentStep === 4 && (
+              {currentStep === 3 && (
                 <CVSection delay={0}>
                   <div className="space-y-8">
                     {/* Certifications */}
@@ -1000,7 +877,7 @@ export default function CurriculumVitaeEditForm({
               )}
 
               {/* Languages Step */}
-              {currentStep === 5 && (
+              {currentStep === 4 && (
                 <CVSection delay={0}>
                   <CusFormSection
                     title="Languages"
@@ -1150,6 +1027,274 @@ export default function CurriculumVitaeEditForm({
           </div>
         </form>
       </Form>
+    </div>
+  );
+}
+
+// Profile and Socials Management Component
+function ProfileSocialsForms({
+  profile,
+  socials,
+}: {
+  profile: Profile | null;
+  socials: Social[];
+}) {
+  const [isProfileEditing, setIsProfileEditing] = useState(false);
+  const [isSocialsEditing, setIsSocialsEditing] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
+  const handleUpdateProfile = useCallback((formData: FormData) => {
+    startTransition(async () => {
+      try {
+        await updateProfile(formData);
+        toast.success("Profile updated successfully!");
+        setIsProfileEditing(false);
+      } catch (error) {
+        toast.error(
+          `Failed to update profile: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
+      }
+    });
+  }, []);
+
+  const handleCreateSocial = useCallback((formData: FormData) => {
+    startTransition(async () => {
+      try {
+        await createSocial(formData);
+        toast.success("Social link added successfully!");
+      } catch (error) {
+        toast.error(
+          `Failed to add social link: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
+      }
+    });
+  }, []);
+
+  const handleDeleteSocial = useCallback((formData: FormData) => {
+    startTransition(async () => {
+      try {
+        await deleteSocial(formData);
+        toast.success("Social link deleted successfully!");
+      } catch (error) {
+        toast.error(
+          `Failed to delete social link: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
+        );
+      }
+    });
+  }, []);
+
+  return (
+    <div className="space-y-8">
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Profile & Social Links</h2>
+        <p className="text-sm text-muted-foreground mb-6">
+          Manage your profile information and social media links separately from
+          your CV content.
+        </p>
+      </div>
+
+      {/* Profile Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium">Profile Information</h3>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setIsProfileEditing(!isProfileEditing)}
+          >
+            {isProfileEditing ? "Cancel" : "Edit Profile"}
+          </Button>
+        </div>
+
+        {profile && !isProfileEditing && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-card rounded-lg">
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">
+                Name
+              </label>
+              <p className="text-sm">{profile.name}</p>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-muted-foreground">
+                Location
+              </label>
+              <p className="text-sm">{profile.location}</p>
+            </div>
+            <div className="md:col-span-2">
+              <label className="text-sm font-medium text-muted-foreground">
+                Description
+              </label>
+              <p className="text-sm">{profile.description}</p>
+            </div>
+          </div>
+        )}
+
+        {isProfileEditing && (
+          <form
+            action={handleUpdateProfile}
+            className="space-y-4 p-4 bg-card rounded-lg"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm font-medium">Full Name</label>
+                <Input
+                  name="name"
+                  defaultValue={profile?.name || ""}
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm font-medium">Location</label>
+                <Input
+                  name="location"
+                  defaultValue={profile?.location || ""}
+                  placeholder="San Francisco, CA"
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Description</label>
+              <Textarea
+                name="description"
+                defaultValue={profile?.description || ""}
+                placeholder="Professional description..."
+                className="min-h-[100px]"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Profile Picture URL</label>
+              <Input
+                name="profilePictureUrl"
+                defaultValue={profile?.profilePictureUrl || ""}
+                placeholder="/uploads/profile.jpg"
+                required
+              />
+            </div>
+            <input
+              type="hidden"
+              name="socials"
+              value={JSON.stringify(profile?.socials || [])}
+            />
+            <div className="flex gap-2">
+              <Button type="submit" disabled={isPending}>
+                {isPending ? "Saving..." : "Save Profile"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsProfileEditing(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        )}
+      </div>
+
+      {/* Socials Section */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-medium">Social Links</h3>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setIsSocialsEditing(!isSocialsEditing)}
+          >
+            {isSocialsEditing ? "Done" : "Manage Links"}
+          </Button>
+        </div>
+
+        {!isSocialsEditing && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {socials.map((social) => (
+              <div key={social.id} className="p-3 bg-card rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-sm">{social.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {social.url}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {socials.length === 0 && (
+              <p className="text-sm text-muted-foreground md:col-span-2">
+                No social links added yet.
+              </p>
+            )}
+          </div>
+        )}
+
+        {isSocialsEditing && (
+          <div className="space-y-4">
+            {/* Add Social Form */}
+            <form
+              action={handleCreateSocial}
+              className="p-4 bg-card rounded-lg"
+            >
+              <h4 className="font-medium mb-3">Add New Social Link</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Platform</label>
+                  <Input name="name" placeholder="LinkedIn" required />
+                </div>
+                <div>
+                  <label className="text-sm font-medium">URL</label>
+                  <Input
+                    name="url"
+                    type="url"
+                    placeholder="https://linkedin.com/in/johndoe"
+                    required
+                  />
+                </div>
+              </div>
+              <Button type="submit" className="mt-4" disabled={isPending}>
+                {isPending ? "Adding..." : "Add Link"}
+              </Button>
+            </form>
+
+            {/* Existing Socials */}
+            <div className="space-y-2">
+              {socials.map((social) => (
+                <div
+                  key={social.id}
+                  className="flex items-center justify-between p-3 bg-card rounded-lg"
+                >
+                  <div>
+                    <p className="font-medium text-sm">{social.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {social.url}
+                    </p>
+                  </div>
+                  <form action={handleDeleteSocial}>
+                    <input type="hidden" name="id" value={social.id} />
+                    <Button
+                      type="submit"
+                      variant="destructive"
+                      size="sm"
+                      disabled={isPending}
+                    >
+                      Delete
+                    </Button>
+                  </form>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
