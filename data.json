@@ -120,6 +120,84 @@
       "isFeatured": false,
       "createdAt": "2023-08-22T11:00:00.000Z",
       "updatedAt": "2024-01-18T13:30:00.000Z"
+    },
+    {
+      "slug": "mobile-fitness-3app",
+      "name": "Mobile Fitness Tracker",
+      "description": "<p>Cross-platform mobile application for fitness tracking and workout planning. Features include exercise libraries, progress tracking, social challenges, and integration with wearable devices. Built with React Native for iOS and Android platforms.</p>",
+      "shortDescription": "Cross-platform fitness tracking mobile app",
+      "bannerUrl": "/uploads/project-banner-3.jpg",
+      "imageUrl": [
+        "/uploads/project-3-screenshot-1.jpg",
+        "/uploads/project-3-screenshot-2.jpg",
+        "/uploads/project-3-screenshot-3.jpg"
+      ],
+      "technologies": [
+        {
+          "name": "React Native"
+        },
+        {
+          "name": "Firebase"
+        },
+        {
+          "name": "Redux"
+        },
+        {
+          "name": "SQLite"
+        }
+      ],
+      "role": [
+        {
+          "name": "Mobile Developer"
+        },
+        {
+          "name": "Backend Developer"
+        }
+      ],
+      "repositoryUrl": "https://github.com/example/fitness-tracker",
+      "liveUrl": "",
+      "isFeatured": false,
+      "createdAt": "2023-08-22T11:00:00.000Z",
+      "updatedAt": "2024-01-18T13:30:00.000Z"
+    },
+    {
+      "slug": "mobile-fitness2-app",
+      "name": "Mobile Fitness Tracker",
+      "description": "<p>Cross-platform mobile application for fitness tracking and workout planning. Features include exercise libraries, progress tracking, social challenges, and integration with wearable devices. Built with React Native for iOS and Android platforms.</p>",
+      "shortDescription": "Cross-platform fitness tracking mobile app",
+      "bannerUrl": "/uploads/project-banner-3.jpg",
+      "imageUrl": [
+        "/uploads/project-3-screenshot-1.jpg",
+        "/uploads/project-3-screenshot-2.jpg",
+        "/uploads/project-3-screenshot-3.jpg"
+      ],
+      "technologies": [
+        {
+          "name": "React Native"
+        },
+        {
+          "name": "Firebase"
+        },
+        {
+          "name": "Redux"
+        },
+        {
+          "name": "SQLite"
+        }
+      ],
+      "role": [
+        {
+          "name": "Mobile Developer"
+        },
+        {
+          "name": "Backend Developer"
+        }
+      ],
+      "repositoryUrl": "https://github.com/example/fitness-tracker",
+      "liveUrl": "",
+      "isFeatured": false,
+      "createdAt": "2023-08-22T11:00:00.000Z",
+      "updatedAt": "2024-01-18T13:30:00.000Z"
     }
   ],
   "cv": {

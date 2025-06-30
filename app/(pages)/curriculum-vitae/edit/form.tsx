@@ -107,14 +107,14 @@ export default function CurriculumVitaeEditForm({
   const form = useForm<CV>({
     resolver: zodResolver(cvSchema),
     defaultValues: CV || {
-      technologies: [],
-      roles: [],
-      workExperiences: [],
-      educations: [],
-      certifications: [],
-      awardOrHonors: [],
-      publications: [],
-      languages: [],
+  technologies: [],
+  roles: [],
+  workExperiences: [],
+  educations: [],
+  certifications: [],
+  awardOrHonors: [],
+  publications: [],
+  languages: [],
     },
   });
 
@@ -188,15 +188,15 @@ export default function CurriculumVitaeEditForm({
 
   // Handle technology and role additions
   const handleAddTechnology = useCallback(async (item: ComboboxItem) => {
-    const formData = new FormData();
-    formData.append("name", item.label);
-    await createTechnology(formData);
-  }, []);
+        const formData = new FormData();
+        formData.append("name", item.label);
+        await createTechnology(formData);
+    }, []);
 
   const handleAddRole = useCallback(async (item: ComboboxItem) => {
-    const formData = new FormData();
-    formData.append("name", item.label);
-    await createRole(formData);
+        const formData = new FormData();
+        formData.append("name", item.label);
+        await createRole(formData);
   }, []);
 
   // Form submission
@@ -213,7 +213,7 @@ export default function CurriculumVitaeEditForm({
         );
       }
     });
-  }, []);
+    }, []);
 
   // Navigation helpers
   const nextStep = () =>
@@ -223,7 +223,7 @@ export default function CurriculumVitaeEditForm({
 
   // Calculate progress
   const progress = ((currentStep + 1) / formSteps.length) * 100;
-  return (
+    return (
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="bg-background/50 border rounded-md mt-4">
@@ -336,30 +336,30 @@ export default function CurriculumVitaeEditForm({
                     icon={<Briefcase className="h-5 w-5" />}
                     onAdd={() =>
                       addWork({
-                        id: crypto.randomUUID(),
-                        name: "",
-                        description: "",
-                        startDate: new Date(),
-                        endDate: new Date(),
+        id: crypto.randomUUID(),
+        name: "",
+        description: "",
+        startDate: new Date(),
+        endDate: new Date(),
                       })
                     }
                     addLabel="Add Experience"
                   >
                     {workFields.map((field, index) => (
                       <ModernFormItem
-                        key={field.id}
+                key={field.id}
                         onDelete={() => removeWork(index)}
                         title="Work Experience"
                         index={index}
                       >
                         <ModernFieldGrid cols={1}>
-                          <FormField
-                            control={form.control}
-                            name={`workExperiences.${index}.name`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`workExperiences.${index}.name`}
+                  render={({ field }) => (
                               <CusFormField label="Position/Role">
-                                <Input
-                                  {...field}
+                        <Input
+                          {...field}
                                   placeholder="Senior Software Engineer"
                                 />
                               </CusFormField>
@@ -382,7 +382,7 @@ export default function CurriculumVitaeEditForm({
                             />
                           </CusFormField>
                           <CusFormField label="End Date">
-                            <DatePicker
+                          <DatePicker
                               value={form.watch(
                                 `workExperiences.${index}.endDate`
                               )}
@@ -396,10 +396,10 @@ export default function CurriculumVitaeEditForm({
                           </CusFormField>
                         </ModernFieldGrid>
 
-                        <FormField
-                          control={form.control}
+                  <FormField
+                    control={form.control}
                           name={`workExperiences.${index}.description`}
-                          render={({ field }) => (
+                    render={({ field }) => (
                             <CusFormField
                               label="Description"
                               description="Describe your responsibilities, achievements, and impact"
@@ -427,28 +427,28 @@ export default function CurriculumVitaeEditForm({
                     icon={<GraduationCap className="h-5 w-5" />}
                     onAdd={() =>
                       addEducation({
-                        id: crypto.randomUUID(),
-                        name: "",
-                        institution: "",
-                        degree: "",
-                        startDate: new Date(),
-                        endDate: new Date(),
+        id: crypto.randomUUID(),
+        name: "",
+        institution: "",
+        degree: "",
+        startDate: new Date(),
+        endDate: new Date(),
                       })
                     }
                     addLabel="Add Education"
                   >
                     {educationFields.map((field, index) => (
                       <ModernFormItem
-                        key={field.id}
+                key={field.id}
                         onDelete={() => removeEducation(index)}
                         title="Education"
                         index={index}
                       >
                         <ModernFieldGrid cols={2}>
-                          <FormField
-                            control={form.control}
-                            name={`educations.${index}.name`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`educations.${index}.name`}
+                  render={({ field }) => (
                               <CusFormField label="Program/Course">
                                 <Input
                                   {...field}
@@ -457,24 +457,24 @@ export default function CurriculumVitaeEditForm({
                               </CusFormField>
                             )}
                           />
-                          <FormField
-                            control={form.control}
-                            name={`educations.${index}.institution`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`educations.${index}.institution`}
+                  render={({ field }) => (
                               <CusFormField label="Institution">
-                                <Input
-                                  {...field}
+                        <Input
+                          {...field}
                                   placeholder="Stanford University"
-                                />
+                        />
                               </CusFormField>
-                            )}
-                          />
+                  )}
+                />
                         </ModernFieldGrid>
 
-                        <FormField
-                          control={form.control}
-                          name={`educations.${index}.degree`}
-                          render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`educations.${index}.degree`}
+                  render={({ field }) => (
                             <CusFormField label="Degree">
                               <Input
                                 {...field}
@@ -486,7 +486,7 @@ export default function CurriculumVitaeEditForm({
 
                         <ModernFieldGrid cols={2}>
                           <CusFormField label="Start Date">
-                            <DatePicker
+                          <DatePicker
                               value={form.watch(
                                 `educations.${index}.startDate`
                               )}
@@ -499,7 +499,7 @@ export default function CurriculumVitaeEditForm({
                             />
                           </CusFormField>
                           <CusFormField label="End Date">
-                            <DatePicker
+                          <DatePicker
                               value={form.watch(`educations.${index}.endDate`)}
                               onChange={(date: Date) =>
                                 form.setValue(
@@ -586,41 +586,41 @@ export default function CurriculumVitaeEditForm({
                       icon={<Shield className="h-5 w-5" />}
                       onAdd={() =>
                         addCertification({
-                          id: crypto.randomUUID(),
-                          name: "",
-                          issuer: "",
-                          startDate: new Date(),
-                          endDate: undefined,
-                          credentialId: "",
-                          url: "",
+        id: crypto.randomUUID(),
+        name: "",
+        issuer: "",
+        startDate: new Date(),
+        endDate: undefined,
+        credentialId: "",
+        url: "",
                         })
                       }
                       addLabel="Add Certification"
                     >
                       {certificationFields.map((field, index) => (
                         <ModernFormItem
-                          key={field.id}
+                key={field.id}
                           onDelete={() => removeCertification(index)}
                           title="Certification"
                           index={index}
                         >
                           <ModernFieldGrid cols={2}>
-                            <FormField
-                              control={form.control}
-                              name={`certifications.${index}.name`}
-                              render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`certifications.${index}.name`}
+                  render={({ field }) => (
                                 <CusFormField label="Certification Name">
-                                  <Input
-                                    {...field}
+                        <Input
+                          {...field}
                                     placeholder="AWS Solutions Architect"
-                                  />
+                        />
                                 </CusFormField>
-                              )}
-                            />
-                            <FormField
-                              control={form.control}
-                              name={`certifications.${index}.issuer`}
-                              render={({ field }) => (
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`certifications.${index}.issuer`}
+                  render={({ field }) => (
                                 <CusFormField label="Issuing Organization">
                                   <Input
                                     {...field}
@@ -663,22 +663,22 @@ export default function CurriculumVitaeEditForm({
                           </ModernFieldGrid>
 
                           <ModernFieldGrid cols={2}>
-                            <FormField
-                              control={form.control}
-                              name={`certifications.${index}.credentialId`}
-                              render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`certifications.${index}.credentialId`}
+                  render={({ field }) => (
                                 <CusFormField label="Credential ID (Optional)">
                                   <Input {...field} placeholder="ABC123XYZ" />
                                 </CusFormField>
                               )}
                             />
-                            <FormField
-                              control={form.control}
-                              name={`certifications.${index}.url`}
-                              render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`certifications.${index}.url`}
+                  render={({ field }) => (
                                 <CusFormField label="Verification URL (Optional)">
-                                  <Input
-                                    {...field}
+                        <Input
+                          {...field}
                                     placeholder="https://verify.example.com"
                                   />
                                 </CusFormField>
@@ -696,28 +696,28 @@ export default function CurriculumVitaeEditForm({
                       icon={<Award className="h-5 w-5" />}
                       onAdd={() =>
                         addAward({
-                          id: crypto.randomUUID(),
-                          name: "",
-                          institution: "",
-                          description: "",
-                          date: new Date(),
-                          url: "",
+        id: crypto.randomUUID(),
+        name: "",
+        institution: "",
+        description: "",
+        date: new Date(),
+        url: "",
                         })
                       }
                       addLabel="Add Award"
                     >
                       {awardFields.map((field, index) => (
                         <ModernFormItem
-                          key={field.id}
+                key={field.id}
                           onDelete={() => removeAward(index)}
                           title="Award"
                           index={index}
                         >
                           <ModernFieldGrid cols={2}>
-                            <FormField
-                              control={form.control}
-                              name={`awardOrHonors.${index}.name`}
-                              render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`awardOrHonors.${index}.name`}
+                  render={({ field }) => (
                                 <CusFormField label="Award Name">
                                   <Input
                                     {...field}
@@ -726,13 +726,13 @@ export default function CurriculumVitaeEditForm({
                                 </CusFormField>
                               )}
                             />
-                            <FormField
-                              control={form.control}
-                              name={`awardOrHonors.${index}.institution`}
-                              render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`awardOrHonors.${index}.institution`}
+                  render={({ field }) => (
                                 <CusFormField label="Awarding Institution">
-                                  <Input
-                                    {...field}
+                        <Input
+                          {...field}
                                     placeholder="Company Name"
                                   />
                                 </CusFormField>
@@ -752,30 +752,30 @@ export default function CurriculumVitaeEditForm({
                             />
                           </CusFormField>
 
-                          <FormField
-                            control={form.control}
-                            name={`awardOrHonors.${index}.description`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`awardOrHonors.${index}.description`}
+                  render={({ field }) => (
                               <CusFormField
                                 label="Description (Optional)"
                                 description="Brief description of the award and why you received it"
                               >
-                                <Textarea
-                                  {...field}
+                        <Textarea
+                          {...field}
                                   placeholder="Recognized for outstanding performance..."
                                   className="min-h-[100px] resize-none"
-                                />
+                        />
                               </CusFormField>
-                            )}
-                          />
+                  )}
+                />
 
-                          <FormField
-                            control={form.control}
-                            name={`awardOrHonors.${index}.url`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`awardOrHonors.${index}.url`}
+                  render={({ field }) => (
                               <CusFormField label="URL (Optional)">
-                                <Input
-                                  {...field}
+                        <Input
+                          {...field}
                                   placeholder="https://award.example.com"
                                 />
                               </CusFormField>
@@ -792,44 +792,44 @@ export default function CurriculumVitaeEditForm({
                       icon={<BookOpen className="h-5 w-5" />}
                       onAdd={() =>
                         addPublication({
-                          id: crypto.randomUUID(),
-                          title: "",
-                          authors: [],
-                          date: new Date(),
-                          url: "",
+        id: crypto.randomUUID(),
+        title: "",
+        authors: [],
+        date: new Date(),
+        url: "",
                         })
                       }
                       addLabel="Add Publication"
                     >
                       {publicationFields.map((field, index) => (
                         <ModernFormItem
-                          key={field.id}
+                key={field.id}
                           onDelete={() => removePublication(index)}
                           title="Publication"
                           index={index}
                         >
-                          <FormField
-                            control={form.control}
-                            name={`publications.${index}.title`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`publications.${index}.title`}
+                  render={({ field }) => (
                               <CusFormField label="Title">
                                 <Input
                                   {...field}
                                   placeholder="A Study on Modern Web Development"
                                 />
                               </CusFormField>
-                            )}
-                          />
+                  )}
+                />
 
-                          <FormField
-                            control={form.control}
-                            name={`publications.${index}.authors`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`publications.${index}.authors`}
+                  render={({ field }) => (
                               <CusFormField
                                 label="Authors"
                                 description="Comma-separated list of authors"
                               >
-                                <Input
+                        <Input
                                   value={field.value?.join(", ") || ""}
                                   onChange={(e) => {
                                     const authors = e.target.value
@@ -856,13 +856,13 @@ export default function CurriculumVitaeEditForm({
                                 }
                               />
                             </CusFormField>
-                            <FormField
-                              control={form.control}
-                              name={`publications.${index}.url`}
-                              render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`publications.${index}.url`}
+                  render={({ field }) => (
                                 <CusFormField label="URL (Optional)">
-                                  <Input
-                                    {...field}
+                        <Input
+                          {...field}
                                     placeholder="https://publication.example.com"
                                   />
                                 </CusFormField>
@@ -885,38 +885,38 @@ export default function CurriculumVitaeEditForm({
                     icon={<Languages className="h-5 w-5" />}
                     onAdd={() =>
                       addLanguage({
-                        id: crypto.randomUUID(),
-                        name: "",
-                        proficiency: "Beginner",
-                        level: undefined,
-                        url: "",
+      id: crypto.randomUUID(),
+      name: "",
+      proficiency: "Beginner",
+      level: undefined,
+      url: "",
                       })
                     }
                     addLabel="Add Language"
                   >
                     {languageFields.map((field, index) => (
                       <ModernFormItem
-                        key={field.id}
+              key={field.id}
                         onDelete={() => removeLanguage(index)}
                         title="Language"
                         index={index}
                       >
                         <ModernFieldGrid cols={2}>
-                          <FormField
-                            control={form.control}
-                            name={`languages.${index}.name`}
-                            render={({ field }) => (
+              <FormField
+                control={form.control}
+                name={`languages.${index}.name`}
+                render={({ field }) => (
                               <CusFormField label="Language">
                                 <Input {...field} placeholder="English" />
                               </CusFormField>
                             )}
                           />
-                          <FormField
-                            control={form.control}
-                            name={`languages.${index}.proficiency`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`languages.${index}.proficiency`}
+                  render={({ field }) => (
                               <CusFormField label="Proficiency Level">
-                                <SelectResponsive
+                        <SelectResponsive
                                   value={field.value}
                                   onChange={field.onChange}
                                   options={[
@@ -937,13 +937,13 @@ export default function CurriculumVitaeEditForm({
                         </ModernFieldGrid>
 
                         <ModernFieldGrid cols={2}>
-                          <FormField
-                            control={form.control}
-                            name={`languages.${index}.level`}
-                            render={({ field }) => (
+                <FormField
+                  control={form.control}
+                  name={`languages.${index}.level`}
+                  render={({ field }) => (
                               <CusFormField label="CEFR Level (Optional)">
-                                <SelectResponsive
-                                  value={field.value || null}
+                        <SelectResponsive
+                          value={field.value || null}
                                   onChange={field.onChange}
                                   options={[
                                     { value: "A1", label: "A1 - Beginner" },
@@ -961,10 +961,10 @@ export default function CurriculumVitaeEditForm({
                               </CusFormField>
                             )}
                           />
-                          <FormField
-                            control={form.control}
-                            name={`languages.${index}.url`}
-                            render={({ field }) => (
+              <FormField
+                control={form.control}
+                name={`languages.${index}.url`}
+                render={({ field }) => (
                               <CusFormField label="Certificate URL (Optional)">
                                 <Input
                                   {...field}
@@ -980,7 +980,7 @@ export default function CurriculumVitaeEditForm({
                 </CVSection>
               )}
             </motion.div>
-          </AnimatePresence>
+        </AnimatePresence>
 
           {/* Navigation buttons */}
           <div className="flex items-center justify-between pt-8">
