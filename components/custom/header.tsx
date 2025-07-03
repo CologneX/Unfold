@@ -7,6 +7,7 @@ import { Download, Menu, X, Edit } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import PdfDownloadButton from "./pdf-download-button";
 
 const navigationItems = [
   { name: "Home", href: "/" },
@@ -128,15 +129,7 @@ export default function Header() {
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="relative overflow-hidden bg-primary/10 border-primary/20 text-primary hover:bg-primary/20 group"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                  <Download className="h-4 w-4 mr-2" />
-                  CV
-                </Button>
+                <PdfDownloadButton />
               </motion.div>
             </div>
           </div>
