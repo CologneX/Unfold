@@ -34,13 +34,13 @@ export function generateSlug(name: string): string {
 }
 
 /**
- * Format a date to a ISO string
+ * Format a date to a localized string
  * @param date - The date to format
  * @returns {string} The formatted date
  */
 export function formatDate(date: Date | string): string {
-    // get current locale
-    const locale = navigator.language;
+    // Use 'en-US' as default locale for server-side rendering
+    const locale = typeof window !== 'undefined' ? navigator.language : 'en-US';
     return new Date(date).toLocaleDateString(locale, {
         year: "numeric",
         month: "long",

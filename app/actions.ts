@@ -6,7 +6,6 @@ import { revalidatePath } from 'next/cache'
 import {
     profileSchema,
     projectSchema,
-    cvSchema,
     socialSchema,
     technologySchema,
     roleSchema,
@@ -18,7 +17,6 @@ import {
     languageSchema,
     type Profile,
     type Project,
-    type CV,
     type Social,
     type Technology,
     type Role,
@@ -28,7 +26,8 @@ import {
     type AwardOrHonor,
     type Publication,
     type Language,
-    type DataStore
+    Data,
+    cvStoreSchema
 } from '@/types/types'
 import { generateSlug } from '@/lib/utils'
 import { mkdir } from 'fs/promises'
@@ -36,8 +35,8 @@ import { mkdir } from 'fs/promises'
 const DATA_FILE = join(process.cwd(), 'data.json')
 
 // Helper function to generate unique slug for projects
-async function generateUniqueSlug(name: string, data: DataStore, excludeSlug?: string): Promise<string> {
-    let baseSlug = generateSlug(name)
+async function generateUniqueSlug(name: string, data: Data, excludeSlug?: string): Promise<string> {
+    const baseSlug = generateSlug(name)
     let slug = baseSlug
     let counter = 1
 
@@ -50,7 +49,7 @@ async function generateUniqueSlug(name: string, data: DataStore, excludeSlug?: s
 }
 
 // Helper function to read data from JSON file
-async function readData(): Promise<DataStore> {
+async function readData(): Promise<Data> {
     try {
         const fileContent = await readFile(DATA_FILE, 'utf-8')
         return JSON.parse(fileContent)
@@ -60,7 +59,7 @@ async function readData(): Promise<DataStore> {
 }
 
 // Helper function to write data to JSON file
-async function writeData(data: DataStore): Promise<void> {
+async function writeData(data: Data): Promise<void> {
     try {
         await writeFile(DATA_FILE, JSON.stringify(data, null, 2))
     } catch (error) {
@@ -94,7 +93,7 @@ export async function uploadImage(formData: FormData): Promise<{ success: boolea
         try {
             await mkdir(uploadsDir, { recursive: true })
         } catch (error) {
-            // Directory might already exist, which is fine
+            console.error('Failed to create uploads directory:', error)
         }
 
         // Generate unique filename
@@ -298,25 +297,25 @@ export async function deleteProject(formData: FormData) {
 }
 
 // CV ACTIONS
-export async function readCV(): Promise<CV | null> {
+export async function readCV(): Promise<Data | null> {
     try {
         const data = await readData()
-        return data.cv
+        return data
     } catch (error) {
         throw new Error(`Failed to read CV: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
 }
 
-export async function updateCV(cv: CV) {
+export async function updateCV(cv: Data) {
     try {
-        const validatedFields = cvSchema.safeParse(cv)
+        const validatedFields = cvStoreSchema.safeParse(cv)
 
         if (!validatedFields.success) {
             throw new Error(`Validation failed: ${JSON.stringify(validatedFields.error.flatten().fieldErrors)}`)
         }
 
         const data = await readData()
-        await writeData({ ...data, cv: validatedFields.data })
+        await writeData({ ...data, ...validatedFields.data })
 
         revalidatePath('/curriculum-vitae')
         return { success: true, message: 'CV updated successfully' }
@@ -329,7 +328,7 @@ export async function updateCV(cv: CV) {
 export async function listSocials(): Promise<Social[]> {
     try {
         const data = await readData()
-        return data.socials
+        return data.profile.socials
     } catch (error) {
         throw new Error(`Failed to list socials: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -350,7 +349,7 @@ export async function createSocial(formData: FormData) {
         }
 
         const data = await readData()
-        data.socials.push(validatedFields.data)
+        data.profile.socials.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/profile')
@@ -368,13 +367,13 @@ export async function deleteSocial(formData: FormData) {
         }
 
         const data = await readData()
-        const socialIndex = data.socials.findIndex(s => s.id === id)
+        const socialIndex = data.profile.socials.findIndex(s => s.id === id)
 
         if (socialIndex === -1) {
             throw new Error(`Social with id "${id}" not found`)
         }
 
-        data.socials.splice(socialIndex, 1)
+        data.profile.socials.splice(socialIndex, 1)
         await writeData(data)
 
         revalidatePath('/profile')
@@ -388,7 +387,7 @@ export async function deleteSocial(formData: FormData) {
 export async function listTechnologies(): Promise<Technology[]> {
     try {
         const data = await readData()
-        return data.technologies
+        return data.cv.technologies
     } catch (error) {
         throw new Error(`Failed to list technologies: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -409,12 +408,12 @@ export async function createTechnology(formData: FormData) {
         const data = await readData()
 
         // Check if technology with same name already exists
-        const existingTechnology = data.technologies.find(t => t.name === validatedFields.data.name)
+        const existingTechnology = data.cv.technologies.find(t => t.name === validatedFields.data.name)
         if (existingTechnology) {
             throw new Error(`Technology with name "${validatedFields.data.name}" already exists`)
         }
 
-        data.technologies.push(validatedFields.data)
+        data.cv.technologies.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/admin/technologies')
@@ -432,13 +431,13 @@ export async function deleteTechnology(formData: FormData) {
         }
 
         const data = await readData()
-        const technologyIndex = data.technologies.findIndex(t => t.name === name)
+        const technologyIndex = data.cv.technologies.findIndex(t => t.name === name)
 
         if (technologyIndex === -1) {
             throw new Error(`Technology with name "${name}" not found`)
         }
 
-        data.technologies.splice(technologyIndex, 1)
+        data.cv.technologies.splice(technologyIndex, 1)
         await writeData(data)
 
         revalidatePath('/admin/technologies')
@@ -452,7 +451,7 @@ export async function deleteTechnology(formData: FormData) {
 export async function listRoles(): Promise<Role[]> {
     try {
         const data = await readData()
-        return data.roles
+        return data.cv.roles
     } catch (error) {
         throw new Error(`Failed to list roles: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -473,12 +472,12 @@ export async function createRole(formData: FormData) {
         const data = await readData()
 
         // Check if role with same name already exists
-        const existingRole = data.roles.find(r => r.name === validatedFields.data.name)
+        const existingRole = data.cv.roles.find(r => r.name === validatedFields.data.name)
         if (existingRole) {
             throw new Error(`Role with name "${validatedFields.data.name}" already exists`)
         }
 
-        data.roles.push(validatedFields.data)
+        data.cv.roles.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/admin/roles')
@@ -496,13 +495,13 @@ export async function deleteRole(formData: FormData) {
         }
 
         const data = await readData()
-        const roleIndex = data.roles.findIndex(r => r.name === name)
+        const roleIndex = data.cv.roles.findIndex(r => r.name === name)
 
         if (roleIndex === -1) {
             throw new Error(`Role with name "${name}" not found`)
         }
 
-        data.roles.splice(roleIndex, 1)
+        data.cv.roles.splice(roleIndex, 1)
         await writeData(data)
 
         revalidatePath('/admin/roles')
@@ -516,7 +515,7 @@ export async function deleteRole(formData: FormData) {
 export async function listWorkExperiences(): Promise<WorkExperience[]> {
     try {
         const data = await readData()
-        return data.workExperiences.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+        return data.cv.workExperiences.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
     } catch (error) {
         throw new Error(`Failed to list work experiences: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -539,7 +538,7 @@ export async function createWorkExperience(formData: FormData) {
         }
 
         const data = await readData()
-        data.workExperiences.push(validatedFields.data)
+        data.cv.workExperiences.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -571,13 +570,13 @@ export async function updateWorkExperience(formData: FormData) {
         }
 
         const data = await readData()
-        const workExperienceIndex = data.workExperiences.findIndex(w => w.id === id)
+        const workExperienceIndex = data.cv.workExperiences.findIndex(w => w.id === id)
 
         if (workExperienceIndex === -1) {
             throw new Error(`Work experience with id "${id}" not found`)
         }
 
-        data.workExperiences[workExperienceIndex] = validatedFields.data
+        data.cv.workExperiences[workExperienceIndex] = validatedFields.data
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -595,13 +594,13 @@ export async function deleteWorkExperience(formData: FormData) {
         }
 
         const data = await readData()
-        const workExperienceIndex = data.workExperiences.findIndex(w => w.id === id)
+        const workExperienceIndex = data.cv.workExperiences.findIndex(w => w.id === id)
 
         if (workExperienceIndex === -1) {
             throw new Error(`Work experience with id "${id}" not found`)
         }
 
-        data.workExperiences.splice(workExperienceIndex, 1)
+        data.cv.workExperiences.splice(workExperienceIndex, 1)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -615,7 +614,7 @@ export async function deleteWorkExperience(formData: FormData) {
 export async function listEducations(): Promise<Education[]> {
     try {
         const data = await readData()
-        return data.educations.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+        return data.cv.educations.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
     } catch (error) {
         throw new Error(`Failed to list educations: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -639,7 +638,7 @@ export async function createEducation(formData: FormData) {
         }
 
         const data = await readData()
-        data.educations.push(validatedFields.data)
+        data.cv.educations.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -672,13 +671,13 @@ export async function updateEducation(formData: FormData) {
         }
 
         const data = await readData()
-        const educationIndex = data.educations.findIndex(e => e.id === id)
+        const educationIndex = data.cv.educations.findIndex(e => e.id === id)
 
         if (educationIndex === -1) {
             throw new Error(`Education with id "${id}" not found`)
         }
 
-        data.educations[educationIndex] = validatedFields.data
+        data.cv.educations[educationIndex] = validatedFields.data
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -696,13 +695,13 @@ export async function deleteEducation(formData: FormData) {
         }
 
         const data = await readData()
-        const educationIndex = data.educations.findIndex(e => e.id === id)
+        const educationIndex = data.cv.educations.findIndex(e => e.id === id)
 
         if (educationIndex === -1) {
             throw new Error(`Education with id "${id}" not found`)
         }
 
-        data.educations.splice(educationIndex, 1)
+        data.cv.educations.splice(educationIndex, 1)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -716,7 +715,7 @@ export async function deleteEducation(formData: FormData) {
 export async function listCertifications(): Promise<Certification[]> {
     try {
         const data = await readData()
-        return data.certifications.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
+        return data.cv.certifications.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime())
     } catch (error) {
         throw new Error(`Failed to list certifications: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -741,7 +740,7 @@ export async function createCertification(formData: FormData) {
         }
 
         const data = await readData()
-        data.certifications.push(validatedFields.data)
+        data.cv.certifications.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -775,13 +774,13 @@ export async function updateCertification(formData: FormData) {
         }
 
         const data = await readData()
-        const certificationIndex = data.certifications.findIndex(c => c.id === id)
+        const certificationIndex = data.cv.certifications.findIndex(c => c.id === id)
 
         if (certificationIndex === -1) {
             throw new Error(`Certification with id "${id}" not found`)
         }
 
-        data.certifications[certificationIndex] = validatedFields.data
+        data.cv.certifications[certificationIndex] = validatedFields.data
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -799,13 +798,13 @@ export async function deleteCertification(formData: FormData) {
         }
 
         const data = await readData()
-        const certificationIndex = data.certifications.findIndex(c => c.id === id)
+        const certificationIndex = data.cv.certifications.findIndex(c => c.id === id)
 
         if (certificationIndex === -1) {
             throw new Error(`Certification with id "${id}" not found`)
         }
 
-        data.certifications.splice(certificationIndex, 1)
+        data.cv.certifications.splice(certificationIndex, 1)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -819,7 +818,7 @@ export async function deleteCertification(formData: FormData) {
 export async function listAwardOrHonors(): Promise<AwardOrHonor[]> {
     try {
         const data = await readData()
-        return data.awardOrHonors.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        return data.cv.awardOrHonors.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     } catch (error) {
         throw new Error(`Failed to list awards or honors: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -843,7 +842,7 @@ export async function createAwardOrHonor(formData: FormData) {
         }
 
         const data = await readData()
-        data.awardOrHonors.push(validatedFields.data)
+        data.cv.awardOrHonors.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -876,13 +875,13 @@ export async function updateAwardOrHonor(formData: FormData) {
         }
 
         const data = await readData()
-        const awardOrHonorIndex = data.awardOrHonors.findIndex(a => a.id === id)
+        const awardOrHonorIndex = data.cv.awardOrHonors.findIndex(a => a.id === id)
 
         if (awardOrHonorIndex === -1) {
             throw new Error(`Award or honor with id "${id}" not found`)
         }
 
-        data.awardOrHonors[awardOrHonorIndex] = validatedFields.data
+        data.cv.awardOrHonors[awardOrHonorIndex] = validatedFields.data
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -900,13 +899,13 @@ export async function deleteAwardOrHonor(formData: FormData) {
         }
 
         const data = await readData()
-        const awardOrHonorIndex = data.awardOrHonors.findIndex(a => a.id === id)
+        const awardOrHonorIndex = data.cv.awardOrHonors.findIndex(a => a.id === id)
 
         if (awardOrHonorIndex === -1) {
             throw new Error(`Award or honor with id "${id}" not found`)
         }
 
-        data.awardOrHonors.splice(awardOrHonorIndex, 1)
+        data.cv.awardOrHonors.splice(awardOrHonorIndex, 1)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -920,7 +919,7 @@ export async function deleteAwardOrHonor(formData: FormData) {
 export async function listPublications(): Promise<Publication[]> {
     try {
         const data = await readData()
-        return data.publications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        return data.cv.publications.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     } catch (error) {
         throw new Error(`Failed to list publications: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -943,7 +942,7 @@ export async function createPublication(formData: FormData) {
         }
 
         const data = await readData()
-        data.publications.push(validatedFields.data)
+        data.cv.publications.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -975,13 +974,13 @@ export async function updatePublication(formData: FormData) {
         }
 
         const data = await readData()
-        const publicationIndex = data.publications.findIndex(p => p.id === id)
+        const publicationIndex = data.cv.publications.findIndex(p => p.id === id)
 
         if (publicationIndex === -1) {
             throw new Error(`Publication with id "${id}" not found`)
         }
 
-        data.publications[publicationIndex] = validatedFields.data
+        data.cv.publications[publicationIndex] = validatedFields.data
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -999,13 +998,13 @@ export async function deletePublication(formData: FormData) {
         }
 
         const data = await readData()
-        const publicationIndex = data.publications.findIndex(p => p.id === id)
+        const publicationIndex = data.cv.publications.findIndex(p => p.id === id)
 
         if (publicationIndex === -1) {
             throw new Error(`Publication with id "${id}" not found`)
         }
 
-        data.publications.splice(publicationIndex, 1)
+        data.cv.publications.splice(publicationIndex, 1)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -1019,7 +1018,7 @@ export async function deletePublication(formData: FormData) {
 export async function listLanguages(): Promise<Language[]> {
     try {
         const data = await readData()
-        return data.languages
+        return data.cv.languages
     } catch (error) {
         throw new Error(`Failed to list languages: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
@@ -1042,7 +1041,7 @@ export async function createLanguage(formData: FormData) {
         }
 
         const data = await readData()
-        data.languages.push(validatedFields.data)
+        data.cv.languages.push(validatedFields.data)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -1074,13 +1073,13 @@ export async function updateLanguage(formData: FormData) {
         }
 
         const data = await readData()
-        const languageIndex = data.languages.findIndex(l => l.id === id)
+        const languageIndex = data.cv.languages.findIndex(l => l.id === id)
 
         if (languageIndex === -1) {
             throw new Error(`Language with id "${id}" not found`)
         }
 
-        data.languages[languageIndex] = validatedFields.data
+        data.cv.languages[languageIndex] = validatedFields.data
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')
@@ -1098,13 +1097,13 @@ export async function deleteLanguage(formData: FormData) {
         }
 
         const data = await readData()
-        const languageIndex = data.languages.findIndex(l => l.id === id)
+        const languageIndex = data.cv.languages.findIndex(l => l.id === id)
 
         if (languageIndex === -1) {
             throw new Error(`Language with id "${id}" not found`)
         }
 
-        data.languages.splice(languageIndex, 1)
+        data.cv.languages.splice(languageIndex, 1)
         await writeData(data)
 
         revalidatePath('/curriculum-vitae')

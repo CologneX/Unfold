@@ -1,5 +1,4 @@
 import { type LucideIcon } from "lucide-react";
-import { JSX } from "react";
 import { z } from "zod";
 
 export type Profile = {
@@ -222,8 +221,8 @@ export const profileSchema = z.object({
     socials: z.array(socialSchema),
 });
 
-// CV (for forms that handle the whole CV)
-export const cvSchema = z.object({
+// CV
+const updateCVSchema = z.object({
     technologies: z.array(technologySchema),
     roles: z.array(roleSchema),
     workExperiences: z.array(workExperienceSchema),
@@ -234,17 +233,13 @@ export const cvSchema = z.object({
     languages: z.array(languageSchema),
 });
 
-export type DataStore = {
-    profile: Profile | null
-    projects: Project[]
-    cv: CV | null
-    socials: Social[]
-    technologies: Technology[]
-    roles: Role[]
-    workExperiences: WorkExperience[]
-    educations: Education[]
-    certifications: Certification[]
-    awardOrHonors: AwardOrHonor[]
-    publications: Publication[]
-    languages: Language[]
+export const cvStoreSchema = z.object({
+    cv: updateCVSchema,
+    profile: profileSchema,
+});
+
+export type Data = {
+    cv: CV,
+    projects: Project[],
+    profile: Profile,
 }
