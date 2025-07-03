@@ -2,9 +2,25 @@
   "profile": {
     "name": "John Doe",
     "description": "Passionate software developer with expertise in modern web technologies and a commitment to creating innovative solutions.",
-    "profilePictureUrl": "/uploads/profile-placeholder.jpg",
+    "profilePictureUrl": "/uploads/1751539786933-yze8pn1lg7l.jpg",
     "location": "San Francisco, CA",
-    "socials": []
+    "socials": [
+      {
+        "id": "global-social-1",
+        "name": "LinkedIn",
+        "url": "https://linkedin.com/in/johndoe-dev"
+      },
+      {
+        "id": "global-social-2",
+        "name": "GitHub",
+        "url": "https://github.com/johndoe-dev"
+      },
+      {
+        "id": "global-social-3",
+        "name": "Twitter",
+        "url": "https://twitter.com/johndoe_dev"
+      }
+    ]
   },
   "projects": [
     {
@@ -42,8 +58,8 @@
       "repositoryUrl": "https://github.com/example/task-master-pro",
       "liveUrl": "https://taskmaster-demo.example.com",
       "isFeatured": true,
-      "createdAt": "2024-01-15T10:30:00.000Z",
-      "updatedAt": "2024-06-20T14:45:00.000Z"
+      "updatedAt": "2025-07-02T16:19:25.361Z",
+      "createdAt": "2024-01-15T10:30:00.000Z"
     },
     {
       "slug": "data-viz-dashboard",
@@ -464,112 +480,5 @@
       }
     ]
   },
-  "socials": [
-    {
-      "id": "global-social-1",
-      "name": "LinkedIn",
-      "url": "https://linkedin.com/in/johndoe-dev"
-    },
-    {
-      "id": "global-social-2",
-      "name": "GitHub",
-      "url": "https://github.com/johndoe-dev"
-    },
-    {
-      "id": "global-social-3",
-      "name": "Twitter",
-      "url": "https://twitter.com/johndoe_dev"
-    }
-  ],
-  "technologies": [
-    {
-      "name": "JavaScript"
-    },
-    {
-      "name": "TypeScript"
-    },
-    {
-      "name": "React"
-    },
-    {
-      "name": "Vue.js"
-    },
-    {
-      "name": "Angular"
-    },
-    {
-      "name": "Node.js"
-    },
-    {
-      "name": "Python"
-    },
-    {
-      "name": "Java"
-    },
-    {
-      "name": "PostgreSQL"
-    },
-    {
-      "name": "MongoDB"
-    },
-    {
-      "name": "Redis"
-    },
-    {
-      "name": "Docker"
-    },
-    {
-      "name": "Kubernetes"
-    },
-    {
-      "name": "AWS"
-    },
-    {
-      "name": "Azure"
-    },
-    {
-      "name": "GraphQL"
-    },
-    {
-      "name": "REST API"
-    },
-    {
-      "name": "React Native"
-    },
-    {
-      "name": "Flutter"
-    }
-  ],
-  "roles": [
-    {
-      "name": "Full-Stack Developer"
-    },
-    {
-      "name": "Frontend Developer"
-    },
-    {
-      "name": "Backend Developer"
-    },
-    {
-      "name": "Mobile Developer"
-    },
-    {
-      "name": "UI/UX Designer"
-    },
-    {
-      "name": "Data Analyst"
-    },
-    {
-      "name": "DevOps Engineer"
-    },
-    {
-      "name": "Software Architect"
-    },
-    {
-      "name": "Technical Lead"
-    },
-    {
-      "name": "Product Manager"
-    }
-  ]
+  "socials": []
 }
