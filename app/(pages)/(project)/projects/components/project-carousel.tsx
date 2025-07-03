@@ -5,7 +5,7 @@ import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Project } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import ProjectCard from "@/components/custom/project-card";
+import ProjectCard from "@/app/(pages)/(project)/projects/components/project-card";
 interface ProjectCarouselProps {
   projects: Project[];
 }

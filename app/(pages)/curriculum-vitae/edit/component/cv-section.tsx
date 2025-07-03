@@ -8,7 +8,11 @@ interface CVSectionProps {
   className?: string;
 }
 
-export function CVSection({ children, delay = 0, className = "" }: CVSectionProps) {
+export function CVSection({
+  children,
+  delay = 0,
+  className = "",
+}: CVSectionProps) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -54,4 +58,4 @@ export function CVSection({ children, delay = 0, className = "" }: CVSectionProp
       {children}
     </div>
   );
-} 
+}

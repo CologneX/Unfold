@@ -33,7 +33,7 @@ export function CVFormHeader({
     <div className="relative mb-8">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 blur-3xl" />
-      
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -80,19 +80,25 @@ export function CVFormHeader({
                       )}
                     </div>
                     <div className="hidden sm:block">
-                      <p className={cn(
-                        "text-sm font-medium transition-colors",
-                        index <= currentStep ? "text-foreground" : "text-muted-foreground"
-                      )}>
+                      <p
+                        className={cn(
+                          "text-sm font-medium transition-colors",
+                          index <= currentStep
+                            ? "text-foreground"
+                            : "text-muted-foreground"
+                        )}
+                      >
                         {step.title}
                       </p>
                     </div>
-                    
+
                     {index < steps.length - 1 && (
-                      <div className={cn(
-                        "h-0.5 w-8 transition-colors duration-300",
-                        index < currentStep ? "bg-primary" : "bg-border"
-                      )} />
+                      <div
+                        className={cn(
+                          "h-0.5 w-8 transition-colors duration-300",
+                          index < currentStep ? "bg-primary" : "bg-border"
+                        )}
+                      />
                     )}
                   </motion.div>
                 ))}
@@ -143,4 +149,4 @@ export function CVFormHeader({
       </motion.div>
     </div>
   );
-} 
+}

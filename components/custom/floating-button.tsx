@@ -4,7 +4,7 @@ import { badgeVariants } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { EditIcon } from "lucide-react";
-import { AnimatePresence, motion, useTransform } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -43,7 +43,13 @@ export default function FloatingButton() {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.2, type:"spring", bounce: 1, damping: 5, mass: 0.5 }}
+            transition={{
+              duration: 0.2,
+              type: "spring",
+              bounce: 1,
+              damping: 5,
+              mass: 0.5,
+            }}
             className={cn(
               badgeVariants({
                 variant: "outline",

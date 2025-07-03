@@ -1,6 +1,5 @@
 import { BackgroundBeams } from "@/components/custom/background";
 import { ArrowDown } from "lucide-react";
-import { h2 } from "motion/react-client";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 const NameMovingGradient = () => {
   return (
     <h2 className="text-3xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
-      Hi, I'm "Name" ✋
+      Hi, I&apos;m &ldquo;Name&rdquo; ✋
     </h2>
   );
 };
@@ -25,10 +24,10 @@ export default function Home() {
         <div className=" p-4 max-w-7xl relative z-10 flex flex-col items-center justify-center md:pt-0 container mx-auto">
           <NameMovingGradient />
           <h1 className="text-5xl md:text-9xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
-            I'm a "role"
+            I&apos;m a &ldquo;role&rdquo;
           </h1>
           <p className="mt-4 font-normal text-base text-neutral-300 max-w-lg text-center mx-auto text-md md:text-2xl">
-            I'm a "role" with a passion for building products that help people
+            I&apos;m a &ldquo;role&rdquo; with a passion for building products that help people
             live better lives.
           </p>
           <p>

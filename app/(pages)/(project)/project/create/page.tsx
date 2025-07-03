@@ -8,7 +8,7 @@ export default async function CreateProject() {
       listRoles(),
     ]);
     return (
-      <>
+      <div className="max-w-4xl mx-auto pt-24 px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Create New Project</h1>
           <p className="text-muted-foreground mt-2">
@@ -17,7 +17,7 @@ export default async function CreateProject() {
         </div>
 
         <ProjectCreateForm technologies={technologies} roles={roles} />
-      </>
+      </div>
     );
   } catch (error) {
     console.error("Failed to load technologies or roles:", error);

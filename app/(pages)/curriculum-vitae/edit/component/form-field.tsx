@@ -9,19 +9,19 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 
-interface CusFormFieldProps {
+interface AppFormFieldProps {
   label: string;
   description?: string;
   className?: string;
   children?: React.ReactNode;
 }
 
-export function CusFormField({
+export function AppFormField({
   label,
   description,
   className,
   children,
-}: CusFormFieldProps) {
+}: AppFormFieldProps) {
   const fieldId = `field-${label.toLowerCase().replace(/\s+/g, "-")}`;
 
   return (
@@ -34,17 +34,17 @@ export function CusFormField({
   );
 }
 
-interface ModernFieldGridProps {
+interface AppFieldGridProps {
   children: React.ReactNode;
   cols?: 1 | 2 | 3;
   className?: string;
 }
 
-export function ModernFieldGrid({
+export function AppFieldGrid({
   children,
   cols = 2,
   className,
-}: ModernFieldGridProps) {
+}: AppFieldGridProps) {
   return (
     <div
       className={cn(

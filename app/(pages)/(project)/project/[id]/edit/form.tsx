@@ -22,10 +22,10 @@ import {
   type Project,
 } from "@/types/types";
 import {
-  createProject,
   createRole,
   createTechnology,
   listTechnologies,
+  updateProject,
 } from "@/app/actions";
 import { useRouter } from "next/navigation";
 import { Trash2, Plus } from "lucide-react";
@@ -35,10 +35,12 @@ import ImageUpload from "@/components/custom/image-upload";
 import BadgeCombobox from "@/components/custom/badge-combobox";
 import { toast } from "sonner";
 
-export default function ProjectCreateForm({
+export default function ProjectEditForm({
+  project,
   technologies,
   roles,
 }: {
+  project: Project;
   technologies: Technology[];
   roles: Role[];
 }) {
@@ -49,17 +51,17 @@ export default function ProjectCreateForm({
   const form = useForm<Project>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
-      slug: "",
-      name: "",
-      description: "",
-      shortDescription: "",
-      bannerUrl: "",
-      imageUrl: [],
-      technologies: [],
-      role: [],
-      repositoryUrl: "",
-      liveUrl: "",
-      isFeatured: false,
+      slug: project.slug,
+      name: project.name,
+      description: project.description,
+      shortDescription: project.shortDescription,
+      bannerUrl: project.bannerUrl,
+      imageUrl: project.imageUrl,
+      technologies: project.technologies,
+      role: project.role,
+      repositoryUrl: project.repositoryUrl,
+      liveUrl: project.liveUrl,
+      isFeatured: project.isFeatured,
     },
   });
 
@@ -128,21 +130,23 @@ export default function ProjectCreateForm({
   async function onSubmit(values: Project) {
     setIsSubmitting(true);
     try {
-      const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description);
-      formData.append("shortDescription", values.shortDescription);
-      if (values.bannerUrl) formData.append("bannerUrl", values.bannerUrl);
-      formData.append("imageUrl", JSON.stringify(values.imageUrl));
-      formData.append("technologies", JSON.stringify(values.technologies));
-      formData.append("role", JSON.stringify(values.role));
-      if (values.repositoryUrl)
-        formData.append("repositoryUrl", values.repositoryUrl);
-      if (values.liveUrl) formData.append("liveUrl", values.liveUrl);
-      formData.append("isFeatured", values.isFeatured.toString());
-
-      const slug = await createProject(formData);
-      router.push(`/project/${slug}`);
+      if (project.slug) {
+        const formData = new FormData();
+        formData.append("slug", project.slug);
+        formData.append("name", values.name);
+        formData.append("description", values.description);
+        formData.append("shortDescription", values.shortDescription);
+        if (values.bannerUrl) formData.append("bannerUrl", values.bannerUrl);
+        formData.append("imageUrl", JSON.stringify(values.imageUrl));
+        formData.append("technologies", JSON.stringify(values.technologies));
+        formData.append("role", JSON.stringify(values.role));
+        if (values.repositoryUrl)
+          formData.append("repositoryUrl", values.repositoryUrl);
+        if (values.liveUrl) formData.append("liveUrl", values.liveUrl);
+        formData.append("isFeatured", values.isFeatured.toString());
+        const { slug } = await updateProject(formData);
+        router.push(`/project/${slug}`);
+      }
     } catch (error) {
       console.error("Error creating project:", error);
       toast.error("Failed to create project");
@@ -441,7 +445,7 @@ export default function ProjectCreateForm({
         {/* Submit */}
         <div className="flex gap-4">
           <Button type="submit" disabled={isSubmitting} className="min-w-32">
-            {isSubmitting ? "Creating..." : "Create Project"}
+            {isSubmitting ? "Updating..." : "Update Project"}
           </Button>
           <Button type="button" variant="outline" onClick={() => router.back()}>
             Cancel

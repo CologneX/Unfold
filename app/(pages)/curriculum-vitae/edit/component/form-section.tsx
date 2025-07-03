@@ -35,7 +35,7 @@ export function CusFormSection({
       <Card className="relative overflow-hidden border-border/40 bg-card/50 backdrop-blur-sm transition-all duration-300 hover:border-border/60 hover:shadow-lg hover:shadow-primary/5">
         {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        
+
         <CardHeader className="relative pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -49,11 +49,13 @@ export function CusFormSection({
                   {title}
                 </CardTitle>
                 {description && (
-                  <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {description}
+                  </p>
                 )}
               </div>
             </div>
-            
+
             {onAdd && (
               <Button
                 type="button"
@@ -68,10 +70,8 @@ export function CusFormSection({
             )}
           </div>
         </CardHeader>
-        
-        <CardContent className="relative space-y-6">
-          {children}
-        </CardContent>
+
+        <CardContent className="relative space-y-6">{children}</CardContent>
       </Card>
     </motion.div>
   );
@@ -136,10 +136,8 @@ export function ModernFormItem({
           )}
         </div>
       )}
-      
-      <div className="space-y-4">
-        {children}
-      </div>
+
+      <div className="space-y-4">{children}</div>
     </motion.div>
   );
-} 
+}

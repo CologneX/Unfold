@@ -2,11 +2,8 @@
 
 import { useState, useCallback, useTransition } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "motion/react";
-import { toast } from "sonner";
 import {
-  User,
   Briefcase,
   GraduationCap,
   Award,
@@ -14,11 +11,12 @@ import {
   Languages,
   Shield,
   Network,
-  Plus,
   Save,
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  User,
+  X,
 } from "lucide-react";
 
 import { Form, FormField } from "@/components/ui/form";
@@ -26,42 +24,36 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { CusFormField, ModernFieldGrid } from "./form-field";
+import { AppFormField, AppFieldGrid } from "./form-field";
 import { CusFormSection, ModernFormItem } from "./form-section";
 import { CVSection } from "./cv-section";
-import ImageUpload from "@/components/custom/image-upload";
 import BadgeCombobox from "@/components/custom/badge-combobox";
 import DatePicker from "@/components/custom/date-picker";
 import { SelectResponsive } from "@/components/custom/res-select";
 
 import {
-  cvSchema,
-  type CV,
   type ComboboxItem,
   type Technology,
   type Role,
-  Social,
-  Profile,
+  Data,
 } from "@/types/types";
-import {
-  updateCV,
-  createTechnology,
-  createRole,
-  updateProfile,
-  createSocial,
-  deleteSocial,
-} from "@/app/actions";
+import { createTechnology, createRole, updateCV } from "@/app/actions";
 import { cn } from "@/lib/utils";
+import ImageUpload from "@/components/custom/image-upload";
 
 interface CurriculumVitaeEditFormProps {
-  CV: CV | null;
+  CV: Data | null;
   availableTechnologies: Technology[];
   availableRoles: Role[];
-  socials: Social[];
-  profile: Profile | null;
 }
 
 const formSteps = [
+  {
+    id: "profile",
+    title: "Profile",
+    description: "Your personal information",
+    icon: User,
+  },
   {
     id: "experience",
     title: "Experience",
@@ -98,24 +90,33 @@ export default function CurriculumVitaeEditForm({
   CV,
   availableTechnologies,
   availableRoles,
-  socials,
-  profile,
 }: CurriculumVitaeEditFormProps) {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const [isPending, startTransition] = useTransition();
-
-  const form = useForm<CV>({
-    resolver: zodResolver(cvSchema),
-    defaultValues: CV || {
-  technologies: [],
-  roles: [],
-  workExperiences: [],
-  educations: [],
-  certifications: [],
-  awardOrHonors: [],
-  publications: [],
-  languages: [],
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const defaultVal = {
+    profile: CV?.profile || {
+      name: "",
+      description: "",
+      profilePictureUrl: "",
+      location: "",
+      socials: [],
     },
+    cv: {
+      technologies: availableTechnologies,
+      roles: availableRoles,
+      workExperiences: CV?.cv?.workExperiences || [],
+      educations: CV?.cv.educations || [],
+      certifications: CV?.cv.certifications || [],
+      awardOrHonors: CV?.cv.awardOrHonors || [],
+      publications: CV?.cv.publications || [],
+      languages: CV?.cv.languages || [],
+    },
+    projects: CV?.projects || [],
+  };
+
+  const form = useForm<Data>({
+    defaultValues: defaultVal,
   });
 
   // Field arrays for array fields
@@ -125,7 +126,7 @@ export default function CurriculumVitaeEditForm({
     remove: removeWork,
   } = useFieldArray({
     control: form.control,
-    name: "workExperiences",
+    name: "cv.workExperiences",
   });
 
   const {
@@ -134,7 +135,7 @@ export default function CurriculumVitaeEditForm({
     remove: removeEducation,
   } = useFieldArray({
     control: form.control,
-    name: "educations",
+    name: "cv.educations",
   });
 
   const {
@@ -143,7 +144,7 @@ export default function CurriculumVitaeEditForm({
     remove: removeCertification,
   } = useFieldArray({
     control: form.control,
-    name: "certifications",
+    name: "cv.certifications",
   });
 
   const {
@@ -152,7 +153,7 @@ export default function CurriculumVitaeEditForm({
     remove: removeAward,
   } = useFieldArray({
     control: form.control,
-    name: "awardOrHonors",
+    name: "cv.awardOrHonors",
   });
 
   const {
@@ -161,7 +162,7 @@ export default function CurriculumVitaeEditForm({
     remove: removePublication,
   } = useFieldArray({
     control: form.control,
-    name: "publications",
+    name: "cv.publications",
   });
 
   const {
@@ -170,7 +171,16 @@ export default function CurriculumVitaeEditForm({
     remove: removeLanguage,
   } = useFieldArray({
     control: form.control,
-    name: "languages",
+    name: "cv.languages",
+  });
+
+  const {
+    fields: socialFields,
+    append: addSocial,
+    remove: removeSocial,
+  } = useFieldArray({
+    control: form.control,
+    name: "profile.socials",
   });
 
   // Convert arrays to combobox format
@@ -188,32 +198,30 @@ export default function CurriculumVitaeEditForm({
 
   // Handle technology and role additions
   const handleAddTechnology = useCallback(async (item: ComboboxItem) => {
-        const formData = new FormData();
-        formData.append("name", item.label);
-        await createTechnology(formData);
-    }, []);
+    const formData = new FormData();
+    formData.append("name", item.label);
+    await createTechnology(formData);
+  }, []);
 
   const handleAddRole = useCallback(async (item: ComboboxItem) => {
-        const formData = new FormData();
-        formData.append("name", item.label);
-        await createRole(formData);
+    const formData = new FormData();
+    formData.append("name", item.label);
+    await createRole(formData);
   }, []);
 
   // Form submission
-  const onSubmit = useCallback((data: CV) => {
+  const onSubmit = useCallback((data: Data) => {
     startTransition(async () => {
+      setIsSuccess(false);
       try {
         await updateCV(data);
-        toast.success("CV updated successfully!");
       } catch (error) {
-        toast.error(
-          `Failed to update CV: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
+        console.error(error);
+      } finally {
+        setIsSuccess(true);
       }
     });
-    }, []);
+  }, []);
 
   // Navigation helpers
   const nextStep = () =>
@@ -223,10 +231,10 @@ export default function CurriculumVitaeEditForm({
 
   // Calculate progress
   const progress = ((currentStep + 1) / formSteps.length) * 100;
-    return (
+  return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="bg-background/50 border rounded-md mt-4">
+      <div className="bg-background/50 border rounded-md my-4">
         <div className="container mx-auto p-4">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -236,31 +244,39 @@ export default function CurriculumVitaeEditForm({
                 {formSteps[currentStep].description}
               </p>
             </div>
-            <Button
-              onClick={form.handleSubmit(onSubmit)}
-              disabled={isPending}
-              className="bg-primary hover:bg-primary/90"
-            >
-              {isPending ? (
-                <>
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear",
-                    }}
-                    className="mr-2 h-4 w-4 rounded-full border-2 border-primary-foreground border-t-transparent"
-                  />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="mr-2 h-4 w-4" />
-                  Save CV
-                </>
+            <div className="flex flex-col md:flex-row gap-4">
+              {isSuccess && (
+                <div className="flex items-center gap-2 justify-items-end justify-end text-sm text-green-500 ">
+                  <CheckCircle2 className="h-4 w-4 " />
+                  CV updated successfully
+                </div>
               )}
-            </Button>
+              <Button
+                onClick={form.handleSubmit(onSubmit)}
+                disabled={isPending}
+                className="bg-primary hover:bg-primary/90"
+              >
+                {isPending ? (
+                  <>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
+                      className="mr-2 h-4 w-4 rounded-full border-2 border-primary-foreground border-t-transparent"
+                    />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Save CV
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
 
           {/* Progress bar */}
@@ -306,13 +322,6 @@ export default function CurriculumVitaeEditForm({
         </div>
       </div>
 
-      {/* Profile and Socials Management */}
-      <div className="bg-background/50 border rounded-md mb-6">
-        <div className="container mx-auto p-6">
-          <ProfileSocialsForms profile={profile} socials={socials} />
-        </div>
-      </div>
-
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -327,8 +336,158 @@ export default function CurriculumVitaeEditForm({
               transition={{ duration: 0.3 }}
               className="space-y-8"
             >
-              {/* Experience Step */}
+              {/* Profile Step */}
               {currentStep === 0 && (
+                <CVSection delay={0}>
+                  <div className="space-y-8">
+                    {/* Profile Section */}
+                    <CusFormSection
+                      title="Profile Information"
+                      description="Your personal information and professional summary"
+                      icon={<User className="h-5 w-5" />}
+                    >
+                      <AppFieldGrid cols={2}>
+                        <FormField
+                          control={form.control}
+                          name="profile.name"
+                          render={({ field }) => (
+                            <AppFormField label="Full Name">
+                              <Input
+                                {...field}
+                                placeholder="John Doe"
+                                required
+                              />
+                            </AppFormField>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="profile.location"
+                          render={({ field }) => (
+                            <AppFormField label="Location">
+                              <Input
+                                {...field}
+                                placeholder="San Francisco, CA"
+                                required
+                              />
+                            </AppFormField>
+                          )}
+                        />
+                      </AppFieldGrid>
+
+                      <FormField
+                        control={form.control}
+                        name="profile.description"
+                        render={({ field }) => (
+                          <AppFormField
+                            label="Professional Description"
+                            description="A brief summary of your professional background and expertise"
+                          >
+                            <Textarea
+                              {...field}
+                              placeholder="Passionate software developer with expertise in modern web technologies..."
+                              className="min-h-[120px] resize-none"
+                              required
+                            />
+                          </AppFormField>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="profile.profilePictureUrl"
+                        render={({ field }) => (
+                          <AppFormField
+                            label="Profile Picture URL"
+                            description="URL to your profile picture (optional)"
+                          >
+                            <ImageUpload
+                              value={field.value}
+                              onChange={field.onChange}
+                            />
+                          </AppFormField>
+                        )}
+                      />
+                    </CusFormSection>
+
+                    {/* Social Links Section */}
+                    <CusFormSection
+                      title="Social Links"
+                      description="Your professional social media and portfolio links"
+                      onAdd={() =>
+                        addSocial({
+                          id: crypto.randomUUID(),
+                          name: "",
+                          url: "",
+                        })
+                      }
+                      addLabel="Add Social Link"
+                      icon={<Network className="h-5 w-5" />}
+                    >
+                      <div className="space-y-6">
+                        {/* Existing Social Links */}
+                        {socialFields.length > 0 && (
+                          <div className="space-y-3">
+                            <h4 className="text-sm font-medium text-muted-foreground">
+                              Current Social Links
+                            </h4>
+                            <div className="space-y-2">
+                              {socialFields.map((social, index) => (
+                                <AppFieldGrid cols={2} key={social.id}>
+                                  <FormField
+                                    control={form.control}
+                                    name={`profile.socials.${index}.name`}
+                                    render={({ field }) => (
+                                      <AppFormField label="Platform">
+                                        <Input {...field} />
+                                      </AppFormField>
+                                    )}
+                                  />
+                                  <FormField
+                                    control={form.control}
+                                    name={`profile.socials.${index}.url`}
+                                    render={({ field }) => (
+                                      <AppFormField label="URL">
+                                        <div className="flex items-center gap-2">
+                                          <Input {...field} />
+                                          <Button
+                                            variant="outline"
+                                            type="button"
+                                            size="icon"
+                                            onClick={() => removeSocial(index)}
+                                          >
+                                            <X className="size-4" />
+                                          </Button>
+                                        </div>
+                                      </AppFormField>
+                                    )}
+                                  />
+                                </AppFieldGrid>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {socialFields.length === 0 && (
+                          <div className="text-center py-8 text-muted-foreground">
+                            <Network className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                            <p className="text-sm">
+                              No social links added yet.
+                            </p>
+                            <p className="text-xs">
+                              Add your first social link above.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </CusFormSection>
+                  </div>
+                </CVSection>
+              )}
+
+              {/* Experience Step */}
+              {currentStep === 1 && (
                 <CVSection delay={0}>
                   <CusFormSection
                     title="Work Experience"
@@ -336,71 +495,71 @@ export default function CurriculumVitaeEditForm({
                     icon={<Briefcase className="h-5 w-5" />}
                     onAdd={() =>
                       addWork({
-        id: crypto.randomUUID(),
-        name: "",
-        description: "",
-        startDate: new Date(),
-        endDate: new Date(),
+                        id: crypto.randomUUID(),
+                        name: "",
+                        description: "",
+                        startDate: new Date(),
+                        endDate: new Date(),
                       })
                     }
                     addLabel="Add Experience"
                   >
                     {workFields.map((field, index) => (
                       <ModernFormItem
-                key={field.id}
+                        key={field.id}
                         onDelete={() => removeWork(index)}
                         title="Work Experience"
                         index={index}
                       >
-                        <ModernFieldGrid cols={1}>
-                <FormField
-                  control={form.control}
-                  name={`workExperiences.${index}.name`}
-                  render={({ field }) => (
-                              <CusFormField label="Position/Role">
-                        <Input
-                          {...field}
+                        <AppFieldGrid cols={1}>
+                          <FormField
+                            control={form.control}
+                            name={`cv.workExperiences.${index}.name`}
+                            render={({ field }) => (
+                              <AppFormField label="Position/Role">
+                                <Input
+                                  {...field}
                                   placeholder="Senior Software Engineer"
                                 />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
-                        </ModernFieldGrid>
+                        </AppFieldGrid>
 
-                        <ModernFieldGrid cols={2}>
-                          <CusFormField label="Start Date">
+                        <AppFieldGrid cols={2}>
+                          <AppFormField label="Start Date">
                             <DatePicker
                               value={form.watch(
-                                `workExperiences.${index}.startDate`
+                                `cv.workExperiences.${index}.startDate`
                               )}
                               onChange={(date: Date) =>
                                 form.setValue(
-                                  `workExperiences.${index}.startDate`,
+                                  `cv.workExperiences.${index}.startDate`,
                                   date || new Date()
                                 )
                               }
                             />
-                          </CusFormField>
-                          <CusFormField label="End Date">
-                          <DatePicker
+                          </AppFormField>
+                          <AppFormField label="End Date">
+                            <DatePicker
                               value={form.watch(
-                                `workExperiences.${index}.endDate`
+                                `cv.workExperiences.${index}.endDate`
                               )}
                               onChange={(date: Date) =>
                                 form.setValue(
-                                  `workExperiences.${index}.endDate`,
+                                  `cv.workExperiences.${index}.endDate`,
                                   date || new Date()
                                 )
                               }
                             />
-                          </CusFormField>
-                        </ModernFieldGrid>
+                          </AppFormField>
+                        </AppFieldGrid>
 
-                  <FormField
-                    control={form.control}
-                          name={`workExperiences.${index}.description`}
-                    render={({ field }) => (
-                            <CusFormField
+                        <FormField
+                          control={form.control}
+                          name={`cv.workExperiences.${index}.description`}
+                          render={({ field }) => (
+                            <AppFormField
                               label="Description"
                               description="Describe your responsibilities, achievements, and impact"
                             >
@@ -409,7 +568,7 @@ export default function CurriculumVitaeEditForm({
                                 placeholder="Led a team of 5 engineers to develop..."
                                 className="min-h-[100px] resize-none"
                               />
-                            </CusFormField>
+                            </AppFormField>
                           )}
                         />
                       </ModernFormItem>
@@ -419,7 +578,7 @@ export default function CurriculumVitaeEditForm({
               )}
 
               {/* Education Step */}
-              {currentStep === 1 && (
+              {currentStep === 2 && (
                 <CVSection delay={0}>
                   <CusFormSection
                     title="Education"
@@ -427,89 +586,91 @@ export default function CurriculumVitaeEditForm({
                     icon={<GraduationCap className="h-5 w-5" />}
                     onAdd={() =>
                       addEducation({
-        id: crypto.randomUUID(),
-        name: "",
-        institution: "",
-        degree: "",
-        startDate: new Date(),
-        endDate: new Date(),
+                        id: crypto.randomUUID(),
+                        name: "",
+                        institution: "",
+                        degree: "",
+                        startDate: new Date(),
+                        endDate: new Date(),
                       })
                     }
                     addLabel="Add Education"
                   >
                     {educationFields.map((field, index) => (
                       <ModernFormItem
-                key={field.id}
+                        key={field.id}
                         onDelete={() => removeEducation(index)}
                         title="Education"
                         index={index}
                       >
-                        <ModernFieldGrid cols={2}>
-                <FormField
-                  control={form.control}
-                  name={`educations.${index}.name`}
-                  render={({ field }) => (
-                              <CusFormField label="Program/Course">
+                        <AppFieldGrid cols={2}>
+                          <FormField
+                            control={form.control}
+                            name={`cv.educations.${index}.name`}
+                            render={({ field }) => (
+                              <AppFormField label="Program/Course">
                                 <Input
                                   {...field}
                                   placeholder="Computer Science"
                                 />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
-                <FormField
-                  control={form.control}
-                  name={`educations.${index}.institution`}
-                  render={({ field }) => (
-                              <CusFormField label="Institution">
-                        <Input
-                          {...field}
+                          <FormField
+                            control={form.control}
+                            name={`cv.educations.${index}.institution`}
+                            render={({ field }) => (
+                              <AppFormField label="Institution">
+                                <Input
+                                  {...field}
                                   placeholder="Stanford University"
-                        />
-                              </CusFormField>
-                  )}
-                />
-                        </ModernFieldGrid>
+                                />
+                              </AppFormField>
+                            )}
+                          />
+                        </AppFieldGrid>
 
-                <FormField
-                  control={form.control}
-                  name={`educations.${index}.degree`}
-                  render={({ field }) => (
-                            <CusFormField label="Degree">
+                        <FormField
+                          control={form.control}
+                          name={`cv.educations.${index}.degree`}
+                          render={({ field }) => (
+                            <AppFormField label="Degree">
                               <Input
                                 {...field}
                                 placeholder="Bachelor of Science"
                               />
-                            </CusFormField>
+                            </AppFormField>
                           )}
                         />
 
-                        <ModernFieldGrid cols={2}>
-                          <CusFormField label="Start Date">
-                          <DatePicker
+                        <AppFieldGrid cols={2}>
+                          <AppFormField label="Start Date">
+                            <DatePicker
                               value={form.watch(
-                                `educations.${index}.startDate`
+                                `cv.educations.${index}.startDate`
                               )}
                               onChange={(date: Date) =>
                                 form.setValue(
-                                  `educations.${index}.startDate`,
+                                  `cv.educations.${index}.startDate`,
                                   date || new Date()
                                 )
                               }
                             />
-                          </CusFormField>
-                          <CusFormField label="End Date">
-                          <DatePicker
-                              value={form.watch(`educations.${index}.endDate`)}
+                          </AppFormField>
+                          <AppFormField label="End Date">
+                            <DatePicker
+                              value={form.watch(
+                                `cv.educations.${index}.endDate`
+                              )}
                               onChange={(date: Date) =>
                                 form.setValue(
-                                  `educations.${index}.endDate`,
+                                  `cv.educations.${index}.endDate`,
                                   date || new Date()
                                 )
                               }
                             />
-                          </CusFormField>
-                        </ModernFieldGrid>
+                          </AppFormField>
+                        </AppFieldGrid>
                       </ModernFormItem>
                     ))}
                   </CusFormSection>
@@ -517,7 +678,7 @@ export default function CurriculumVitaeEditForm({
               )}
 
               {/* Skills Step */}
-              {currentStep === 2 && (
+              {currentStep === 3 && (
                 <CVSection delay={0}>
                   <div className="space-y-8">
                     <CusFormSection
@@ -525,16 +686,16 @@ export default function CurriculumVitaeEditForm({
                       description="Programming languages, frameworks, and tools you work with"
                       icon={<Network className="h-5 w-5" />}
                     >
-                      <CusFormField label="Technologies & Tools">
+                      <AppFormField label="Technologies & Tools">
                         <BadgeCombobox
-                          value={form.watch("technologies").map((tech) => ({
+                          value={form.watch("cv.technologies").map((tech) => ({
                             value: tech.name,
                             label: tech.name,
                           }))}
                           data={technologyOptions}
                           onChange={(items) => {
                             form.setValue(
-                              "technologies",
+                              "cv.technologies",
                               items.map((item) => ({ name: item.label }))
                             );
                           }}
@@ -543,7 +704,7 @@ export default function CurriculumVitaeEditForm({
                           searchPlaceholder="Search technologies..."
                           emptyMessage="No technologies found. Type to add a new one."
                         />
-                      </CusFormField>
+                      </AppFormField>
                     </CusFormSection>
 
                     <CusFormSection
@@ -551,16 +712,16 @@ export default function CurriculumVitaeEditForm({
                       description="Your professional roles and areas of expertise"
                       icon={<Briefcase className="h-5 w-5" />}
                     >
-                      <CusFormField label="Professional Roles">
+                      <AppFormField label="Professional Roles">
                         <BadgeCombobox
-                          value={form.watch("roles").map((role) => ({
+                          value={form.watch("cv.roles").map((role) => ({
                             value: role.name,
                             label: role.name,
                           }))}
                           data={roleOptions}
                           onChange={(items) => {
                             form.setValue(
-                              "roles",
+                              "cv.roles",
                               items.map((item) => ({ name: item.label }))
                             );
                           }}
@@ -569,14 +730,14 @@ export default function CurriculumVitaeEditForm({
                           searchPlaceholder="Search roles..."
                           emptyMessage="No roles found. Type to add a new one."
                         />
-                      </CusFormField>
+                      </AppFormField>
                     </CusFormSection>
                   </div>
                 </CVSection>
               )}
 
               {/* Achievements Step */}
-              {currentStep === 3 && (
+              {currentStep === 4 && (
                 <CVSection delay={0}>
                   <div className="space-y-8">
                     {/* Certifications */}
@@ -586,105 +747,105 @@ export default function CurriculumVitaeEditForm({
                       icon={<Shield className="h-5 w-5" />}
                       onAdd={() =>
                         addCertification({
-        id: crypto.randomUUID(),
-        name: "",
-        issuer: "",
-        startDate: new Date(),
-        endDate: undefined,
-        credentialId: "",
-        url: "",
+                          id: crypto.randomUUID(),
+                          name: "",
+                          issuer: "",
+                          startDate: new Date(),
+                          endDate: undefined,
+                          credentialId: "",
+                          url: "",
                         })
                       }
                       addLabel="Add Certification"
                     >
                       {certificationFields.map((field, index) => (
                         <ModernFormItem
-                key={field.id}
+                          key={field.id}
                           onDelete={() => removeCertification(index)}
                           title="Certification"
                           index={index}
                         >
-                          <ModernFieldGrid cols={2}>
-                <FormField
-                  control={form.control}
-                  name={`certifications.${index}.name`}
-                  render={({ field }) => (
-                                <CusFormField label="Certification Name">
-                        <Input
-                          {...field}
+                          <AppFieldGrid cols={2}>
+                            <FormField
+                              control={form.control}
+                              name={`cv.certifications.${index}.name`}
+                              render={({ field }) => (
+                                <AppFormField label="Certification Name">
+                                  <Input
+                                    {...field}
                                     placeholder="AWS Solutions Architect"
-                        />
-                                </CusFormField>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name={`certifications.${index}.issuer`}
-                  render={({ field }) => (
-                                <CusFormField label="Issuing Organization">
+                                  />
+                                </AppFormField>
+                              )}
+                            />
+                            <FormField
+                              control={form.control}
+                              name={`cv.certifications.${index}.issuer`}
+                              render={({ field }) => (
+                                <AppFormField label="Issuing Organization">
                                   <Input
                                     {...field}
                                     placeholder="Amazon Web Services"
                                   />
-                                </CusFormField>
+                                </AppFormField>
                               )}
                             />
-                          </ModernFieldGrid>
+                          </AppFieldGrid>
 
-                          <ModernFieldGrid cols={2}>
-                            <CusFormField label="Issue Date">
+                          <AppFieldGrid cols={2}>
+                            <AppFormField label="Issue Date">
                               <DatePicker
                                 value={form.watch(
-                                  `certifications.${index}.startDate`
+                                  `cv.certifications.${index}.startDate`
                                 )}
                                 onChange={(date: Date) =>
                                   form.setValue(
-                                    `certifications.${index}.startDate`,
+                                    `cv.certifications.${index}.startDate`,
                                     date || new Date()
                                   )
                                 }
                               />
-                            </CusFormField>
-                            <CusFormField label="Expiry Date (Optional)">
+                            </AppFormField>
+                            <AppFormField label="Expiry Date (Optional)">
                               <DatePicker
                                 value={
                                   form.watch(
-                                    `certifications.${index}.endDate`
+                                    `cv.certifications.${index}.endDate`
                                   ) || new Date()
                                 }
                                 onChange={(date: Date) =>
                                   form.setValue(
-                                    `certifications.${index}.endDate`,
+                                    `cv.certifications.${index}.endDate`,
                                     date
                                   )
                                 }
                               />
-                            </CusFormField>
-                          </ModernFieldGrid>
+                            </AppFormField>
+                          </AppFieldGrid>
 
-                          <ModernFieldGrid cols={2}>
-                <FormField
-                  control={form.control}
-                  name={`certifications.${index}.credentialId`}
-                  render={({ field }) => (
-                                <CusFormField label="Credential ID (Optional)">
+                          <AppFieldGrid cols={2}>
+                            <FormField
+                              control={form.control}
+                              name={`cv.certifications.${index}.credentialId`}
+                              render={({ field }) => (
+                                <AppFormField label="Credential ID (Optional)">
                                   <Input {...field} placeholder="ABC123XYZ" />
-                                </CusFormField>
+                                </AppFormField>
                               )}
                             />
-                <FormField
-                  control={form.control}
-                  name={`certifications.${index}.url`}
-                  render={({ field }) => (
-                                <CusFormField label="Verification URL (Optional)">
-                        <Input
-                          {...field}
+                            <FormField
+                              control={form.control}
+                              name={`cv.certifications.${index}.url`}
+                              render={({ field }) => (
+                                <AppFormField label="Verification URL (Optional)">
+                                  <Input
+                                    {...field}
                                     placeholder="https://verify.example.com"
                                   />
-                                </CusFormField>
+                                </AppFormField>
                               )}
                             />
-                          </ModernFieldGrid>
+                          </AppFieldGrid>
                         </ModernFormItem>
                       ))}
                     </CusFormSection>
@@ -696,89 +857,91 @@ export default function CurriculumVitaeEditForm({
                       icon={<Award className="h-5 w-5" />}
                       onAdd={() =>
                         addAward({
-        id: crypto.randomUUID(),
-        name: "",
-        institution: "",
-        description: "",
-        date: new Date(),
-        url: "",
+                          id: crypto.randomUUID(),
+                          name: "",
+                          institution: "",
+                          description: "",
+                          date: new Date(),
+                          url: "",
                         })
                       }
                       addLabel="Add Award"
                     >
                       {awardFields.map((field, index) => (
                         <ModernFormItem
-                key={field.id}
+                          key={field.id}
                           onDelete={() => removeAward(index)}
                           title="Award"
                           index={index}
                         >
-                          <ModernFieldGrid cols={2}>
-                <FormField
-                  control={form.control}
-                  name={`awardOrHonors.${index}.name`}
-                  render={({ field }) => (
-                                <CusFormField label="Award Name">
+                          <AppFieldGrid cols={2}>
+                            <FormField
+                              control={form.control}
+                              name={`cv.awardOrHonors.${index}.name`}
+                              render={({ field }) => (
+                                <AppFormField label="Award Name">
                                   <Input
                                     {...field}
                                     placeholder="Employee of the Year"
                                   />
-                                </CusFormField>
+                                </AppFormField>
                               )}
                             />
-                <FormField
-                  control={form.control}
-                  name={`awardOrHonors.${index}.institution`}
-                  render={({ field }) => (
-                                <CusFormField label="Awarding Institution">
-                        <Input
-                          {...field}
+                            <FormField
+                              control={form.control}
+                              name={`cv.awardOrHonors.${index}.institution`}
+                              render={({ field }) => (
+                                <AppFormField label="Awarding Institution">
+                                  <Input
+                                    {...field}
                                     placeholder="Company Name"
                                   />
-                                </CusFormField>
+                                </AppFormField>
                               )}
                             />
-                          </ModernFieldGrid>
+                          </AppFieldGrid>
 
-                          <CusFormField label="Date Received">
+                          <AppFormField label="Date Received">
                             <DatePicker
-                              value={form.watch(`awardOrHonors.${index}.date`)}
+                              value={form.watch(
+                                `cv.awardOrHonors.${index}.date`
+                              )}
                               onChange={(date: Date) =>
                                 form.setValue(
-                                  `awardOrHonors.${index}.date`,
+                                  `cv.awardOrHonors.${index}.date`,
                                   date || new Date()
                                 )
                               }
                             />
-                          </CusFormField>
+                          </AppFormField>
 
-                <FormField
-                  control={form.control}
-                  name={`awardOrHonors.${index}.description`}
-                  render={({ field }) => (
-                              <CusFormField
+                          <FormField
+                            control={form.control}
+                            name={`cv.awardOrHonors.${index}.description`}
+                            render={({ field }) => (
+                              <AppFormField
                                 label="Description (Optional)"
                                 description="Brief description of the award and why you received it"
                               >
-                        <Textarea
-                          {...field}
+                                <Textarea
+                                  {...field}
                                   placeholder="Recognized for outstanding performance..."
                                   className="min-h-[100px] resize-none"
-                        />
-                              </CusFormField>
-                  )}
-                />
+                                />
+                              </AppFormField>
+                            )}
+                          />
 
-                <FormField
-                  control={form.control}
-                  name={`awardOrHonors.${index}.url`}
-                  render={({ field }) => (
-                              <CusFormField label="URL (Optional)">
-                        <Input
-                          {...field}
+                          <FormField
+                            control={form.control}
+                            name={`cv.awardOrHonors.${index}.url`}
+                            render={({ field }) => (
+                              <AppFormField label="URL (Optional)">
+                                <Input
+                                  {...field}
                                   placeholder="https://award.example.com"
                                 />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
                         </ModernFormItem>
@@ -792,44 +955,44 @@ export default function CurriculumVitaeEditForm({
                       icon={<BookOpen className="h-5 w-5" />}
                       onAdd={() =>
                         addPublication({
-        id: crypto.randomUUID(),
-        title: "",
-        authors: [],
-        date: new Date(),
-        url: "",
+                          id: crypto.randomUUID(),
+                          title: "",
+                          authors: [],
+                          date: new Date(),
+                          url: "",
                         })
                       }
                       addLabel="Add Publication"
                     >
                       {publicationFields.map((field, index) => (
                         <ModernFormItem
-                key={field.id}
+                          key={field.id}
                           onDelete={() => removePublication(index)}
                           title="Publication"
                           index={index}
                         >
-                <FormField
-                  control={form.control}
-                  name={`publications.${index}.title`}
-                  render={({ field }) => (
-                              <CusFormField label="Title">
+                          <FormField
+                            control={form.control}
+                            name={`cv.publications.${index}.title`}
+                            render={({ field }) => (
+                              <AppFormField label="Title">
                                 <Input
                                   {...field}
                                   placeholder="A Study on Modern Web Development"
                                 />
-                              </CusFormField>
-                  )}
-                />
+                              </AppFormField>
+                            )}
+                          />
 
-                <FormField
-                  control={form.control}
-                  name={`publications.${index}.authors`}
-                  render={({ field }) => (
-                              <CusFormField
+                          <FormField
+                            control={form.control}
+                            name={`cv.publications.${index}.authors`}
+                            render={({ field }) => (
+                              <AppFormField
                                 label="Authors"
                                 description="Comma-separated list of authors"
                               >
-                        <Input
+                                <Input
                                   value={field.value?.join(", ") || ""}
                                   onChange={(e) => {
                                     const authors = e.target.value
@@ -840,35 +1003,37 @@ export default function CurriculumVitaeEditForm({
                                   }}
                                   placeholder="John Doe, Jane Smith, Bob Johnson"
                                 />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
 
-                          <ModernFieldGrid cols={2}>
-                            <CusFormField label="Publication Date">
+                          <AppFieldGrid cols={2}>
+                            <AppFormField label="Publication Date">
                               <DatePicker
-                                value={form.watch(`publications.${index}.date`)}
+                                value={form.watch(
+                                  `cv.publications.${index}.date`
+                                )}
                                 onChange={(date: Date) =>
                                   form.setValue(
-                                    `publications.${index}.date`,
+                                    `cv.publications.${index}.date`,
                                     date || new Date()
                                   )
                                 }
                               />
-                            </CusFormField>
-                <FormField
-                  control={form.control}
-                  name={`publications.${index}.url`}
-                  render={({ field }) => (
-                                <CusFormField label="URL (Optional)">
-                        <Input
-                          {...field}
+                            </AppFormField>
+                            <FormField
+                              control={form.control}
+                              name={`cv.publications.${index}.url`}
+                              render={({ field }) => (
+                                <AppFormField label="URL (Optional)">
+                                  <Input
+                                    {...field}
                                     placeholder="https://publication.example.com"
                                   />
-                                </CusFormField>
+                                </AppFormField>
                               )}
                             />
-                          </ModernFieldGrid>
+                          </AppFieldGrid>
                         </ModernFormItem>
                       ))}
                     </CusFormSection>
@@ -877,7 +1042,7 @@ export default function CurriculumVitaeEditForm({
               )}
 
               {/* Languages Step */}
-              {currentStep === 4 && (
+              {currentStep === 5 && (
                 <CVSection delay={0}>
                   <CusFormSection
                     title="Languages"
@@ -885,38 +1050,38 @@ export default function CurriculumVitaeEditForm({
                     icon={<Languages className="h-5 w-5" />}
                     onAdd={() =>
                       addLanguage({
-      id: crypto.randomUUID(),
-      name: "",
-      proficiency: "Beginner",
-      level: undefined,
-      url: "",
+                        id: crypto.randomUUID(),
+                        name: "",
+                        proficiency: "Beginner",
+                        level: undefined,
+                        url: "",
                       })
                     }
                     addLabel="Add Language"
                   >
                     {languageFields.map((field, index) => (
                       <ModernFormItem
-              key={field.id}
+                        key={field.id}
                         onDelete={() => removeLanguage(index)}
                         title="Language"
                         index={index}
                       >
-                        <ModernFieldGrid cols={2}>
-              <FormField
-                control={form.control}
-                name={`languages.${index}.name`}
-                render={({ field }) => (
-                              <CusFormField label="Language">
+                        <AppFieldGrid cols={2}>
+                          <FormField
+                            control={form.control}
+                            name={`cv.languages.${index}.name`}
+                            render={({ field }) => (
+                              <AppFormField label="Language">
                                 <Input {...field} placeholder="English" />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
-                <FormField
-                  control={form.control}
-                  name={`languages.${index}.proficiency`}
-                  render={({ field }) => (
-                              <CusFormField label="Proficiency Level">
-                        <SelectResponsive
+                          <FormField
+                            control={form.control}
+                            name={`cv.languages.${index}.proficiency`}
+                            render={({ field }) => (
+                              <AppFormField label="Proficiency Level">
+                                <SelectResponsive
                                   value={field.value}
                                   onChange={field.onChange}
                                   options={[
@@ -931,19 +1096,19 @@ export default function CurriculumVitaeEditForm({
                                   ]}
                                   placeholder="Select proficiency level"
                                 />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
-                        </ModernFieldGrid>
+                        </AppFieldGrid>
 
-                        <ModernFieldGrid cols={2}>
-                <FormField
-                  control={form.control}
-                  name={`languages.${index}.level`}
-                  render={({ field }) => (
-                              <CusFormField label="CEFR Level (Optional)">
-                        <SelectResponsive
-                          value={field.value || null}
+                        <AppFieldGrid cols={2}>
+                          <FormField
+                            control={form.control}
+                            name={`cv.languages.${index}.level`}
+                            render={({ field }) => (
+                              <AppFormField label="CEFR Level (Optional)">
+                                <SelectResponsive
+                                  value={field.value || null}
                                   onChange={field.onChange}
                                   options={[
                                     { value: "A1", label: "A1 - Beginner" },
@@ -958,29 +1123,29 @@ export default function CurriculumVitaeEditForm({
                                   ]}
                                   placeholder="Select CEFR level"
                                 />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
-              <FormField
-                control={form.control}
-                name={`languages.${index}.url`}
-                render={({ field }) => (
-                              <CusFormField label="Certificate URL (Optional)">
+                          <FormField
+                            control={form.control}
+                            name={`cv.languages.${index}.url`}
+                            render={({ field }) => (
+                              <AppFormField label="Certificate URL (Optional)">
                                 <Input
                                   {...field}
                                   placeholder="https://certificate.example.com"
                                 />
-                              </CusFormField>
+                              </AppFormField>
                             )}
                           />
-                        </ModernFieldGrid>
+                        </AppFieldGrid>
                       </ModernFormItem>
                     ))}
                   </CusFormSection>
                 </CVSection>
               )}
             </motion.div>
-        </AnimatePresence>
+          </AnimatePresence>
 
           {/* Navigation buttons */}
           <div className="flex items-center justify-between pt-8">
@@ -1027,274 +1192,6 @@ export default function CurriculumVitaeEditForm({
           </div>
         </form>
       </Form>
-    </div>
-  );
-}
-
-// Profile and Socials Management Component
-function ProfileSocialsForms({
-  profile,
-  socials,
-}: {
-  profile: Profile | null;
-  socials: Social[];
-}) {
-  const [isProfileEditing, setIsProfileEditing] = useState(false);
-  const [isSocialsEditing, setIsSocialsEditing] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
-  const handleUpdateProfile = useCallback((formData: FormData) => {
-    startTransition(async () => {
-      try {
-        await updateProfile(formData);
-        toast.success("Profile updated successfully!");
-        setIsProfileEditing(false);
-      } catch (error) {
-        toast.error(
-          `Failed to update profile: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
-      }
-    });
-  }, []);
-
-  const handleCreateSocial = useCallback((formData: FormData) => {
-    startTransition(async () => {
-      try {
-        await createSocial(formData);
-        toast.success("Social link added successfully!");
-      } catch (error) {
-        toast.error(
-          `Failed to add social link: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
-      }
-    });
-  }, []);
-
-  const handleDeleteSocial = useCallback((formData: FormData) => {
-    startTransition(async () => {
-      try {
-        await deleteSocial(formData);
-        toast.success("Social link deleted successfully!");
-      } catch (error) {
-        toast.error(
-          `Failed to delete social link: ${
-            error instanceof Error ? error.message : "Unknown error"
-          }`
-        );
-      }
-    });
-  }, []);
-
-  return (
-    <div className="space-y-8">
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Profile & Social Links</h2>
-        <p className="text-sm text-muted-foreground mb-6">
-          Manage your profile information and social media links separately from
-          your CV content.
-        </p>
-      </div>
-
-      {/* Profile Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">Profile Information</h3>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setIsProfileEditing(!isProfileEditing)}
-          >
-            {isProfileEditing ? "Cancel" : "Edit Profile"}
-          </Button>
-        </div>
-
-        {profile && !isProfileEditing && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-card rounded-lg">
-            <div>
-              <label className="text-sm font-medium text-muted-foreground">
-                Name
-              </label>
-              <p className="text-sm">{profile.name}</p>
-            </div>
-            <div>
-              <label className="text-sm font-medium text-muted-foreground">
-                Location
-              </label>
-              <p className="text-sm">{profile.location}</p>
-            </div>
-            <div className="md:col-span-2">
-              <label className="text-sm font-medium text-muted-foreground">
-                Description
-              </label>
-              <p className="text-sm">{profile.description}</p>
-            </div>
-          </div>
-        )}
-
-        {isProfileEditing && (
-          <form
-            action={handleUpdateProfile}
-            className="space-y-4 p-4 bg-card rounded-lg"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-sm font-medium">Full Name</label>
-                <Input
-                  name="name"
-                  defaultValue={profile?.name || ""}
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium">Location</label>
-                <Input
-                  name="location"
-                  defaultValue={profile?.location || ""}
-                  placeholder="San Francisco, CA"
-                  required
-                />
-              </div>
-            </div>
-            <div>
-              <label className="text-sm font-medium">Description</label>
-              <Textarea
-                name="description"
-                defaultValue={profile?.description || ""}
-                placeholder="Professional description..."
-                className="min-h-[100px]"
-                required
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Profile Picture URL</label>
-              <Input
-                name="profilePictureUrl"
-                defaultValue={profile?.profilePictureUrl || ""}
-                placeholder="/uploads/profile.jpg"
-                required
-              />
-            </div>
-            <input
-              type="hidden"
-              name="socials"
-              value={JSON.stringify(profile?.socials || [])}
-            />
-            <div className="flex gap-2">
-              <Button type="submit" disabled={isPending}>
-                {isPending ? "Saving..." : "Save Profile"}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsProfileEditing(false)}
-              >
-                Cancel
-              </Button>
-            </div>
-          </form>
-        )}
-      </div>
-
-      {/* Socials Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">Social Links</h3>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setIsSocialsEditing(!isSocialsEditing)}
-          >
-            {isSocialsEditing ? "Done" : "Manage Links"}
-          </Button>
-        </div>
-
-        {!isSocialsEditing && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {socials.map((social) => (
-              <div key={social.id} className="p-3 bg-card rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-sm">{social.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {social.url}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-            {socials.length === 0 && (
-              <p className="text-sm text-muted-foreground md:col-span-2">
-                No social links added yet.
-              </p>
-            )}
-          </div>
-        )}
-
-        {isSocialsEditing && (
-          <div className="space-y-4">
-            {/* Add Social Form */}
-            <form
-              action={handleCreateSocial}
-              className="p-4 bg-card rounded-lg"
-            >
-              <h4 className="font-medium mb-3">Add New Social Link</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium">Platform</label>
-                  <Input name="name" placeholder="LinkedIn" required />
-                </div>
-                <div>
-                  <label className="text-sm font-medium">URL</label>
-                  <Input
-                    name="url"
-                    type="url"
-                    placeholder="https://linkedin.com/in/johndoe"
-                    required
-                  />
-                </div>
-              </div>
-              <Button type="submit" className="mt-4" disabled={isPending}>
-                {isPending ? "Adding..." : "Add Link"}
-              </Button>
-            </form>
-
-            {/* Existing Socials */}
-            <div className="space-y-2">
-              {socials.map((social) => (
-                <div
-                  key={social.id}
-                  className="flex items-center justify-between p-3 bg-card rounded-lg"
-                >
-                  <div>
-                    <p className="font-medium text-sm">{social.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {social.url}
-                    </p>
-                  </div>
-                  <form action={handleDeleteSocial}>
-                    <input type="hidden" name="id" value={social.id} />
-                    <Button
-                      type="submit"
-                      variant="destructive"
-                      size="sm"
-                      disabled={isPending}
-                    >
-                      Delete
-                    </Button>
-                  </form>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   );
 }

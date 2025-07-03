@@ -1,9 +1,9 @@
 import { listProjects } from "@/app/actions";
 import { isDev } from "@/lib/utils";
-import ProjectCarousel from "@/components/custom/project-carousel";
-import ProjectEmptyState from "@/components/custom/project-empty-state";
-import ProjectGridCard from "@/components/custom/project-grid-card";
-import ProjectAddCard from "@/components/custom/project-add-card";
+import ProjectCarousel from "@/app/(pages)/(project)/projects/components/project-carousel";
+import ProjectEmptyState from "@/app/(pages)/(project)/projects/components/project-empty-state";
+import ProjectGridCard from "@/app/(pages)/(project)/projects/components/project-grid-card";
+import ProjectAddCard from "@/app/(pages)/(project)/projects/components/project-add-card";
 
 export default async function Projects() {
   const projects = await listProjects();

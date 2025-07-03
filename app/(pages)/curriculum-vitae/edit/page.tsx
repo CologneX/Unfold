@@ -1,19 +1,15 @@
 import {
   listRoles,
-  listSocials,
   listTechnologies,
   readCV,
-  readProfile,
 } from "@/app/actions";
-import CurriculumVitaeEditForm from "./form";
+import CurriculumVitaeEditForm from "./component/form";
 
 export default async function CurriculumVitaeEdit() {
-  const [CV, technologies, roles, socials, profile] = await Promise.all([
+  const [CV, technologies, roles] = await Promise.all([
     readCV(),
     listTechnologies(),
     listRoles(),
-    listSocials(),
-    readProfile(),
   ]);
   return (
     <CurriculumVitaeEditForm
@@ -21,8 +17,6 @@ export default async function CurriculumVitaeEdit() {
         CV: CV,
         availableTechnologies: technologies,
         availableRoles: roles,
-        socials: socials,
-        profile: profile,
       }}
     />
   );

@@ -36,6 +36,7 @@ import {
   Sparkles,
   Star,
 } from "lucide-react";
+import Image from "next/image";
 
 export default async function CurriculumVitae() {
   try {
@@ -83,17 +84,17 @@ export default async function CurriculumVitae() {
               technologies={technologiesAndRoles?.technologies || []}
             />
             <CVRoleSection roles={technologiesAndRoles?.roles || []} />
-            <CVLanguageSection languages={CV.languages} />
+            <CVLanguageSection languages={CV.cv.languages} />
           </div>
 
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            <CVWorkExperienceSection workExperiences={CV.workExperiences} />
-            <CVEducationSection educations={CV.educations} />
+            <CVWorkExperienceSection workExperiences={CV.cv.workExperiences} />
+            <CVEducationSection educations={CV.cv.educations} />
             <CVProjectSection projects={projects} />
-            <CVCertificationSection certifications={CV.certifications} />
-            <CVAwardOrHonorSection awardOrHonors={CV.awardOrHonors} />
-            <CVPublicationSection publications={CV.publications} />
+            <CVCertificationSection certifications={CV.cv.certifications} />
+            <CVAwardOrHonorSection awardOrHonors={CV.cv.awardOrHonors} />
+            <CVPublicationSection publications={CV.cv.publications} />
           </div>
         </div>
       </div>
@@ -115,9 +116,11 @@ function CVProfileSection({ profile }: { profile: Profile }) {
 
         {/* Profile image */}
         <div className="relative h-36 w-36 rounded-full overflow-hidden ring-2 ring-primary/20 bg-gradient-to-br from-primary/10 to-transparent">
-          <img
+          <Image
             src={profile.profilePictureUrl || "/placeholder.jpg"}
             alt={profile.name}
+            width={2000}
+            height={2000}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
 

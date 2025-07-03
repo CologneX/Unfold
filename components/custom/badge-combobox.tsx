@@ -170,7 +170,7 @@ export default function BadgeCombobox({
                     </p>
                     {onAddNew && searchValue.trim() && (
                       <p className="text-xs text-muted-foreground mt-1">
-                        Press Enter to add "{searchValue.trim()}"
+                        Press Enter to add &quot;{searchValue.trim()}&quot;
                       </p>
                     )}
                   </div>
