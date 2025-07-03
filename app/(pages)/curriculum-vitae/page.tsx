@@ -119,8 +119,7 @@ function CVProfileSection({ profile }: { profile: Profile }) {
           <Image
             src={profile.profilePictureUrl || "/placeholder.jpg"}
             alt={profile.name}
-            width={2000}
-            height={2000}
+            fill
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
 

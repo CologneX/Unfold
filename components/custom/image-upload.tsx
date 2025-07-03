@@ -120,8 +120,6 @@ export default function ImageUpload({
             <Image
               src={value}
               alt="Preview"
-              width={2000}
-              height={2000}
               fill
               className="object-contain"
               onError={() => setError("Failed to load image")}
