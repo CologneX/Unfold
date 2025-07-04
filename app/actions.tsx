@@ -4,17 +4,17 @@ import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
 import { revalidatePath } from "next/cache";
 import {
-  profileSchema,
-  projectSchema,
-  socialSchema,
-  technologySchema,
-  roleSchema,
-  workExperienceSchema,
-  educationSchema,
-  certificationSchema,
-  awardOrHonorSchema,
-  publicationSchema,
-  languageSchema,
+  ProfileSchema,
+  ProjectSchema,
+  SocialSchema,
+  TechnologySchema,
+  RoleSchema,
+  WorkExperienceSchema,
+  EducationSchema,
+  CertificationSchema,
+  AwardOrHonorSchema,
+  PublicationSchema,
+  LanguageSchema,
   type Profile,
   type Project,
   type Social,
@@ -27,7 +27,7 @@ import {
   type Publication,
   type Language,
   Data,
-  cvStoreSchema,
+  CVStoreSchema,
 } from "@/types/types";
 import { generateSlug } from "@/lib/utils";
 import { mkdir } from "fs/promises";
@@ -175,7 +175,7 @@ export async function updateProfile(formData: FormData) {
       socials: JSON.parse((formData.get("socials") as string) || "[]"),
     };
 
-    const validatedFields = profileSchema.safeParse(rawData);
+    const validatedFields = ProfileSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -223,7 +223,7 @@ export async function createProject(formData: FormData) {
       updatedAt: new Date(),
     };
 
-    const validatedFields = projectSchema.safeParse(rawData);
+    const validatedFields = ProjectSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -271,7 +271,7 @@ export async function updateProject(formData: FormData) {
       updatedAt: new Date(),
     };
 
-    const validatedFields = projectSchema.safeParse(rawData);
+    const validatedFields = ProjectSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -389,7 +389,7 @@ export async function readCV(): Promise<Data | null> {
 
 export async function updateCV(cv: Data) {
   try {
-    const validatedFields = cvStoreSchema.safeParse(cv);
+    const validatedFields = CVStoreSchema.safeParse(cv);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -435,7 +435,7 @@ export async function createSocial(formData: FormData) {
       url: formData.get("url") as string,
     };
 
-    const validatedFields = socialSchema.safeParse(rawData);
+    const validatedFields = SocialSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -508,7 +508,7 @@ export async function createTechnology(formData: FormData) {
       name: formData.get("name") as string,
     };
 
-    const validatedFields = technologySchema.safeParse(rawData);
+    const validatedFields = TechnologySchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -594,7 +594,7 @@ export async function createRole(formData: FormData) {
       name: formData.get("name") as string,
     };
 
-    const validatedFields = roleSchema.safeParse(rawData);
+    const validatedFields = RoleSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -685,7 +685,7 @@ export async function createWorkExperience(formData: FormData) {
       endDate: new Date(formData.get("endDate") as string),
     };
 
-    const validatedFields = workExperienceSchema.safeParse(rawData);
+    const validatedFields = WorkExperienceSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -725,7 +725,7 @@ export async function updateWorkExperience(formData: FormData) {
       endDate: new Date(formData.get("endDate") as string),
     };
 
-    const validatedFields = workExperienceSchema.safeParse(rawData);
+    const validatedFields = WorkExperienceSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -816,7 +816,7 @@ export async function createEducation(formData: FormData) {
       endDate: new Date(formData.get("endDate") as string),
     };
 
-    const validatedFields = educationSchema.safeParse(rawData);
+    const validatedFields = EducationSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -857,7 +857,7 @@ export async function updateEducation(formData: FormData) {
       endDate: new Date(formData.get("endDate") as string),
     };
 
-    const validatedFields = educationSchema.safeParse(rawData);
+    const validatedFields = EducationSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -947,7 +947,7 @@ export async function createCertification(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = certificationSchema.safeParse(rawData);
+    const validatedFields = CertificationSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -991,7 +991,7 @@ export async function updateCertification(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = certificationSchema.safeParse(rawData);
+    const validatedFields = CertificationSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -1081,7 +1081,7 @@ export async function createAwardOrHonor(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = awardOrHonorSchema.safeParse(rawData);
+    const validatedFields = AwardOrHonorSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -1122,7 +1122,7 @@ export async function updateAwardOrHonor(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = awardOrHonorSchema.safeParse(rawData);
+    const validatedFields = AwardOrHonorSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -1211,7 +1211,7 @@ export async function createPublication(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = publicationSchema.safeParse(rawData);
+    const validatedFields = PublicationSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -1251,7 +1251,7 @@ export async function updatePublication(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = publicationSchema.safeParse(rawData);
+    const validatedFields = PublicationSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -1346,7 +1346,7 @@ export async function createLanguage(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = languageSchema.safeParse(rawData);
+    const validatedFields = LanguageSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(
@@ -1398,7 +1398,7 @@ export async function updateLanguage(formData: FormData) {
       url: (formData.get("url") as string) || undefined,
     };
 
-    const validatedFields = languageSchema.safeParse(rawData);
+    const validatedFields = LanguageSchema.safeParse(rawData);
 
     if (!validatedFields.success) {
       throw new Error(

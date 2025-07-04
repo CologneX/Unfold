@@ -1,153 +1,50 @@
-import { type LucideIcon } from "lucide-react";
 import { z } from "zod";
 
-export type Profile = {
-    name: string;
-    description: string;
-    profilePictureUrl: string;
-    location: string;
-    socials: Social[];
-}
-
-export type Project = {
-    slug?: string;
-    name: string;
-    description: string;
-    shortDescription: string;
-    bannerUrl: string;
-    imageUrl: string[];
-    technologies: Technology[];
-    role: Role[];
-    repositoryUrl?: string;
-    liveUrl?: string;
-    isFeatured: boolean;
-    createdAt?: Date;
-    updatedAt?: Date;
-}
-
-export type Social = {
-    id: string;
-    name: string;
-    url: string;
-    icon?: LucideIcon;
-}
-
-export type Technology = {
-    name: string;
-}
-
-export type Role = {
-    name: string;
-}
-
-export type WorkExperience = {
-    id: string;
-    name: string;
-    description: string;
-    startDate: Date;
-    endDate: Date;
-}
-
-export type Education = {
-    id: string;
-    name: string;
-    institution: string;
-    degree: string;
-    startDate: Date;
-    endDate: Date;
-}
-
-export type Certification = {
-    id: string;
-    name: string;
-    issuer: string;
-    startDate: Date;
-    endDate?: Date;
-    credentialId?: string;
-    url?: string;
-}
-
-export type AwardOrHonor = {
-    id: string;
-    name: string;
-    institution: string;
-    description?: string;
-    date: Date;
-    url?: string;
-}
-
-export type Publication = {
-    id: string;
-    title: string;
-    authors: string[];
-    date: Date;
-    url?: string;
-}
-
-export type Language = {
-    id: string;
-    name: string;
-    proficiency: "Beginner" | "Intermediate" | "Advanced" | "Fluent" | "Native";
-    level?: "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
-    url?: string;
-}
-
-export type CV = {
-    technologies: Technology[];
-    roles: Role[];
-    workExperiences: WorkExperience[];
-    educations: Education[];
-    certifications: Certification[];
-    awardOrHonors: AwardOrHonor[];
-    publications: Publication[];
-    languages: Language[];
-}
-
-
-export interface ComboboxItem {
-    value: string;
-    label: string;
-}
-
-// Social
-export const socialSchema = z.object({
+// Social Schema
+export const SocialSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
     url: z.string().url().or(z.literal('')),
     icon: z.any().optional(),
 });
 
-// Technology
-export const technologySchema = z.object({
+// Technology Schema
+export const TechnologySchema = z.object({
     name: z.string().min(1),
 });
 
-// Role
-export const roleSchema = z.object({
+// Role Schema
+export const RoleSchema = z.object({
     name: z.string().min(1),
 });
 
-// Work Experience
-export const workExperienceSchema = z.object({
+// Work Experience Schema
+export const WorkExperienceSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
-    description: z.string().min(5),
+    company: z.string().min(2),
+    location: z.string().optional(),
+    type: z.enum(["Full-time", "Part-time", "Freelance", "Internship", "Volunteer", "Contract", "Other"]).optional(),
+    description: z.string().optional(),
     startDate: z.coerce.date(),
-    endDate: z.coerce.date(),
+    endDate: z.coerce.date().optional(),
+    isCurrent: z.boolean().optional(),
 });
 
-// Education
-export const educationSchema = z.object({
+// Education Schema
+export const EducationSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
     institution: z.string().min(2),
+    location: z.string().optional(),
     degree: z.string().min(2),
     startDate: z.coerce.date(),
-    endDate: z.coerce.date(),
+    endDate: z.coerce.date().optional(),
+    isCurrent: z.boolean().optional(),
 });
 
-// Certification
-export const certificationSchema = z.object({
+// Certification Schema
+export const CertificationSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
     issuer: z.string().min(2),
@@ -157,8 +54,8 @@ export const certificationSchema = z.object({
     url: z.string().url().or(z.literal('')).optional(),
 });
 
-// Award or Honor
-export const awardOrHonorSchema = z.object({
+// Award or Honor Schema
+export const AwardOrHonorSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
     institution: z.string().min(2),
@@ -167,8 +64,8 @@ export const awardOrHonorSchema = z.object({
     url: z.string().url().or(z.literal('')).optional(),
 });
 
-// Publication
-export const publicationSchema = z.object({
+// Publication Schema
+export const PublicationSchema = z.object({
     id: z.string(),
     title: z.string().min(2),
     authors: z.array(z.string().min(2)),
@@ -176,8 +73,8 @@ export const publicationSchema = z.object({
     url: z.string().url().or(z.literal('')).optional(),
 });
 
-// Language
-export const languageSchema = z.object({
+// Language Schema
+export const LanguageSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
     proficiency: z.enum([
@@ -191,8 +88,8 @@ export const languageSchema = z.object({
     url: z.string().url().or(z.literal('')).optional(),
 });
 
-// Project
-export const projectSchema = z.object({
+// Project Schema
+export const ProjectSchema = z.object({
     slug: z.string().optional(),
     name: z.string().min(2, "Name is required"),
     description: z.string({
@@ -203,8 +100,8 @@ export const projectSchema = z.object({
     }).min(5, "Short description must be at least 5 characters"),
     bannerUrl: z.string().nonempty("Banner image is required"),
     imageUrl: z.array(z.string()),
-    technologies: z.array(technologySchema).min(1, "At least one technology is required"),
-    role: z.array(roleSchema).min(1, "At least one role is required"),
+    technologies: z.array(TechnologySchema).min(1, "At least one technology is required"),
+    role: z.array(RoleSchema).min(1, "At least one role is required"),
     repositoryUrl: z.string().url().or(z.literal("")).optional(),
     liveUrl: z.string().url().or(z.literal("")).optional(),
     isFeatured: z.boolean(),
@@ -212,34 +109,58 @@ export const projectSchema = z.object({
     updatedAt: z.coerce.date().optional(),
 });
 
-// Profile
-export const profileSchema = z.object({
+// Profile Schema
+export const ProfileSchema = z.object({
     name: z.string().min(2),
     description: z.string().min(5),
     profilePictureUrl: z.string(),
     location: z.string().min(2),
-    socials: z.array(socialSchema),
+    socials: z.array(SocialSchema),
 });
 
-// CV
-const updateCVSchema = z.object({
-    technologies: z.array(technologySchema),
-    roles: z.array(roleSchema),
-    workExperiences: z.array(workExperienceSchema),
-    educations: z.array(educationSchema),
-    certifications: z.array(certificationSchema),
-    awardOrHonors: z.array(awardOrHonorSchema),
-    publications: z.array(publicationSchema),
-    languages: z.array(languageSchema),
+// CV Schema
+export const CVSchema = z.object({
+    technologies: z.array(TechnologySchema),
+    roles: z.array(RoleSchema),
+    workExperiences: z.array(WorkExperienceSchema),
+    educations: z.array(EducationSchema),
+    certifications: z.array(CertificationSchema),
+    awardOrHonors: z.array(AwardOrHonorSchema),
+    publications: z.array(PublicationSchema),
+    languages: z.array(LanguageSchema),
 });
 
-export const cvStoreSchema = z.object({
-    cv: updateCVSchema,
-    profile: profileSchema,
+// ComboboxItem Schema
+export const ComboboxItemSchema = z.object({
+    value: z.string(),
+    label: z.string(),
 });
 
-export type Data = {
-    cv: CV,
-    projects: Project[],
-    profile: Profile,
-}
+// Data Schema
+export const DataSchema = z.object({
+    cv: CVSchema,
+    projects: z.array(ProjectSchema),
+    profile: ProfileSchema,
+});
+
+// CV Store Schema
+export const CVStoreSchema = z.object({
+    cv: CVSchema,
+    profile: ProfileSchema,
+});
+
+// Inferred Types
+export type Social = z.infer<typeof SocialSchema>;
+export type Technology = z.infer<typeof TechnologySchema>;
+export type Role = z.infer<typeof RoleSchema>;
+export type WorkExperience = z.infer<typeof WorkExperienceSchema>;
+export type Education = z.infer<typeof EducationSchema>;
+export type Certification = z.infer<typeof CertificationSchema>;
+export type AwardOrHonor = z.infer<typeof AwardOrHonorSchema>;
+export type Publication = z.infer<typeof PublicationSchema>;
+export type Language = z.infer<typeof LanguageSchema>;
+export type Project = z.infer<typeof ProjectSchema>;
+export type Profile = z.infer<typeof ProfileSchema>;
+export type CV = z.infer<typeof CVSchema>;
+export type ComboboxItem = z.infer<typeof ComboboxItemSchema>;
+export type Data = z.infer<typeof DataSchema>;

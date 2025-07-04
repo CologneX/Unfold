@@ -282,30 +282,44 @@
       {
         "id": "work-1",
         "name": "Senior Software Engineer",
+        "company": "Tech Solutions Corp",
+        "location": "San Francisco, CA",
+        "type": "Full-time",
         "description": "Led development of microservices architecture for e-commerce platform serving 1M+ users. Implemented CI/CD pipelines, reduced deployment time by 60%, and mentored junior developers. Collaborated with product managers to define technical requirements and delivered features ahead of schedule.",
-        "startDate": "2022-03-01T00:00:00.000Z",
-        "endDate": "2024-12-31T23:59:59.000Z"
+        "startDate": "2028-01-31T17:00:00.000Z",
+        "isCurrent": true
       },
       {
         "id": "work-2",
         "name": "Full-Stack Developer",
+        "company": "Digital Innovations Ltd",
+        "location": "Austin, TX",
+        "type": "Full-time",
         "description": "Developed and maintained web applications using React, Node.js, and PostgreSQL. Built responsive user interfaces and RESTful APIs. Participated in code reviews, wrote comprehensive unit tests, and collaborated with cross-functional teams to deliver high-quality software solutions.",
-        "startDate": "2020-06-15T00:00:00.000Z",
-        "endDate": "2022-02-28T23:59:59.000Z"
+        "startDate": "2020-07-31T17:00:00.000Z",
+        "isCurrent": true
       },
       {
         "id": "work-3",
         "name": "Frontend Developer",
+        "company": "Creative Web Studio",
+        "location": "Seattle, WA",
+        "type": "Full-time",
         "description": "Created interactive user interfaces for SaaS applications using modern JavaScript frameworks. Optimized application performance and implemented responsive designs. Worked closely with UX designers to translate mockups into functional components and ensured cross-browser compatibility.",
         "startDate": "2019-01-10T00:00:00.000Z",
-        "endDate": "2020-06-10T23:59:59.000Z"
+        "endDate": "2020-06-10T23:59:59.000Z",
+        "isCurrent": false
       },
       {
         "id": "work-4",
         "name": "Junior Web Developer",
+        "company": "StartupTech Inc",
+        "location": "Remote",
+        "type": "Internship",
         "description": "Assisted in developing company websites and web applications. Gained experience with HTML, CSS, JavaScript, and basic backend technologies. Participated in agile development processes and contributed to team projects while learning best practices in software development.",
         "startDate": "2018-08-01T00:00:00.000Z",
-        "endDate": "2018-12-31T23:59:59.000Z"
+        "endDate": "2018-12-31T23:59:59.000Z",
+        "isCurrent": false
       }
     ],
     "educations": [
@@ -313,25 +327,31 @@
         "id": "edu-1",
         "name": "Computer Science",
         "institution": "State University of Technology",
+        "location": "Austin, TX",
         "degree": "Bachelor of Science",
         "startDate": "2014-09-01T00:00:00.000Z",
-        "endDate": "2018-05-31T23:59:59.000Z"
+        "endDate": "2018-05-31T23:59:59.000Z",
+        "isCurrent": false
       },
       {
         "id": "edu-2",
         "name": "Web Development Bootcamp",
         "institution": "Tech Academy",
+        "location": "San Francisco, CA",
         "degree": "Certificate",
         "startDate": "2018-01-15T00:00:00.000Z",
-        "endDate": "2018-06-30T23:59:59.000Z"
+        "endDate": "2018-06-30T23:59:59.000Z",
+        "isCurrent": false
       },
       {
         "id": "edu-3",
         "name": "Data Structures and Algorithms",
         "institution": "Online Learning Platform",
+        "location": "Online",
         "degree": "Specialization Certificate",
         "startDate": "2019-03-01T00:00:00.000Z",
-        "endDate": "2019-08-31T23:59:59.000Z"
+        "endDate": "2019-08-31T23:59:59.000Z",
+        "isCurrent": false
       }
     ],
     "certifications": [
