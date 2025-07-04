@@ -11,7 +11,6 @@ import PdfDownloadButton from "./pdf-download-button";
 
 const navigationItems = [
   { name: "Home", href: "/" },
-  { name: "CV", href: "/curriculum-vitae" },
   { name: "Projects", href: "/projects" },
 ];
 
