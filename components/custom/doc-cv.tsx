@@ -168,7 +168,7 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
         <Text style={styles.name}>{data.profile.name}</Text>
         <View style={styles.contactInfo}>
           <Text>{data.profile.location}</Text>
-          {data.profile.socials.map((social, index) => (
+          {data.profile.socials.map((social) => (
             <Link key={social.id} style={styles.link} src={social.url}>
               <Text>
                 {social.name}: {social.url}

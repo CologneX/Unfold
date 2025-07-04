@@ -13,7 +13,7 @@ export default function Error({ error }: { error: Error }) {
         </div>
         <div className="text-xs md:text-sm text-muted-foreground text-center">
           Please edit the profile and CV data{" "}
-          <Link href="/curriculum-vitae/edit">
+          <Link href="/edit">
             <Button variant="link" className="p-0 font-bold h-fit">
               here
             </Button>

@@ -30,7 +30,7 @@ export default function FloatingButton() {
         )}
         type="button"
         onClick={() => {
-          router.push("/curriculum-vitae/edit");
+          router.push("/edit");
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

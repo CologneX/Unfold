@@ -402,7 +402,7 @@ export async function updateCV(cv: Data) {
     const data = await readData();
     await writeData({ ...data, ...validatedFields.data });
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "CV updated successfully" };
   } catch (error) {
     throw new Error(
@@ -699,7 +699,7 @@ export async function createWorkExperience(formData: FormData) {
     data.cv.workExperiences.push(validatedFields.data);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Work experience added successfully" };
   } catch (error) {
     throw new Error(
@@ -747,7 +747,7 @@ export async function updateWorkExperience(formData: FormData) {
     data.cv.workExperiences[workExperienceIndex] = validatedFields.data;
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Work experience updated successfully" };
   } catch (error) {
     throw new Error(
@@ -777,7 +777,7 @@ export async function deleteWorkExperience(formData: FormData) {
     data.cv.workExperiences.splice(workExperienceIndex, 1);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Work experience deleted successfully" };
   } catch (error) {
     throw new Error(
@@ -830,7 +830,7 @@ export async function createEducation(formData: FormData) {
     data.cv.educations.push(validatedFields.data);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Education added successfully" };
   } catch (error) {
     throw new Error(
@@ -877,7 +877,7 @@ export async function updateEducation(formData: FormData) {
     data.cv.educations[educationIndex] = validatedFields.data;
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Education updated successfully" };
   } catch (error) {
     throw new Error(
@@ -905,7 +905,7 @@ export async function deleteEducation(formData: FormData) {
     data.cv.educations.splice(educationIndex, 1);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Education deleted successfully" };
   } catch (error) {
     throw new Error(
@@ -961,7 +961,7 @@ export async function createCertification(formData: FormData) {
     data.cv.certifications.push(validatedFields.data);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Certification added successfully" };
   } catch (error) {
     throw new Error(
@@ -1013,7 +1013,7 @@ export async function updateCertification(formData: FormData) {
     data.cv.certifications[certificationIndex] = validatedFields.data;
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Certification updated successfully" };
   } catch (error) {
     throw new Error(
@@ -1043,7 +1043,7 @@ export async function deleteCertification(formData: FormData) {
     data.cv.certifications.splice(certificationIndex, 1);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Certification deleted successfully" };
   } catch (error) {
     throw new Error(
@@ -1095,7 +1095,7 @@ export async function createAwardOrHonor(formData: FormData) {
     data.cv.awardOrHonors.push(validatedFields.data);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Award or honor added successfully" };
   } catch (error) {
     throw new Error(
@@ -1144,7 +1144,7 @@ export async function updateAwardOrHonor(formData: FormData) {
     data.cv.awardOrHonors[awardOrHonorIndex] = validatedFields.data;
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Award or honor updated successfully" };
   } catch (error) {
     throw new Error(
@@ -1174,7 +1174,7 @@ export async function deleteAwardOrHonor(formData: FormData) {
     data.cv.awardOrHonors.splice(awardOrHonorIndex, 1);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Award or honor deleted successfully" };
   } catch (error) {
     throw new Error(
@@ -1225,7 +1225,7 @@ export async function createPublication(formData: FormData) {
     data.cv.publications.push(validatedFields.data);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Publication added successfully" };
   } catch (error) {
     throw new Error(
@@ -1271,7 +1271,7 @@ export async function updatePublication(formData: FormData) {
     data.cv.publications[publicationIndex] = validatedFields.data;
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Publication updated successfully" };
   } catch (error) {
     throw new Error(
@@ -1299,7 +1299,7 @@ export async function deletePublication(formData: FormData) {
     data.cv.publications.splice(publicationIndex, 1);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Publication deleted successfully" };
   } catch (error) {
     throw new Error(
@@ -1360,7 +1360,7 @@ export async function createLanguage(formData: FormData) {
     data.cv.languages.push(validatedFields.data);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Language added successfully" };
   } catch (error) {
     throw new Error(
@@ -1418,7 +1418,7 @@ export async function updateLanguage(formData: FormData) {
     data.cv.languages[languageIndex] = validatedFields.data;
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Language updated successfully" };
   } catch (error) {
     throw new Error(
@@ -1446,7 +1446,7 @@ export async function deleteLanguage(formData: FormData) {
     data.cv.languages.splice(languageIndex, 1);
     await writeData(data);
 
-    revalidatePath("/curriculum-vitae");
+    revalidatePath("");
     return { success: true, message: "Language deleted successfully" };
   } catch (error) {
     throw new Error(

@@ -117,7 +117,7 @@ export default function Header() {
                     iconPlacement="left"
                     effect="shineHover"
                   >
-                    <Link href="/curriculum-vitae/edit">Edit Profile</Link>
+                    <Link href="/edit">Edit Profile</Link>
                   </Button>
                 </motion.div>
               )}
@@ -285,7 +285,7 @@ export default function Header() {
                           }}
                         >
                           <Link
-                            href="/curriculum-vitae/edit"
+                            href="/edit"
                             onClick={() => setIsOpen(false)}
                           >
                             <motion.div
@@ -301,7 +301,7 @@ export default function Header() {
                                 variant="ghost"
                                 className={cn(
                                   "w-full justify-start font-medium transition-all duration-200",
-                                  isActive("/curriculum-vitae/edit")
+                                  isActive("/edit")
                                     ? "bg-primary/10 text-primary border border-primary/20"
                                     : "hover:bg-accent/50 text-muted-foreground hover:text-foreground"
                                 )}
