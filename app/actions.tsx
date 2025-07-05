@@ -502,3 +502,23 @@ export async function getProjectTechnologiesAndRoles(): Promise<{
     );
   }
 }
+
+// DELETE PROJECT ACTION
+export async function deleteProject(slug: string) {
+  try {
+    const data = await readData();
+    const projectIndex = data.projects.findIndex((p) => p.slug === slug);
+    if (projectIndex === -1) {
+      throw new Error(`Project with slug "${slug}" not found`);
+    }
+    data.projects.splice(projectIndex, 1);
+    await writeData(data);
+    revalidatePath(`/project/${slug}`);
+  } catch (error) {
+    throw new Error(
+      `Failed to delete project: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  }
+}
