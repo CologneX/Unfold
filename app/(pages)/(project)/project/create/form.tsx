@@ -232,7 +232,6 @@ export default function ProjectCreateForm({
                   <ImageUpload
                     value={field.value}
                     onChange={(value) => {
-                      console.log("value", value);
                       field.onChange(value);
                     }}
                   />

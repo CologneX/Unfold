@@ -40,7 +40,6 @@ import {
 import { createTechnology, createRole, updateCV } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import ImageUpload from "@/components/custom/image-upload";
-import { Select } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface CurriculumVitaeEditFormProps {
@@ -560,9 +559,10 @@ export default function CurriculumVitaeEditForm({
                             render={({ field }) => (
                               <AppFormField label="Employment Type (Optional)">
                                 <SelectResponsive
-                                  value={field.value || null}
+                                  value={field.value || null!}
                                   onChange={field.onChange}
                                   options={[
+                                    { value: null!, label: "Select Type" },
                                     { value: "Full-time", label: "Full-time" },
                                     { value: "Part-time", label: "Part-time" },
                                     { value: "Freelance", label: "Freelance" },
@@ -799,7 +799,7 @@ export default function CurriculumVitaeEditForm({
                                       }}
                                     />
                                     <FormLabel>
-                                      I'm currently enrolled
+                                      I&apos;m currently enrolled
                                     </FormLabel>
                                   </div>
                                 </AppFormField>
@@ -807,26 +807,6 @@ export default function CurriculumVitaeEditForm({
                             />
                           </div>
                         </AppFieldGrid>
-
-                        <FormField
-                          control={form.control}
-                          name={`cv.educations.${index}.isCurrent`}
-                          render={({ field }) => (
-                            <AppFormField label="Currently Enrolled">
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  type="checkbox"
-                                  checked={field.value || false}
-                                  onChange={field.onChange}
-                                  className="h-4 w-4"
-                                />
-                                <span className="text-sm text-muted-foreground">
-                                  I am currently enrolled in this program
-                                </span>
-                              </div>
-                            </AppFormField>
-                          )}
-                        />
                       </ModernFormItem>
                     ))}
                   </CusFormSection>
@@ -1207,7 +1187,7 @@ export default function CurriculumVitaeEditForm({
                         id: crypto.randomUUID(),
                         name: "",
                         proficiency: "Beginner",
-                        level: undefined,
+                        level: null,
                         url: "",
                       })
                     }
@@ -1262,9 +1242,13 @@ export default function CurriculumVitaeEditForm({
                             render={({ field }) => (
                               <AppFormField label="CEFR Level (Optional)">
                                 <SelectResponsive
-                                  value={field.value || null}
+                                  value={field.value}
                                   onChange={field.onChange}
                                   options={[
+                                    {
+                                      value: null!,
+                                      label: "Select Level",
+                                    },
                                     { value: "A1", label: "A1 - Beginner" },
                                     { value: "A2", label: "A2 - Elementary" },
                                     { value: "B1", label: "B1 - Intermediate" },
