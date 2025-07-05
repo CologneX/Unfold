@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/custom/header";
+import { DialogProvider } from "@/components/custom/app-dialog";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
         <header className="fixed top-0 z-50 translate-y-4 left-0 right-0 max-w-xl mx-auto px-4">
           <Header />
         </header>
+        <DialogProvider />
         <main className="flex-grow z-0">{children}</main>
       </body>
     </html>
