@@ -84,7 +84,7 @@ export const LanguageSchema = z.object({
         "Fluent",
         "Native",
     ]),
-    level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).optional(),
+    level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).nullable(),
     url: z.string().url().or(z.literal('')).optional(),
 });
 
