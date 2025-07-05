@@ -36,11 +36,13 @@ import {
   type Technology,
   type Role,
   Data,
+  DataSchema,
 } from "@/types/types";
 import { createTechnology, createRole, updateCV } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import ImageUpload from "@/components/custom/image-upload";
 import { Checkbox } from "@/components/ui/checkbox";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface CurriculumVitaeEditFormProps {
   CV: Data | null;
@@ -117,6 +119,7 @@ export default function CurriculumVitaeEditForm({
   };
 
   const form = useForm<Data>({
+    resolver: zodResolver(DataSchema),
     defaultValues: defaultVal,
   });
 
