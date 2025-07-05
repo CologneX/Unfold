@@ -47,3 +47,16 @@ export function formatDate(date: Date | string): string {
         day: "numeric",
     });
 }
+
+/**
+ * Format a date to month and year
+ * @param date - The date to format
+ * @returns {string} The formatted date
+ */
+export function formatDateToMonthYear(date: Date | string): string {
+    const locale = typeof window !== 'undefined' ? navigator.language : 'en-US';
+    return new Date(date).toLocaleDateString(locale, {
+        year: "numeric",
+        month: "long",
+    });
+}
