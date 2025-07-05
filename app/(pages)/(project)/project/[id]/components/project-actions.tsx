@@ -5,8 +5,11 @@ import Link from "next/link";
 import { Project } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Github, ExternalLink, Zap, Edit } from "lucide-react";
+import { Github, ExternalLink, Zap, Edit, TrashIcon } from "lucide-react";
 import { isDev } from "@/lib/utils";
+import { deleteProject } from "@/app/actions";
+import { openDialog } from "@/components/custom/app-dialog";
+import { useRouter } from "next/navigation";
 
 interface ProjectActionsProps {
   project: Project;
@@ -14,10 +17,23 @@ interface ProjectActionsProps {
 
 export default function ProjectActions({ project }: ProjectActionsProps) {
   const hasActions = project.repositoryUrl || project.liveUrl || isDev();
-
+  const router = useRouter();
   if (!hasActions) {
     return null;
   }
+
+  const DeleteProjectHandler = async ({ project }: { project: Project }) => {
+    openDialog({
+      title: "Delete Project",
+      description:
+        "Are you sure you want to delete this project? This action cannot be undone.",
+      onConfirm: () => {
+        deleteProject(project.slug ?? "");
+        router.replace("/projects");
+      },
+      dialogType: "destructive",
+    });
+  };
 
   return (
     <Card className="border-border/40 bg-card/40 backdrop-blur-sm">
@@ -41,7 +57,9 @@ export default function ProjectActions({ project }: ProjectActionsProps) {
               iconPlacement="left"
               variant="outline"
             >
-              <Link href={`/project/${project.slug}/edit`} className="gap-4">Edit Project</Link>
+              <Link href={`/project/${project.slug}/edit`} className="gap-4">
+                Edit Project
+              </Link>
             </Button>
           </motion.div>
         )}
@@ -57,7 +75,7 @@ export default function ProjectActions({ project }: ProjectActionsProps) {
               className="w-full group/btn relative overflow-hidden bg-card hover:bg-accent border border-border/40 text-foreground"
               variant="outline"
             >
-              <a
+              <Link
                 href={project.repositoryUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -66,7 +84,7 @@ export default function ProjectActions({ project }: ProjectActionsProps) {
                 <Github className="h-4 w-4 mr-2" />
                 View Source Code
                 <ExternalLink className="h-3 w-3 ml-auto opacity-50 group-hover/btn:opacity-100 transition-opacity" />
-              </a>
+              </Link>
             </Button>
           </motion.div>
         )}
@@ -81,7 +99,7 @@ export default function ProjectActions({ project }: ProjectActionsProps) {
               asChild
               className="w-full group/btn relative overflow-hidden bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl"
             >
-              <a
+              <Link
                 href={project.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -90,7 +108,25 @@ export default function ProjectActions({ project }: ProjectActionsProps) {
                 <ExternalLink className="h-4 w-4 mr-2" />
                 View Live Project
                 <ExternalLink className="h-3 w-3 ml-auto opacity-70 group-hover/btn:opacity-100 transition-opacity" />
-              </a>
+              </Link>
+            </Button>
+          </motion.div>
+        )}
+
+        {isDev() && (
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          >
+            <Button
+              variant="destructive"
+              onClick={() => DeleteProjectHandler({ project })}
+              className="w-full group/btn relative justify-start overflow-hidden shadow-lg hover:shadow-xl"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
+              <TrashIcon className="h-4 w-4 mr-2" />
+              Delete
             </Button>
           </motion.div>
         )}
