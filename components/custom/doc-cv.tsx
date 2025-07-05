@@ -9,6 +9,7 @@ import {
   Link,
 } from "@react-pdf/renderer";
 import { Data } from "@/types/types";
+import { formatDateToMonthYear } from "@/lib/utils";
 
 // Register fonts for better ATS compatibility
 Font.register({
@@ -142,15 +143,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// Helper function to format dates
-const formatDate = (dateString: string | Date) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-  });
-};
-
 // Helper function to strip HTML tags from rich text
 const stripHtml = (html: string): string => {
   return html
@@ -207,12 +199,14 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
               <View style={styles.experienceHeader}>
                 <Text style={styles.jobTitle}>{experience.name}</Text>
                 <Text style={styles.dates}>
-                  {formatDate(experience.startDate)} -{" "}
-                  {formatDate(experience.endDate)}
+                  {formatDateToMonthYear(experience.startDate)} -{" "}
+                  {experience.endDate
+                    ? formatDateToMonthYear(experience.endDate)
+                    : "Present"}
                 </Text>
               </View>
               <Text style={styles.description}>
-                {stripHtml(experience.description)}
+                {stripHtml(experience.description || "")}
               </Text>
             </View>
           ))}
@@ -224,7 +218,7 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
         {data.cv.educations
           .sort(
             (a, b) =>
-              new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+              new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
           )
           .map((education) => (
             <View key={education.id} style={styles.educationItem}>
@@ -233,7 +227,9 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                   {education.degree} in {education.name}
                 </Text>
                 <Text style={styles.dates}>
-                  {formatDate(education.endDate)}
+                  {education.endDate
+                    ? formatDateToMonthYear(education.endDate)
+                    : "Present"}
                 </Text>
               </View>
               <Text>{education.institution}</Text>
@@ -255,9 +251,9 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
               <View key={cert.id} style={styles.certificationItem}>
                 <Text style={styles.jobTitle}>{cert.name}</Text>
                 <Text>
-                  {cert.issuer} • {formatDate(cert.startDate)}
+                  {cert.issuer} • {formatDateToMonthYear(cert.startDate)}
                   {cert.endDate
-                    ? ` - ${formatDate(cert.endDate)}`
+                    ? ` - ${formatDateToMonthYear(cert.endDate)}`
                     : " - Present"}
                 </Text>
                 {cert.credentialId && (
@@ -327,7 +323,7 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                 <Text style={styles.publicationTitle}>{publication.title}</Text>
                 <Text style={styles.authors}>
                   {publication.authors.join(", ")} •{" "}
-                  {formatDate(publication.date)}
+                  {formatDateToMonthYear(publication.date)}
                 </Text>
                 {publication.url && (
                   <Link style={styles.link} src={publication.url}>
@@ -351,7 +347,9 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
               <View key={award.id} style={styles.awardItem}>
                 <View style={styles.awardHeader}>
                   <Text>{award.name}</Text>
-                  <Text style={styles.dates}>{formatDate(award.date)}</Text>
+                  <Text style={styles.dates}>
+                    {formatDateToMonthYear(award.date)}
+                  </Text>
                 </View>
                 <Text>{award.institution}</Text>
                 {award.description && (

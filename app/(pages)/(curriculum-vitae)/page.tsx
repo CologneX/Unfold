@@ -37,6 +37,7 @@ import {
   Star,
 } from "lucide-react";
 import Image from "next/image";
+import { formatDateToMonthYear } from "@/lib/utils";
 
 export default async function CurriculumVitae() {
   try {
@@ -386,8 +387,10 @@ function CVWorkExperienceSection({
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2 group/date">
                   <Calendar className="h-4 w-4 transition-colors group-hover/date:text-primary" />
                   <span className="group-hover/date:text-foreground transition-colors">
-                    {new Date(experience.startDate).toLocaleDateString()} -{" "}
-                    {new Date(experience.endDate).toLocaleDateString()}
+                    {formatDateToMonthYear(experience.startDate)} -{" "}
+                    {experience.endDate
+                      ? formatDateToMonthYear(experience.endDate)
+                      : "Present"}
                   </span>
                 </div>
               </div>
@@ -457,8 +460,10 @@ function CVEducationSection({ educations }: { educations: Education[] }) {
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mt-3 group/date">
                   <Calendar className="h-4 w-4 transition-colors group-hover/date:text-primary" />
                   <span className="group-hover/date:text-foreground transition-colors">
-                    {new Date(education.startDate).toLocaleDateString()} -{" "}
-                    {new Date(education.endDate).toLocaleDateString()}
+                    {formatDateToMonthYear(education.startDate)} -{" "}
+                    {education.endDate
+                      ? formatDateToMonthYear(education.endDate)
+                      : "Present"}
                   </span>
                 </div>
               </div>
