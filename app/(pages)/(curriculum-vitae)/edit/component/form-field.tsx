@@ -8,9 +8,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
+import { useId } from "react";
 
 interface AppFormFieldProps {
-  label: string;
+  label?: string;
   description?: string;
   className?: string;
   children?: React.ReactNode;
@@ -22,11 +23,11 @@ export function AppFormField({
   className,
   children,
 }: AppFormFieldProps) {
-  const fieldId = `field-${label.toLowerCase().replace(/\s+/g, "-")}`;
+  const fieldId = useId();
 
   return (
     <FormItem className={cn(className)}>
-      <FormLabel htmlFor={fieldId}>{label}</FormLabel>
+      {label && <FormLabel htmlFor={fieldId}>{label}</FormLabel>}
       {description && <FormDescription>{description}</FormDescription>}
       <FormControl>{children}</FormControl>
       <FormMessage />

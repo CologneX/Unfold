@@ -19,7 +19,7 @@ import {
   X,
 } from "lucide-react";
 
-import { Form, FormField } from "@/components/ui/form";
+import { Form, FormField, FormLabel } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,7 +28,7 @@ import { AppFormField, AppFieldGrid } from "./form-field";
 import { CusFormSection, ModernFormItem } from "./form-section";
 import { CVSection } from "./cv-section";
 import BadgeCombobox from "@/components/custom/badge-combobox";
-import DatePicker from "@/components/custom/date-picker";
+import MonthPicker from "@/components/custom/month-picker";
 import { SelectResponsive } from "@/components/custom/res-select";
 
 import {
@@ -40,6 +40,8 @@ import {
 import { createTechnology, createRole, updateCV } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import ImageUpload from "@/components/custom/image-upload";
+import { Select } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface CurriculumVitaeEditFormProps {
   CV: Data | null;
@@ -497,9 +499,13 @@ export default function CurriculumVitaeEditForm({
                       addWork({
                         id: crypto.randomUUID(),
                         name: "",
+                        company: "",
+                        location: "",
+                        type: undefined,
                         description: "",
                         startDate: new Date(),
-                        endDate: new Date(),
+                        endDate: undefined,
+                        isCurrent: false,
                       })
                     }
                     addLabel="Add Experience"
@@ -511,7 +517,7 @@ export default function CurriculumVitaeEditForm({
                         title="Work Experience"
                         index={index}
                       >
-                        <AppFieldGrid cols={1}>
+                        <AppFieldGrid cols={2}>
                           <FormField
                             control={form.control}
                             name={`cv.workExperiences.${index}.name`}
@@ -524,35 +530,117 @@ export default function CurriculumVitaeEditForm({
                               </AppFormField>
                             )}
                           />
+                          <FormField
+                            control={form.control}
+                            name={`cv.workExperiences.${index}.company`}
+                            render={({ field }) => (
+                              <AppFormField label="Company">
+                                <Input {...field} placeholder="Google Inc." />
+                              </AppFormField>
+                            )}
+                          />
                         </AppFieldGrid>
 
                         <AppFieldGrid cols={2}>
+                          <FormField
+                            control={form.control}
+                            name={`cv.workExperiences.${index}.location`}
+                            render={({ field }) => (
+                              <AppFormField label="Location (Optional)">
+                                <Input
+                                  {...field}
+                                  placeholder="San Francisco, CA"
+                                />
+                              </AppFormField>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`cv.workExperiences.${index}.type`}
+                            render={({ field }) => (
+                              <AppFormField label="Employment Type (Optional)">
+                                <SelectResponsive
+                                  value={field.value || null}
+                                  onChange={field.onChange}
+                                  options={[
+                                    { value: "Full-time", label: "Full-time" },
+                                    { value: "Part-time", label: "Part-time" },
+                                    { value: "Freelance", label: "Freelance" },
+                                    {
+                                      value: "Internship",
+                                      label: "Internship",
+                                    },
+                                    { value: "Volunteer", label: "Volunteer" },
+                                    { value: "Contract", label: "Contract" },
+                                    { value: "Other", label: "Other" },
+                                  ]}
+                                  placeholder="Select employment type"
+                                />
+                              </AppFormField>
+                            )}
+                          />
+                        </AppFieldGrid>
+                        <AppFieldGrid cols={2} className="items-start">
                           <AppFormField label="Start Date">
-                            <DatePicker
-                              value={form.watch(
-                                `cv.workExperiences.${index}.startDate`
+                            <FormField
+                              control={form.control}
+                              name={`cv.workExperiences.${index}.startDate`}
+                              render={({ field }) => (
+                                <MonthPicker
+                                  currentMonth={field.value}
+                                  onMonthChange={field.onChange}
+                                />
                               )}
-                              onChange={(date: Date) =>
-                                form.setValue(
-                                  `cv.workExperiences.${index}.startDate`,
-                                  date || new Date()
-                                )
-                              }
                             />
                           </AppFormField>
-                          <AppFormField label="End Date">
-                            <DatePicker
-                              value={form.watch(
-                                `cv.workExperiences.${index}.endDate`
+                          <div className="flex flex-col gap-2">
+                            <AppFormField label="End Date (Optional)">
+                              <FormField
+                                disabled={form.watch(
+                                  `cv.workExperiences.${index}.isCurrent`
+                                )}
+                                control={form.control}
+                                name={`cv.workExperiences.${index}.endDate`}
+                                render={({ field }) => (
+                                  <MonthPicker
+                                    disabled={form.watch(
+                                      `cv.workExperiences.${index}.isCurrent`
+                                    )}
+                                    minMonth={form.watch(
+                                      `cv.workExperiences.${index}.startDate`
+                                    )}
+                                    currentMonth={field.value}
+                                    onMonthChange={field.onChange}
+                                  />
+                                )}
+                              />
+                            </AppFormField>
+                            <FormField
+                              control={form.control}
+                              name={`cv.workExperiences.${index}.isCurrent`}
+                              render={({ field }) => (
+                                <AppFormField>
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox
+                                      checked={field.value || false}
+                                      onCheckedChange={(checked) => {
+                                        field.onChange(checked);
+                                        if (checked) {
+                                          form.setValue(
+                                            `cv.workExperiences.${index}.endDate`,
+                                            undefined
+                                          );
+                                        }
+                                      }}
+                                    />
+                                    <FormLabel>
+                                      I currently work in this position
+                                    </FormLabel>
+                                  </div>
+                                </AppFormField>
                               )}
-                              onChange={(date: Date) =>
-                                form.setValue(
-                                  `cv.workExperiences.${index}.endDate`,
-                                  date || new Date()
-                                )
-                              }
                             />
-                          </AppFormField>
+                          </div>
                         </AppFieldGrid>
 
                         <FormField
@@ -589,9 +677,11 @@ export default function CurriculumVitaeEditForm({
                         id: crypto.randomUUID(),
                         name: "",
                         institution: "",
+                        location: "",
                         degree: "",
                         startDate: new Date(),
-                        endDate: new Date(),
+                        endDate: undefined,
+                        isCurrent: false,
                       })
                     }
                     addLabel="Add Education"
@@ -630,47 +720,113 @@ export default function CurriculumVitaeEditForm({
                           />
                         </AppFieldGrid>
 
+                        <AppFieldGrid cols={2}>
+                          <FormField
+                            control={form.control}
+                            name={`cv.educations.${index}.degree`}
+                            render={({ field }) => (
+                              <AppFormField label="Degree">
+                                <Input
+                                  {...field}
+                                  placeholder="Bachelor of Science"
+                                />
+                              </AppFormField>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name={`cv.educations.${index}.location`}
+                            render={({ field }) => (
+                              <AppFormField label="Location (Optional)">
+                                <Input {...field} placeholder="Stanford, CA" />
+                              </AppFormField>
+                            )}
+                          />
+                        </AppFieldGrid>
+
+                        <AppFieldGrid cols={2} className="items-start">
+                          <AppFormField label="Start Date">
+                            <MonthPicker
+                              currentMonth={form.watch(
+                                `cv.educations.${index}.startDate`
+                              )}
+                              onMonthChange={(date: Date) =>
+                                form.setValue(
+                                  `cv.educations.${index}.startDate`,
+                                  date
+                                )
+                              }
+                            />
+                          </AppFormField>
+                          <div className="flex flex-col gap-2">
+                            <AppFormField label="End Date (Optional)">
+                              <FormField
+                                disabled={form.watch(
+                                  `cv.educations.${index}.isCurrent`
+                                )}
+                                control={form.control}
+                                name={`cv.educations.${index}.endDate`}
+                                render={({ field }) => (
+                                  <MonthPicker
+                                    disabled={form.watch(
+                                      `cv.educations.${index}.isCurrent`
+                                    )}
+                                    minMonth={form.watch(
+                                      `cv.educations.${index}.startDate`
+                                    )}
+                                    currentMonth={field.value}
+                                    onMonthChange={field.onChange}
+                                  />
+                                )}
+                              />
+                            </AppFormField>
+                            <FormField
+                              control={form.control}
+                              name={`cv.educations.${index}.isCurrent`}
+                              render={({ field }) => (
+                                <AppFormField>
+                                  <div className="flex items-center gap-2">
+                                    <Checkbox
+                                      checked={field.value || false}
+                                      onCheckedChange={(checked) => {
+                                        field.onChange(checked);
+                                        if (checked) {
+                                          form.setValue(
+                                            `cv.educations.${index}.endDate`,
+                                            undefined
+                                          );
+                                        }
+                                      }}
+                                    />
+                                    <FormLabel>
+                                      I'm currently enrolled
+                                    </FormLabel>
+                                  </div>
+                                </AppFormField>
+                              )}
+                            />
+                          </div>
+                        </AppFieldGrid>
+
                         <FormField
                           control={form.control}
-                          name={`cv.educations.${index}.degree`}
+                          name={`cv.educations.${index}.isCurrent`}
                           render={({ field }) => (
-                            <AppFormField label="Degree">
-                              <Input
-                                {...field}
-                                placeholder="Bachelor of Science"
-                              />
+                            <AppFormField label="Currently Enrolled">
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  type="checkbox"
+                                  checked={field.value || false}
+                                  onChange={field.onChange}
+                                  className="h-4 w-4"
+                                />
+                                <span className="text-sm text-muted-foreground">
+                                  I am currently enrolled in this program
+                                </span>
+                              </div>
                             </AppFormField>
                           )}
                         />
-
-                        <AppFieldGrid cols={2}>
-                          <AppFormField label="Start Date">
-                            <DatePicker
-                              value={form.watch(
-                                `cv.educations.${index}.startDate`
-                              )}
-                              onChange={(date: Date) =>
-                                form.setValue(
-                                  `cv.educations.${index}.startDate`,
-                                  date || new Date()
-                                )
-                              }
-                            />
-                          </AppFormField>
-                          <AppFormField label="End Date">
-                            <DatePicker
-                              value={form.watch(
-                                `cv.educations.${index}.endDate`
-                              )}
-                              onChange={(date: Date) =>
-                                form.setValue(
-                                  `cv.educations.${index}.endDate`,
-                                  date || new Date()
-                                )
-                              }
-                            />
-                          </AppFormField>
-                        </AppFieldGrid>
                       </ModernFormItem>
                     ))}
                   </CusFormSection>
@@ -794,26 +950,24 @@ export default function CurriculumVitaeEditForm({
 
                           <AppFieldGrid cols={2}>
                             <AppFormField label="Issue Date">
-                              <DatePicker
-                                value={form.watch(
+                              <MonthPicker
+                                currentMonth={form.watch(
                                   `cv.certifications.${index}.startDate`
                                 )}
-                                onChange={(date: Date) =>
+                                onMonthChange={(date: Date) =>
                                   form.setValue(
                                     `cv.certifications.${index}.startDate`,
-                                    date || new Date()
+                                    date
                                   )
                                 }
                               />
                             </AppFormField>
                             <AppFormField label="Expiry Date (Optional)">
-                              <DatePicker
-                                value={
-                                  form.watch(
-                                    `cv.certifications.${index}.endDate`
-                                  ) || new Date()
-                                }
-                                onChange={(date: Date) =>
+                              <MonthPicker
+                                currentMonth={form.watch(
+                                  `cv.certifications.${index}.endDate`
+                                )}
+                                onMonthChange={(date: Date) =>
                                   form.setValue(
                                     `cv.certifications.${index}.endDate`,
                                     date
@@ -902,14 +1056,14 @@ export default function CurriculumVitaeEditForm({
                           </AppFieldGrid>
 
                           <AppFormField label="Date Received">
-                            <DatePicker
-                              value={form.watch(
+                            <MonthPicker
+                              currentMonth={form.watch(
                                 `cv.awardOrHonors.${index}.date`
                               )}
-                              onChange={(date: Date) =>
+                              onMonthChange={(date: Date) =>
                                 form.setValue(
                                   `cv.awardOrHonors.${index}.date`,
-                                  date || new Date()
+                                  date
                                 )
                               }
                             />
@@ -1009,14 +1163,14 @@ export default function CurriculumVitaeEditForm({
 
                           <AppFieldGrid cols={2}>
                             <AppFormField label="Publication Date">
-                              <DatePicker
-                                value={form.watch(
+                              <MonthPicker
+                                currentMonth={form.watch(
                                   `cv.publications.${index}.date`
                                 )}
-                                onChange={(date: Date) =>
+                                onMonthChange={(date: Date) =>
                                   form.setValue(
                                     `cv.publications.${index}.date`,
-                                    date || new Date()
+                                    date
                                   )
                                 }
                               />

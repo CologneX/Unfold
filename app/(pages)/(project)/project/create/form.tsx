@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   ComboboxItem,
-  projectSchema,
+  ProjectSchema,
   Role,
   Technology,
   type Project,
@@ -47,7 +47,7 @@ export default function ProjectCreateForm({
   const [imageUrls, setImageUrls] = useState<string[]>([""]);
 
   const form = useForm<Project>({
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(ProjectSchema),
     defaultValues: {
       slug: "",
       name: "",
