@@ -1,8 +1,9 @@
 {
   "profile": {
     "name": "John Doe",
+    "email": "john.doe@email.com",
     "description": "Passionate software developer with expertise in modern web technologies and a commitment to creating innovative solutions.",
-    "profilePictureUrl": "/uploads/1751539786933-yze8pn1lg7l.jpg",
+    "profilePictureUrl": "/uploads/1751819356204-s4en98ap50l.png",
     "location": "San Francisco, CA",
     "socials": [
       {
