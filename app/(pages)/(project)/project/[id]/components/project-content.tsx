@@ -1,7 +1,7 @@
 import { Project } from "@/types/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText } from "lucide-react";
-import DisplayRichEditor from "@/components/custom/display-rich-editor";
+import RichTextDisplay from "@/components/custom/display-rich-editor";
 
 interface ProjectContentProps {
   project: Project;
@@ -23,7 +23,7 @@ export default function ProjectContent({ project }: ProjectContentProps) {
         <div
           className="prose prose-gray dark:prose-invert max-w-none prose-headings:text-foreground prose-p:text-muted-foreground prose-p:leading-relaxed prose-strong:text-foreground"
         />
-        <DisplayRichEditor content={project.description} />
+        <RichTextDisplay content={project.description} />
       </CardContent>
     </Card>
   );
