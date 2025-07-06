@@ -36,7 +36,7 @@ export default async function Projects() {
               <ProjectCarousel projects={projects} />
 
               {/* Project Grid (Secondary View) */}
-              {projects.length > 3 && (
+              {projects.length > 1 && (
                 <div className="max-w-4xl mx-auto mt-16 animate-in fade-in-0 slide-in-from-bottom-6 duration-700 delay-500">
                   <div className="text-center mb-8">
                     <h2 className="text-2xl font-semibold text-foreground/90 mb-2">
