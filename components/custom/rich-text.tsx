@@ -11,12 +11,10 @@ import {
   Code,
   List,
   ListOrdered,
-  Quote,
   Minus,
   Undo,
   Redo,
   Type,
-  MoreHorizontal,
 } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { SelectResponsive } from "./res-select";
@@ -157,22 +155,22 @@ function OrderedListButton({ editor, className }: ButtonProps) {
   );
 }
 
-// Block Element Buttons
-function BlockquoteButton({ editor, className }: ButtonProps) {
-  return (
-    <Button
-      type="button"
-      variant={editor.isActive("blockquote") ? "default" : "ghost"}
-      size="icon"
-      className={className}
-      onClick={() => editor.chain().focus().toggleBlockquote().run()}
-      disabled={!editor.can().chain().focus().toggleBlockquote().run()}
-      title="Blockquote"
-    >
-      <Quote />
-    </Button>
-  );
-}
+// Legacy - Block Element Buttons
+// function BlockquoteButton({ editor, className }: ButtonProps) {
+//   return (
+//     <Button
+//       type="button"
+//       variant={editor.isActive("blockquote") ? "default" : "ghost"}
+//       size="icon"
+//       className={className}
+//       onClick={() => editor.chain().focus().toggleBlockquote().run()}
+//       disabled={!editor.can().chain().focus().toggleBlockquote().run()}
+//       title="Blockquote"
+//     >
+//       <Quote />
+//     </Button>
+//   );
+// }
 
 function HorizontalRuleButton({ editor, className }: ButtonProps) {
   return (
@@ -205,32 +203,30 @@ function CodeBlockButton({ editor, className }: ButtonProps) {
   );
 }
 
-// Clear Formatting Button
-function ClearFormattingButton({ editor, className }: ButtonProps) {
-  return (
-    <Button
-      type="button"
-      variant="ghost"
-      size="sm"
-      className={className}
-      onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
-      title="Clear Formatting"
-    >
-      Clear
-    </Button>
-  );
-}
+// Legacy - Clear Formatting Button
+// function ClearFormattingButton({ editor, className }: ButtonProps) {
+//   return (
+//     <Button
+//       type="button"
+//       variant="ghost"
+//       size="sm"
+//       className={className}
+//       onClick={() => editor.chain().focus().clearNodes().unsetAllMarks().run()}
+//       title="Clear Formatting"
+//     >
+//       Clear
+//     </Button>
+//   );
+// }
 
 // Heading Selector
 interface HeadingSelectProps {
-  editor: Editor;
   getCurrentHeadingLevel: () => string;
   setHeadingLevel: (level: string) => void;
   className?: string;
 }
 
 function HeadingSelect({
-  editor,
   getCurrentHeadingLevel,
   setHeadingLevel,
   className,
@@ -328,7 +324,6 @@ function MobileToolbar({
 
           {/* Headings - Responsive width */}
           <HeadingSelect
-            editor={editor}
             getCurrentHeadingLevel={getCurrentHeadingLevel}
             setHeadingLevel={setHeadingLevel}
             className="flex-1 min-w-max"
@@ -372,7 +367,6 @@ function DesktopToolbar({
 
         {/* Headings */}
         <HeadingSelect
-          editor={editor}
           getCurrentHeadingLevel={getCurrentHeadingLevel}
           setHeadingLevel={setHeadingLevel}
           className="flex-1 min-w-max"
@@ -433,6 +427,7 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class: "focus:outline-none min-h-[200px] prose",
+        placeholder: placeholder,
       },
     },
   });
