@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-// import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -15,12 +14,13 @@ export function SelectResponsive({
   onChange,
   options,
   placeholder = "Select",
+  ...props
 }: {
   value: string | null;
   onChange: (value: string) => void;
-  options: { value: string | null; label: string }[];
+  options: { value: string | null; label: string | React.ReactNode }[];
   placeholder?: string;
-}) {
+} & Omit<React.ComponentProps<typeof SelectTrigger>, "value" | "onChange">) {
   const [open, setOpen] = React.useState(false);
   return (
     <Select
@@ -29,7 +29,7 @@ export function SelectResponsive({
       defaultValue={value || null!}
       onValueChange={(value) => onChange(value || null!)}
     >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-full" {...props}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
