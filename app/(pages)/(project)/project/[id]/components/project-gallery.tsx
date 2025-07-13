@@ -3,7 +3,12 @@
 import { motion } from "motion/react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { ImageIcon, ZoomIn } from "lucide-react";
 
@@ -12,7 +17,10 @@ interface ProjectGalleryProps {
   projectName: string;
 }
 
-export default function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
+export default function ProjectGallery({
+  images,
+  projectName,
+}: ProjectGalleryProps) {
   return (
     <Card className="border-border/40 bg-card/40 backdrop-blur-sm">
       <CardHeader>
@@ -23,8 +31,11 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
             </div>
             Project Gallery
           </CardTitle>
-          <Badge variant="secondary" className="bg-primary/10 border-primary/20 text-primary">
-            {images.length} {images.length === 1 ? 'Image' : 'Images'}
+          <Badge
+            variant="secondary"
+            className="bg-primary/10 border-primary/20 text-primary"
+          >
+            {images.length} {images.length === 1 ? "Image" : "Images"}
           </Badge>
         </div>
       </CardHeader>
@@ -35,26 +46,24 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
               key={index}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.6, 
+              transition={{
+                duration: 0.6,
                 delay: index * 0.1,
-                ease: [0.16, 1, 0.3, 1]
+                ease: [0.16, 1, 0.3, 1],
               }}
               whileHover={{ y: -8 }}
               className="group relative aspect-video rounded-lg overflow-hidden bg-muted"
             >
               <Dialog>
                 <DialogTrigger asChild>
-                  <div 
-                    className="relative w-full h-full cursor-pointer"
-                  >
+                  <div className="relative w-full h-full cursor-pointer">
                     <Image
                       src={image}
                       alt={`${projectName} screenshot ${index + 1}`}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    
+
                     {/* Hover overlay */}
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
                       <motion.div
@@ -75,7 +84,13 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
                     </div>
                   </div>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl w-full p-0 bg-transparent border-0">
+                <DialogContent
+                  className="max-w-4xl w-full p-0 bg-transparent border-0"
+                  aria-describedby={undefined}
+                >
+                  <DialogTitle className="sr-only">{`${projectName} screenshot ${
+                    index + 1
+                  }`}</DialogTitle>
                   <div className="relative aspect-video w-full">
                     <Image
                       src={image}
@@ -92,4 +107,4 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
       </CardContent>
     </Card>
   );
-} 
+}
