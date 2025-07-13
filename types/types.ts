@@ -5,7 +5,6 @@ export const SocialSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
     url: z.string().url().or(z.literal('')),
-    icon: z.any().optional(),
 });
 
 // Technology Schema
@@ -112,6 +111,7 @@ export const ProjectSchema = z.object({
 // Profile Schema
 export const ProfileSchema = z.object({
     name: z.string().min(2),
+    email: z.string().email(),
     description: z.string().min(5),
     profilePictureUrl: z.string(),
     location: z.string().min(2),

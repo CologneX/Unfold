@@ -44,26 +44,6 @@ export default function ProjectActions({ project }: ProjectActionsProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        {isDev() && (
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          >
-            <Button
-              asChild
-              className="w-full group/btn relative overflow-hidden bg-card hover:bg-accent border border-border/40 text-foreground flex items-center justify-start"
-              icon={Edit}
-              iconPlacement="left"
-              variant="outline"
-            >
-              <Link href={`/project/${project.slug}/edit`} className="gap-4">
-                Edit Project
-              </Link>
-            </Button>
-          </motion.div>
-        )}
-
         {project.repositoryUrl && (
           <motion.div
             whileHover={{ scale: 1.02 }}
@@ -114,21 +94,40 @@ export default function ProjectActions({ project }: ProjectActionsProps) {
         )}
 
         {isDev() && (
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          >
-            <Button
-              variant="destructive"
-              onClick={() => DeleteProjectHandler({ project })}
-              className="w-full group/btn relative justify-start overflow-hidden shadow-lg hover:shadow-xl"
+          <>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
-              <TrashIcon className="h-4 w-4 mr-2" />
-              Delete
-            </Button>
-          </motion.div>
+              <Button
+                asChild
+                className="w-full group/btn relative overflow-hidden bg-card hover:bg-accent border border-border/40 text-foreground flex items-center justify-start"
+                icon={Edit}
+                iconPlacement="left"
+                variant="outline"
+              >
+                <Link href={`/project/${project.slug}/edit`} className="gap-4">
+                  Edit Project
+                </Link>
+              </Button>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <Button
+                variant="destructive"
+                onClick={() => DeleteProjectHandler({ project })}
+                className="w-full group/btn relative justify-start overflow-hidden shadow-lg hover:shadow-xl"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700" />
+                <TrashIcon className="h-4 w-4 mr-2" />
+                Delete
+              </Button>
+            </motion.div>
+          </>
         )}
       </CardContent>
     </Card>

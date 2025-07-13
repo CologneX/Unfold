@@ -97,30 +97,30 @@ export default function CurriculumVitaeEditForm({
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [isPending, startTransition] = useTransition();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const defaultVal = {
-    profile: CV?.profile || {
-      name: "",
-      description: "",
-      profilePictureUrl: "",
-      location: "",
-      socials: [],
-    },
-    cv: {
-      technologies: availableTechnologies,
-      roles: availableRoles,
-      workExperiences: CV?.cv?.workExperiences || [],
-      educations: CV?.cv.educations || [],
-      certifications: CV?.cv.certifications || [],
-      awardOrHonors: CV?.cv.awardOrHonors || [],
-      publications: CV?.cv.publications || [],
-      languages: CV?.cv.languages || [],
-    },
-    projects: CV?.projects || [],
-  };
 
   const form = useForm<Data>({
     resolver: zodResolver(DataSchema),
-    defaultValues: defaultVal,
+    defaultValues: {
+      profile: CV?.profile || {
+        name: "",
+        description: "",
+        email: "",
+        profilePictureUrl: "",
+        location: "",
+        socials: [],
+      },
+      cv: {
+        technologies: availableTechnologies,
+        roles: availableRoles,
+        workExperiences: CV?.cv?.workExperiences || [],
+        educations: CV?.cv.educations || [],
+        certifications: CV?.cv.certifications || [],
+        awardOrHonors: CV?.cv.awardOrHonors || [],
+        publications: CV?.cv.publications || [],
+        languages: CV?.cv.languages || [],
+      },
+      projects: CV?.projects || [],
+    },
   });
 
   // Field arrays for array fields
@@ -379,6 +379,19 @@ export default function CurriculumVitaeEditForm({
                           )}
                         />
                       </AppFieldGrid>
+                      <FormField
+                        control={form.control}
+                        name="profile.email"
+                        render={({ field }) => (
+                          <AppFormField label="Email">
+                            <Input
+                              {...field}
+                              placeholder="john.doe@example.com"
+                              required
+                            />
+                          </AppFormField>
+                        )}
+                      />
 
                       <FormField
                         control={form.control}

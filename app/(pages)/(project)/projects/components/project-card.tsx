@@ -21,7 +21,7 @@ export default function ProjectCard({
     >
       {/* Background Image */}
       {project.bannerUrl && (
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 rounded-3xl overflow-hidden">
           <Image
             src={project.bannerUrl}
             alt={project.name}
@@ -29,8 +29,8 @@ export default function ProjectCard({
             className="object-cover"
             priority={isActive}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20 rounded-3xl" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80 rounded-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80" />
         </div>
       )}
 
