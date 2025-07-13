@@ -250,13 +250,13 @@ export default function ProjectEditForm({
               control={form.control}
               name="imageUrl"
               render={({}) => (
-                <FormItem>
+                <FormItem className="w-full overflow-hidden">
                   <FormLabel>Project Images</FormLabel>
                   <FormDescription className="mb-4">
                     Add multiple images to showcase your project
                   </FormDescription>
                   <FormControl>
-                    <div className="w-full">
+                    <div className="w-full overflow-hidden">
                       <div className="space-y-2 flex flex-col md:flex-row gap-2 overflow-x-auto">
                         {imageUrls.map((url, index) => (
                           <div
