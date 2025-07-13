@@ -1,6 +1,6 @@
 "use server";
 
-import { readFile, writeFile } from "fs/promises";
+import { readFile, unlink, writeFile } from "fs/promises";
 import { join } from "path";
 import { revalidatePath } from "next/cache";
 import {
@@ -133,6 +133,20 @@ export async function uploadImage(
         error instanceof Error ? error.message : "Unknown error"
       }`,
     };
+  }
+}
+
+// DELETE IMAGE ACTION
+export async function deleteImage(filename: string) {
+  try {
+    const filepath = join(process.cwd(), "public", filename);
+    await unlink(filepath);
+  } catch (error) {
+    throw new Error(
+      `Failed to delete image: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
   }
 }
 

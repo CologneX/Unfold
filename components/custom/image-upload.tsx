@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Upload, X, Loader2 } from "lucide-react";
-import { uploadImage } from "@/app/actions";
+import { deleteImage, uploadImage } from "@/app/actions";
 import Image from "next/image";
 
 interface ImageUploadProps {
@@ -75,11 +75,17 @@ export default function ImageUpload({
     }
   };
 
-  const removeImage = () => {
-    onChange("");
-    setError("");
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+  const removeImage = async () => {
+    try {
+      await deleteImage(value);
+    } catch (err) {
+      console.error("Delete error:", err);
+    } finally {
+      onChange("");
+      setError("");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
 
@@ -135,7 +141,7 @@ export default function ImageUpload({
                   removeImage();
                 }}
               >
-                <X className="h-3 w-3 mr-1" />
+                <X className="size-3 mr-1" />
                 Remove
               </Button>
             </div>
