@@ -44,7 +44,6 @@ export default function ProjectCreateForm({
 }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imageUrls, setImageUrls] = useState<string[]>([""]);
 
   const form = useForm<Project>({
     resolver: zodResolver(ProjectSchema),
@@ -54,7 +53,7 @@ export default function ProjectCreateForm({
       description: "",
       shortDescription: "",
       bannerUrl: "",
-      imageUrl: [],
+      imageUrl: [""],
       technologies: [],
       role: [],
       repositoryUrl: "",
@@ -82,17 +81,17 @@ export default function ProjectCreateForm({
     form.setValue("technologies", formattedTechnologies);
   };
 
-  
   const addImageUrl = () => {
     form.setValue("imageUrl", [...form.getValues("imageUrl"), ""]);
   };
 
   const removeImageUrl = (index: number) => {
-    console.log(index);
-    const newUrls = form.getValues("imageUrl").filter((_, i) => i !== index);
-    form.setValue("imageUrl", newUrls);
+    if (form.getValues("imageUrl").length > 1) {
+      const newUrls = form.getValues("imageUrl").splice(index, 1);
+      form.setValue("imageUrl", newUrls);
+    }
   };
-
+  
   const updateImageUrl = (index: number, value: string) => {
     const newUrls = [...form.getValues("imageUrl")];
     newUrls[index] = value;
@@ -237,7 +236,7 @@ export default function ProjectCreateForm({
             <FormField
               control={form.control}
               name="imageUrl"
-              render={({}) => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Project Images</FormLabel>
                   <FormDescription className="mb-4">
@@ -246,7 +245,7 @@ export default function ProjectCreateForm({
                   <FormControl>
                     <div className="w-full">
                       <div className="space-y-2 flex flex-col md:flex-row gap-2 overflow-x-auto">
-                        {imageUrls.map((url, index) => (
+                        {field.value.map((url, index) => (
                           <div
                             key={index}
                             className="flex gap-2 mb-2 items-end"
