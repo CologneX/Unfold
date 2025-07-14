@@ -28,7 +28,7 @@ import {
   updateProject,
 } from "@/app/actions";
 import { useRouter } from "next/navigation";
-import { Trash2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import RichTextEditor from "@/components/custom/rich-text";
 import ImageUpload from "@/components/custom/image-upload";
@@ -46,7 +46,6 @@ export default function ProjectEditForm({
 }) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imageUrls, setImageUrls] = useState<string[]>([""]);
 
   const form = useForm<Project>({
     resolver: zodResolver(ProjectSchema),
@@ -56,7 +55,7 @@ export default function ProjectEditForm({
       description: project.description,
       shortDescription: project.shortDescription,
       bannerUrl: project.bannerUrl,
-      imageUrl: project.imageUrl,
+      imageUrl: project.imageUrl.length > 0 ? project.imageUrl : [""],
       technologies: project.technologies,
       role: project.role,
       repositoryUrl: project.repositoryUrl,
@@ -85,28 +84,19 @@ export default function ProjectEditForm({
   };
 
   const addImageUrl = () => {
-    setImageUrls([...imageUrls, ""]);
+    form.setValue("imageUrl", [...form.getValues("imageUrl"), ""]);
   };
 
   const removeImageUrl = (index: number) => {
-    if (imageUrls.length > 1) {
-      const newUrls = imageUrls.filter((_, i) => i !== index);
-      setImageUrls(newUrls);
-      form.setValue(
-        "imageUrl",
-        newUrls.filter((url) => url.trim() !== "")
-      );
-    }
+    console.log(index);
+    const newUrls = form.getValues("imageUrl").filter((_, i) => i !== index);
+    form.setValue("imageUrl", newUrls);
   };
 
   const updateImageUrl = (index: number, value: string) => {
-    const newUrls = [...imageUrls];
+    const newUrls = [...form.getValues("imageUrl")];
     newUrls[index] = value;
-    setImageUrls(newUrls);
-    form.setValue(
-      "imageUrl",
-      newUrls.filter((url) => url.trim() !== "")
-    );
+    form.setValue("imageUrl", newUrls);
   };
 
   const handleRolesChange = (newRoles: ComboboxItem[]) => {
@@ -249,33 +239,22 @@ export default function ProjectEditForm({
             <FormField
               control={form.control}
               name="imageUrl"
-              render={({}) => (
-                <FormItem className="w-full overflow-hidden">
+              render={({ field }) => (
+                <FormItem>
                   <FormLabel>Project Images</FormLabel>
                   <FormDescription className="mb-4">
                     Add multiple images to showcase your project
                   </FormDescription>
                   <FormControl>
-                    <div className="w-full overflow-hidden">
-                      <div className="space-y-2 flex flex-col md:flex-row gap-2 overflow-x-auto">
-                        {imageUrls.map((url, index) => (
-                          <div
-                            key={index}
-                            className="flex gap-2 mb-2 items-end"
-                          >
+                    <div className="w-full overflow-hidden space-y-2">
+                      <div className="flex flex-col md:flex-row gap-2 overflow-x-auto">
+                        {field.value.map((url, index) => (
+                          <div key={index} className="relative group">
                             <ImageUpload
                               value={url}
+                              onDelete={() => removeImageUrl(index)}
                               onChange={(value) => updateImageUrl(index, value)}
                             />
-                            <Button
-                              type="button"
-                              variant="destructive"
-                              disabled={index === 0}
-                              size="sm"
-                              onClick={() => removeImageUrl(index)}
-                            >
-                              <Trash2 />
-                            </Button>
                           </div>
                         ))}
                       </div>

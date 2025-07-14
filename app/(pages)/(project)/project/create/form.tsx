@@ -82,29 +82,21 @@ export default function ProjectCreateForm({
     form.setValue("technologies", formattedTechnologies);
   };
 
+  
   const addImageUrl = () => {
-    setImageUrls([...imageUrls, ""]);
+    form.setValue("imageUrl", [...form.getValues("imageUrl"), ""]);
   };
 
   const removeImageUrl = (index: number) => {
-    if (imageUrls.length > 1) {
-      const newUrls = imageUrls.filter((_, i) => i !== index);
-      setImageUrls(newUrls);
-      form.setValue(
-        "imageUrl",
-        newUrls.filter((url) => url.trim() !== "")
-      );
-    }
+    console.log(index);
+    const newUrls = form.getValues("imageUrl").filter((_, i) => i !== index);
+    form.setValue("imageUrl", newUrls);
   };
 
   const updateImageUrl = (index: number, value: string) => {
-    const newUrls = [...imageUrls];
+    const newUrls = [...form.getValues("imageUrl")];
     newUrls[index] = value;
-    setImageUrls(newUrls);
-    form.setValue(
-      "imageUrl",
-      newUrls.filter((url) => url.trim() !== "")
-    );
+    form.setValue("imageUrl", newUrls);
   };
 
   const handleRolesChange = (newRoles: ComboboxItem[]) => {
@@ -261,6 +253,7 @@ export default function ProjectCreateForm({
                           >
                             <ImageUpload
                               value={url}
+                              onDelete={() => removeImageUrl(index)}
                               onChange={(value) => updateImageUrl(index, value)}
                             />
                             <Button

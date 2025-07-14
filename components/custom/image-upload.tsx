@@ -10,12 +10,14 @@ import Image from "next/image";
 interface ImageUploadProps {
   value: string;
   onChange: (value: string) => void;
+  onDelete?: () => void;
   accept?: string;
 }
 
 export default function ImageUpload({
   value,
   onChange,
+  onDelete,
   accept = "image/*",
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -77,11 +79,18 @@ export default function ImageUpload({
 
   const removeImage = async () => {
     try {
-      await deleteImage(value);
+      if (onDelete) {
+        onDelete();
+      }
+      if (value) {
+        await deleteImage(value);
+      }
     } catch (err) {
       console.error("Delete error:", err);
     } finally {
-      onChange("");
+      if (!onDelete) {
+        onChange("");
+      }
       setError("");
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -95,10 +104,11 @@ export default function ImageUpload({
 
   return (
     <>
-      {/* File Upload Area with Integrated Preview */}
+      {/* File Upload Area*/}
       <Card
         className={`
           relative border-2 border-dashed text-center cursor-pointer transition-colors p-1 w-80 h-32
+          group
           ${
             dragActive
               ? "border-primary bg-primary/5"
@@ -116,6 +126,18 @@ export default function ImageUpload({
         onDrop={handleDrop}
         onClick={openFileDialog}
       >
+        <Button
+          type="button"
+          variant="destructive"
+          size="icon"
+          className="absolute top-2 right-2 z-10 size-8 opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeImage();
+          }}
+        >
+          <X className="size-4" />
+        </Button>
         {error && (
           <div className="text-sm text-destructive bg-destructive/10 p-2 rounded-md w-full">
             {error}
@@ -130,21 +152,6 @@ export default function ImageUpload({
               className="object-contain"
               onError={() => setError("Failed to load image")}
             />
-            {/* Overlay with actions */}
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  removeImage();
-                }}
-              >
-                <X className="size-3 mr-1" />
-                Remove
-              </Button>
-            </div>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center gap-2 w-full h-full">
