@@ -130,6 +130,10 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: "#666666",
   },
+  secondaryText: {
+    fontSize: 10,
+    color: "#555555",
+  },
   // HTML rendering styles
   htmlText: {
     marginBottom: 3,
@@ -429,22 +433,22 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
             (a, b) =>
               new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
           )
-                      .map((experience) => (
-              <View key={experience.id} style={styles.universalItemContainer}>
-                <View style={styles.universalHeader}>
-                  <Text style={styles.title}>{experience.name}</Text>
-                  <Text style={styles.dates}>
-                    {formatDateToMonthYear(experience.startDate)} -{" "}
-                    {experience.endDate
-                      ? formatDateToMonthYear(experience.endDate)
-                      : "Present"}
-                  </Text>
-                </View>
-                <View style={styles.description}>
-                  {parseHtmlToReactPdf(experience.description || "")}
-                </View>
+          .map((experience) => (
+            <View key={experience.id} style={styles.universalItemContainer}>
+              <View style={styles.universalHeader}>
+                <Text style={styles.title}>{experience.name}</Text>
+                <Text style={styles.dates}>
+                  {formatDateToMonthYear(experience.startDate)} -{" "}
+                  {experience.endDate
+                    ? formatDateToMonthYear(experience.endDate)
+                    : "Present"}
+                </Text>
               </View>
-            ))}
+              <View style={styles.description}>
+                {parseHtmlToReactPdf(experience.description || "")}
+              </View>
+            </View>
+          ))}
       </View>
 
       {/* Education Section */}
@@ -467,7 +471,7 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                     : "Present"}
                 </Text>
               </View>
-              <Text>{education.institution}</Text>
+              <Text style={styles.secondaryText}>{education.institution}</Text>
             </View>
           ))}
       </View>
@@ -493,9 +497,11 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                       : " - Present"}
                   </Text>
                 </View>
-                <Text>{cert.issuer}</Text>
+                <Text style={styles.secondaryText}>{cert.issuer}</Text>
                 {cert.credentialId && (
-                  <Text style={styles.dimmedText}>Credential ID: {cert.credentialId}</Text>
+                  <Text style={styles.dimmedText}>
+                    Credential ID: {cert.credentialId}
+                  </Text>
                 )}
                 {cert.url && (
                   <Link style={styles.link} src={cert.url}>
@@ -514,8 +520,8 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
           {data.projects
             .sort(
               (a, b) =>
-                new Date(b.updatedAt || b.createdAt || 0).getTime() -
-                new Date(a.updatedAt || a.createdAt || 0).getTime()
+                new Date(b.createdAt || 0).getTime() -
+                new Date(a.createdAt || 0).getTime()
             )
             .map((project) => (
               <View key={project.slug} style={styles.universalItemContainer}>
@@ -525,12 +531,12 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                     project.description || project.shortDescription
                   )}
                 </View>
-                <View style={styles.skillsContainer}>
-                  <Text style={styles.skillItem}>Technologies: </Text>
-                  <Text style={styles.authors}>
-                    {project.technologies.map((tech) => tech.name).join(", ")}
-                  </Text>
-                </View>
+                                  <View style={styles.skillsContainer}>
+                    <Text style={[styles.authors, styles.secondaryText]}>Technologies: </Text>
+                    <Text style={[styles.authors, styles.secondaryText]}>
+                      {project.technologies.map((tech) => tech.name).join(", ")}
+                    </Text>
+                  </View>
                 {(project.repositoryUrl || project.liveUrl) && (
                   <Text>
                     {joinNodesWithDot(
@@ -578,12 +584,15 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                     {formatDateToMonthYear(publication.date)}
                   </Text>
                 </View>
-                <Text style={styles.authors}>
+                <Text style={[styles.authors, styles.secondaryText]}>
                   {publication.authors.join(", ")}
                 </Text>
                 {publication.url && (
                   <Link style={styles.link} src={publication.url}>
-                    <Text>View Publication</Text> <Text><PointerIcon /></Text>
+                    <Text>View Publication</Text>{" "}
+                    <Text>
+                      <PointerIcon />
+                    </Text>
                   </Link>
                 )}
               </View>
@@ -607,7 +616,7 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                     {formatDateToMonthYear(award.date)}
                   </Text>
                 </View>
-                <Text>{award.institution}</Text>
+                <Text style={styles.secondaryText}>{award.institution}</Text>
                 {award.description && (
                   <Text style={styles.description}>{award.description}</Text>
                 )}
@@ -629,7 +638,7 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
             <View key={language.id} style={styles.universalItemContainer}>
               <View style={styles.universalHeader}>
                 <Text style={styles.title}>{language.name}</Text>
-                <Text>
+                <Text style={styles.secondaryText}>
                   {language.proficiency}{" "}
                   {language.level ? `(${language.level})` : ""}
                 </Text>
