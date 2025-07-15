@@ -2,8 +2,8 @@ import { Project } from "@/types/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Code, UserCheck, Calendar, Clock } from "lucide-react";
-import { formatDate, formatDateToMonthYear } from "@/lib/utils";
+import { Code, UserCheck, Calendar } from "lucide-react";
+import { formatDateToMonthYear } from "@/lib/utils";
 
 interface ProjectMetadataProps {
   project: Project;

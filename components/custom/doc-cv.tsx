@@ -184,7 +184,7 @@ const parseHtmlToReactPdf = (html: string): React.ReactNode[] => {
   // Helper function to parse text content with inline styling
   const parseInlineText = (
     text: string,
-    baseStyle: any = {}
+    baseStyle = {}
   ): React.ReactNode[] => {
     if (!text) return [];
 
