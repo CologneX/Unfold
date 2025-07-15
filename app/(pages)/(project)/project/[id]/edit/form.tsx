@@ -33,6 +33,7 @@ import { Switch } from "@/components/ui/switch";
 import RichTextEditor from "@/components/custom/rich-text";
 import ImageUpload from "@/components/custom/image-upload";
 import BadgeCombobox from "@/components/custom/badge-combobox";
+import MonthPicker from "@/components/custom/month-picker";
 import { toast } from "sonner";
 
 export default function ProjectEditForm({
@@ -61,6 +62,7 @@ export default function ProjectEditForm({
       repositoryUrl: project.repositoryUrl,
       liveUrl: project.liveUrl,
       isFeatured: project.isFeatured,
+      createdAt: project.createdAt,
     },
   });
 
@@ -135,6 +137,7 @@ export default function ProjectEditForm({
           formData.append("repositoryUrl", values.repositoryUrl);
         if (values.liveUrl) formData.append("liveUrl", values.liveUrl);
         formData.append("isFeatured", values.isFeatured.toString());
+        formData.append("createdAt", values.createdAt?.toISOString() ?? "");
         const { slug } = await updateProject(formData);
         router.push(`/project/${slug}`);
       }
@@ -162,6 +165,24 @@ export default function ProjectEditForm({
                   <FormLabel>Project Name *</FormLabel>
                   <FormControl>
                     <Input placeholder="My Awesome Project" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="createdAt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Project Date</FormLabel>
+                  <FormControl>
+                    <MonthPicker
+                      currentMonth={field.value}
+                      onMonthChange={field.onChange}
+                      maxMonth={new Date()}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

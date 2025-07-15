@@ -33,6 +33,7 @@ import { Switch } from "@/components/ui/switch";
 import RichTextEditor from "@/components/custom/rich-text";
 import ImageUpload from "@/components/custom/image-upload";
 import BadgeCombobox from "@/components/custom/badge-combobox";
+import MonthPicker from "@/components/custom/month-picker";
 import { toast } from "sonner";
 
 export default function ProjectCreateForm({
@@ -59,6 +60,7 @@ export default function ProjectCreateForm({
       repositoryUrl: "",
       liveUrl: "",
       isFeatured: false,
+      createdAt: new Date(),
     },
   });
 
@@ -131,6 +133,7 @@ export default function ProjectCreateForm({
         formData.append("repositoryUrl", values.repositoryUrl);
       if (values.liveUrl) formData.append("liveUrl", values.liveUrl);
       formData.append("isFeatured", values.isFeatured.toString());
+      if (values.createdAt) formData.append("createdAt", values.createdAt.toISOString());
 
       const slug = await createProject(formData);
       router.push(`/project/${slug}`);
@@ -159,6 +162,27 @@ export default function ProjectCreateForm({
                   <FormControl>
                     <Input placeholder="My Awesome Project" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="createdAt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Project Date</FormLabel>
+                  <FormControl>
+                    <MonthPicker
+                      currentMonth={field.value}
+                      onMonthChange={field.onChange}
+                      maxMonth={new Date()}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    When this project was created or started
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

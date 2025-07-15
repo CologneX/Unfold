@@ -185,8 +185,7 @@ export async function createProject(formData: FormData) {
       repositoryUrl: (formData.get("repositoryUrl") as string) || undefined,
       liveUrl: (formData.get("liveUrl") as string) || undefined,
       isFeatured: formData.get("isFeatured") === "true",
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: formData.get("createdAt") as string,
     };
 
     const validatedFields = ProjectSchema.safeParse(rawData);
@@ -234,11 +233,11 @@ export async function updateProject(formData: FormData) {
       repositoryUrl: (formData.get("repositoryUrl") as string) || undefined,
       liveUrl: (formData.get("liveUrl") as string) || undefined,
       isFeatured: formData.get("isFeatured") === "true",
-      updatedAt: new Date(),
+      createdAt: formData.get("createdAt") as string,
     };
 
     const validatedFields = ProjectSchema.safeParse(rawData);
-
+    console.log("validatedFields:", validatedFields);
     if (!validatedFields.success) {
       throw new Error(
         `Validation failed: ${JSON.stringify(
@@ -254,15 +253,8 @@ export async function updateProject(formData: FormData) {
       throw new Error(`Project with slug "${slug}" not found`);
     }
 
-    // Preserve original createdAt
-    const originalProject = data.projects[projectIndex];
-    data.projects[projectIndex] = {
-      ...validatedFields.data,
-      createdAt: originalProject.createdAt,
-    };
-
+    data.projects[projectIndex] = validatedFields.data;
     await writeData(data);
-
     revalidatePath("/projects");
     return {
       success: true,

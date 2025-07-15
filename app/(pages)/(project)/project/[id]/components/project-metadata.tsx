@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Code, UserCheck, Calendar, Clock } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatDateToMonthYear } from "@/lib/utils";
 
 interface ProjectMetadataProps {
   project: Project;
@@ -57,7 +57,7 @@ export default function ProjectMetadata({ project }: ProjectMetadataProps) {
         </div>
 
         {/* Dates */}
-        {(project.createdAt || project.updatedAt) && (
+        {project.createdAt && (
           <>
             <Separator className="bg-border/40" />
             <div className="space-y-3">
@@ -66,16 +66,7 @@ export default function ProjectMetadata({ project }: ProjectMetadataProps) {
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="text-muted-foreground">Created:</span>
                   <span className="text-foreground font-medium">
-                    {formatDate(new Date(project.createdAt))}
-                  </span>
-                </div>
-              )}
-              {project.updatedAt && (
-                <div className="flex items-center gap-2 text-sm">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Updated:</span>
-                  <span className="text-foreground font-medium">
-                    {formatDate(new Date(project.updatedAt))}
+                    {formatDateToMonthYear(new Date(project.createdAt))}
                   </span>
                 </div>
               )}
@@ -85,4 +76,4 @@ export default function ProjectMetadata({ project }: ProjectMetadataProps) {
       </CardContent>
     </Card>
   );
-} 
+}

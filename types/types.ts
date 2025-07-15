@@ -105,7 +105,6 @@ export const ProjectSchema = z.object({
     liveUrl: z.string().url().or(z.literal("")).optional(),
     isFeatured: z.boolean(),
     createdAt: z.coerce.date().optional(),
-    updatedAt: z.coerce.date().optional(),
 });
 
 // Profile Schema
