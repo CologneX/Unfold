@@ -90,8 +90,9 @@ export default function ProjectEditForm({
   };
 
   const removeImageUrl = (index: number) => {
-    const newUrls = form.getValues("imageUrl").splice(index + 1, 1);
-    form.setValue("imageUrl", newUrls);
+    const currentUrls = [...form.getValues("imageUrl")];
+    currentUrls.splice(index, 1);
+    form.setValue("imageUrl", currentUrls);
   };
 
   const updateImageUrl = (index: number, value: string) => {
