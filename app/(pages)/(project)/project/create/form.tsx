@@ -88,12 +88,10 @@ export default function ProjectCreateForm({
   };
 
   const removeImageUrl = (index: number) => {
-    if (form.getValues("imageUrl").length > 1) {
-      const newUrls = form.getValues("imageUrl").splice(index, 1);
-      form.setValue("imageUrl", newUrls);
-    }
+    const newUrls = form.getValues("imageUrl").splice(index + 1, 1);
+    form.setValue("imageUrl", newUrls);
   };
-  
+
   const updateImageUrl = (index: number, value: string) => {
     const newUrls = [...form.getValues("imageUrl")];
     newUrls[index] = value;
@@ -133,7 +131,8 @@ export default function ProjectCreateForm({
         formData.append("repositoryUrl", values.repositoryUrl);
       if (values.liveUrl) formData.append("liveUrl", values.liveUrl);
       formData.append("isFeatured", values.isFeatured.toString());
-      if (values.createdAt) formData.append("createdAt", values.createdAt.toISOString());
+      if (values.createdAt)
+        formData.append("createdAt", values.createdAt.toISOString());
 
       const slug = await createProject(formData);
       router.push(`/project/${slug}`);

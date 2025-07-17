@@ -56,7 +56,7 @@ export default function ProjectEditForm({
       description: project.description,
       shortDescription: project.shortDescription,
       bannerUrl: project.bannerUrl,
-      imageUrl: project.imageUrl.length > 0 ? project.imageUrl : [""],
+      imageUrl: project.imageUrl,
       technologies: project.technologies,
       role: project.role,
       repositoryUrl: project.repositoryUrl,
@@ -90,10 +90,8 @@ export default function ProjectEditForm({
   };
 
   const removeImageUrl = (index: number) => {
-    if (form.getValues("imageUrl").length > 1) {
-      const newUrls = form.getValues("imageUrl").splice(index, 1);
-      form.setValue("imageUrl", newUrls);
-    }
+    const newUrls = form.getValues("imageUrl").splice(index + 1, 1);
+    form.setValue("imageUrl", newUrls);
   };
 
   const updateImageUrl = (index: number, value: string) => {
