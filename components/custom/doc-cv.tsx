@@ -444,6 +444,12 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                     : "Present"}
                 </Text>
               </View>
+              <Text style={styles.secondaryText}>{experience.company}</Text>
+              <View style={styles.content}>
+                <Text style={styles.dimmedText}>
+                  {experience.location} • {experience.type}
+                </Text>
+              </View>
               <View style={styles.description}>
                 {parseHtmlToReactPdf(experience.description || "")}
               </View>
