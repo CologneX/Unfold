@@ -623,11 +623,9 @@ function CVCertificationSection({
                   <div className="flex items-center gap-2 text-sm text-muted-foreground group/date">
                     <Calendar className="h-4 w-4 transition-colors group-hover/date:text-primary" />
                     <span className="group-hover/date:text-foreground transition-colors">
-                      {new Date(certification.startDate).toLocaleDateString()}
+                      {formatDateToMonthYear(certification.startDate)}
                       {certification.endDate &&
-                        ` - ${new Date(
-                          certification.endDate
-                        ).toLocaleDateString()}`}
+                        ` - ${formatDateToMonthYear(certification.endDate)}`}
                     </span>
                   </div>
 
@@ -711,7 +709,7 @@ function CVAwardOrHonorSection({
                   <div className="flex items-center gap-2 text-sm text-muted-foreground group/date">
                     <Calendar className="h-4 w-4 transition-colors group-hover/date:text-primary" />
                     <span className="group-hover/date:text-foreground transition-colors">
-                      {new Date(award.date).toLocaleDateString()}
+                      {formatDateToMonthYear(award.date)}
                     </span>
                   </div>
 
@@ -798,8 +796,7 @@ function CVPublicationSection({
                   <div className="flex items-center gap-2 text-sm text-muted-foreground group/date">
                     <Calendar className="h-4 w-4 transition-colors group-hover/date:text-primary" />
                     <span className="group-hover/date:text-foreground transition-colors">
-                      Published:{" "}
-                      {new Date(publication.date).toLocaleDateString()}
+                      Published: {formatDateToMonthYear(publication.date)}
                     </span>
                   </div>
 
