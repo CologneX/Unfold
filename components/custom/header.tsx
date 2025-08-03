@@ -338,11 +338,7 @@ export default function Header() {
                           damping: 30,
                         }}
                       >
-                        <Button className="w-full bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 group relative overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                          <Download className="h-4 w-4 mr-2" />
-                          Download CV
-                        </Button>
+                       <PdfDownloadButton />
                       </motion.div>
                     </motion.div>
                   </div>
