@@ -3,7 +3,7 @@
 import { cn, isDev } from "@/lib/utils";
 import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
-import { Download, Menu, X, Edit } from "lucide-react";
+import { Menu, X, Edit } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -284,10 +284,7 @@ export default function Header() {
                             ease: [0.16, 1, 0.3, 1],
                           }}
                         >
-                          <Link
-                            href="/edit"
-                            onClick={() => setIsOpen(false)}
-                          >
+                          <Link href="/edit" onClick={() => setIsOpen(false)}>
                             <motion.div
                               whileHover={{ x: 4 }}
                               whileTap={{ scale: 0.98 }}
@@ -338,7 +335,7 @@ export default function Header() {
                           damping: 30,
                         }}
                       >
-                       <PdfDownloadButton />
+                        <PdfDownloadButton />
                       </motion.div>
                     </motion.div>
                   </div>
