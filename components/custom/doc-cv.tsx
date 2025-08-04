@@ -182,10 +182,7 @@ const parseHtmlToReactPdf = (html: string): React.ReactNode[] => {
   let elementIndex = 0;
 
   // Helper function to parse text content with inline styling
-  const parseInlineText = (
-    text: string,
-    baseStyle = {}
-  ): React.ReactNode[] => {
+  const parseInlineText = (text: string, baseStyle = {}): React.ReactNode[] => {
     if (!text) return [];
 
     let processedText = text;
@@ -412,22 +409,48 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
         <View style={styles.contactInfo}>
           <Text>
             {joinNodesWithDot(
-              data.profile.socials.map((social) => (
-                <Link key={social.id} style={styles.link} src={social.url}>
-                  <Text>{social.name}</Text>
-                </Link>
-              ))
+              data.profile.socials.map((social) => <Text>{social.url}</Text>)
             )}
           </Text>
         </View>
-        <Text style={styles.profileDescription}>
+      </View>
+
+      {/* Summary Section */}
+      <View>
+        <Text style={styles.sectionTitle}>Summary</Text>
+        <Text style={styles.description}>
           {stripHtml(data.profile.description)}
         </Text>
       </View>
 
+      {/* Education Section */}
+      <View>
+        <Text style={styles.sectionTitle}>Education</Text>
+        {data.cv.educations
+          .sort(
+            (a, b) =>
+              new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+          )
+          .map((education) => (
+            <View key={education.id} style={styles.universalItemContainer}>
+              <View style={styles.universalHeader}>
+                <Text style={styles.title}>
+                  {education.degree} in {education.name}
+                </Text>
+                <Text style={styles.dates}>
+                  {education.endDate
+                    ? formatDateToMonthYear(education.endDate)
+                    : "Present"}
+                </Text>
+              </View>
+              <Text style={styles.secondaryText}>{education.institution}</Text>
+            </View>
+          ))}
+      </View>
+
       {/* Professional Experience Section */}
       <View>
-        <Text style={styles.sectionTitle}>Experience</Text>
+        <Text style={styles.sectionTitle}>Work Experience</Text>
         {data.cv.workExperiences
           .sort(
             (a, b) =>
@@ -457,31 +480,6 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
           ))}
       </View>
 
-      {/* Education Section */}
-      <View>
-        <Text style={styles.sectionTitle}>Education</Text>
-        {data.cv.educations
-          .sort(
-            (a, b) =>
-              new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-          )
-          .map((education) => (
-            <View key={education.id} style={styles.universalItemContainer}>
-              <View style={styles.universalHeader}>
-                <Text style={styles.title}>
-                  {education.degree} in {education.name}
-                </Text>
-                <Text style={styles.dates}>
-                  {education.endDate
-                    ? formatDateToMonthYear(education.endDate)
-                    : "Present"}
-                </Text>
-              </View>
-              <Text style={styles.secondaryText}>{education.institution}</Text>
-            </View>
-          ))}
-      </View>
-
       {/* Certifications Section */}
       {data.cv.certifications.length > 0 && (
         <View>
@@ -494,14 +492,16 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
             )
             .map((cert) => (
               <View key={cert.id} style={styles.universalItemContainer}>
-                <View style={styles.universalHeader}>
+                <View>
                   <Text style={styles.title}>{cert.name}</Text>
                   <Text style={styles.dates}>
-                    {formatDateToMonthYear(cert.startDate)}
-                    {cert.endDate
-                      ? ` - ${formatDateToMonthYear(cert.endDate)}`
-                      : " - Present"}
+                    Issued at {formatDateToMonthYear(cert.startDate)}
                   </Text>
+                  {cert.endDate && (
+                    <Text style={styles.dates}>
+                      Expires at {formatDateToMonthYear(cert.endDate)}
+                    </Text>
+                  )}
                 </View>
                 <Text style={styles.secondaryText}>{cert.issuer}</Text>
                 {cert.credentialId && (
@@ -537,12 +537,14 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
                     project.description || project.shortDescription
                   )}
                 </View>
-                                  <View style={styles.skillsContainer}>
-                    <Text style={[styles.authors, styles.secondaryText]}>Technologies: </Text>
-                    <Text style={[styles.authors, styles.secondaryText]}>
-                      {project.technologies.map((tech) => tech.name).join(", ")}
-                    </Text>
-                  </View>
+                <View style={styles.skillsContainer}>
+                  <Text style={[styles.authors, styles.secondaryText]}>
+                    Technologies:{" "}
+                  </Text>
+                  <Text style={[styles.authors, styles.secondaryText]}>
+                    {project.technologies.map((tech) => tech.name).join(", ")}
+                  </Text>
+                </View>
                 {(project.repositoryUrl || project.liveUrl) && (
                   <Text>
                     {joinNodesWithDot(
