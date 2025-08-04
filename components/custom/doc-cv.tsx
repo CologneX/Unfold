@@ -409,7 +409,9 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
         <View style={styles.contactInfo}>
           <Text>
             {joinNodesWithDot(
-              data.profile.socials.map((social) => <Text>{social.url}</Text>)
+              data.profile.socials.map((social) => (
+                <Text key={social.id}>{social.url}</Text>
+              ))
             )}
           </Text>
         </View>
