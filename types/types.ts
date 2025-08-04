@@ -4,7 +4,7 @@ import { z } from "zod";
 export const SocialSchema = z.object({
     id: z.string(),
     name: z.string().min(2),
-    url: z.string().url().or(z.literal('')),
+    url: z.string().min(1),
 });
 
 // Technology Schema
@@ -50,7 +50,7 @@ export const CertificationSchema = z.object({
     startDate: z.coerce.date(),
     endDate: z.coerce.date().optional(),
     credentialId: z.string().optional(),
-    url: z.string().url().or(z.literal('')).optional(),
+    url: z.string().optional(),
 });
 
 // Award or Honor Schema
@@ -60,7 +60,7 @@ export const AwardOrHonorSchema = z.object({
     institution: z.string().min(2),
     description: z.string().optional(),
     date: z.coerce.date(),
-    url: z.string().url().or(z.literal('')).optional(),
+    url: z.string().optional(),
 });
 
 // Publication Schema
@@ -69,7 +69,7 @@ export const PublicationSchema = z.object({
     title: z.string().min(2),
     authors: z.array(z.string().min(2)),
     date: z.coerce.date(),
-    url: z.string().url().or(z.literal('')).optional(),
+    url: z.string().optional(),
 });
 
 // Language Schema
@@ -84,7 +84,7 @@ export const LanguageSchema = z.object({
         "Native",
     ]),
     level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).nullable(),
-    url: z.string().url().or(z.literal('')).optional(),
+    url: z.string().optional(),
 });
 
 // Project Schema
