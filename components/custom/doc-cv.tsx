@@ -406,6 +406,7 @@ const CVDocument: React.FC<{ data: Data }> = ({ data }) => (
       <View style={styles.header}>
         <Text style={styles.name}>{data.profile.name}</Text>
         <Text style={styles.location}>{data.profile.location}</Text>
+        <Text style={styles.contactInfo}>{data.profile.email}</Text>
         <View style={styles.contactInfo}>
           <Text>
             {joinNodesWithDot(
